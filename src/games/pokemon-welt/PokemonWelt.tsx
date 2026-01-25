@@ -1,25 +1,41 @@
 import { useState, useCallback } from 'react';
-import { GameCanvas, Sprite, GameText, GameButton } from '../../components';
+import type { ReactNode } from 'react';
+import { GameCanvas, GameText, GameButton } from '../../components';
 import { useKeyboard, useGameLoop, clamp, randomIntBetween } from '../../hooks';
+import {
+  PixelPlayer,
+  PixelGrass,
+  PixelTallGrass,
+  PixelTree,
+  PixelWater,
+  PixelPath,
+  PixelHouse,
+  PixelDeepWater,
+  PixelSeaweed,
+  PixelCoral,
+  PixelSand,
+  PixelBug,
+  PixelBird,
+  PixelRat,
+  PixelFish,
+  PixelJelly,
+  PixelCrab,
+} from '../../sprites';
 
 /**
- * POKEMON WELT
- * ============
- * Ein Pokemon-ähnliches Spiel wie auf dem Gameboy!
- * Laufe herum, finde wildes Gras, und triff Pokemon!
- * Gehe ins Wasser um in die Wasserwelt zu tauchen!
+ * POKEMON WELT - GAMEBOY STYLE
+ * ============================
+ * Ein Pokemon-ähnliches Spiel im Retro Gameboy Look!
  */
 
-// Spielfeld Größe
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 480;
 const TILE_SIZE = 32;
-
-// Spieler
 const PLAYER_SPEED = 150;
 
-// Karten-Elemente
 type TileType = 'grass' | 'tall_grass' | 'tree' | 'water' | 'path' | 'house' | 'seaweed' | 'coral' | 'deep_water' | 'sand';
+type Direction = 'up' | 'down' | 'left' | 'right';
+type WorldType = 'overworld' | 'waterworld';
 
 interface WorldTile {
   type: TileType;
@@ -27,7 +43,38 @@ interface WorldTile {
   y: number;
 }
 
-// Überwelt generieren
+interface Pokemon {
+  name: string;
+  component: ReactNode;
+}
+
+// Pokemon lists
+const landPokemon: Pokemon[] = [
+  { name: 'Käfer', component: <PixelBug size={64} /> },
+  { name: 'Vogel', component: <PixelBird size={64} /> },
+  { name: 'Ratte', component: <PixelRat size={64} /> },
+];
+
+const waterPokemon: Pokemon[] = [
+  { name: 'Fisch', component: <PixelFish size={64} /> },
+  { name: 'Qualle', component: <PixelJelly size={64} /> },
+  { name: 'Krabbe', component: <PixelCrab size={64} /> },
+];
+
+// Tile components
+const TileComponents: Record<TileType, React.FC<{ size: number }>> = {
+  grass: PixelGrass,
+  tall_grass: PixelTallGrass,
+  tree: PixelTree,
+  water: PixelWater,
+  path: PixelPath,
+  house: PixelHouse,
+  deep_water: PixelDeepWater,
+  seaweed: PixelSeaweed,
+  coral: PixelCoral,
+  sand: PixelSand,
+};
+
 function generateOverworld(): WorldTile[] {
   const tiles: WorldTile[] = [];
   const cols = Math.floor(CANVAS_WIDTH / TILE_SIZE);
@@ -53,13 +100,11 @@ function generateOverworld(): WorldTile[] {
     }
   }
 
-  // Haus
   const houseX = Math.floor(cols / 2) * TILE_SIZE;
   const houseY = 2 * TILE_SIZE;
   const houseIndex = tiles.findIndex(t => t.x === houseX && t.y === houseY);
   if (houseIndex >= 0) tiles[houseIndex] = { type: 'house', x: houseX, y: houseY };
 
-  // Pfad
   for (let py = 3; py < 6; py++) {
     const pathIndex = tiles.findIndex(t => t.x === houseX && t.y === py * TILE_SIZE);
     if (pathIndex >= 0) tiles[pathIndex] = { type: 'path', x: houseX, y: py * TILE_SIZE };
@@ -68,7 +113,6 @@ function generateOverworld(): WorldTile[] {
   return tiles;
 }
 
-// Wasserwelt generieren
 function generateWaterWorld(): WorldTile[] {
   const tiles: WorldTile[] = [];
   const cols = Math.floor(CANVAS_WIDTH / TILE_SIZE);
@@ -89,7 +133,6 @@ function generateWaterWorld(): WorldTile[] {
     }
   }
 
-  // Portal zum Zurückkehren (in der Mitte oben)
   const portalX = Math.floor(cols / 2) * TILE_SIZE;
   const portalY = 2 * TILE_SIZE;
   const portalIndex = tiles.findIndex(t => t.x === portalX && t.y === portalY);
@@ -98,29 +141,6 @@ function generateWaterWorld(): WorldTile[] {
   return tiles;
 }
 
-const overworldEmojis: Record<string, string> = {
-  grass: '🟩',
-  tall_grass: '🌿',
-  tree: '🌲',
-  water: '🌊',
-  path: '🟫',
-  house: '🏠',
-};
-
-const waterWorldEmojis: Record<string, string> = {
-  deep_water: '🟦',
-  seaweed: '🌿',
-  coral: '🪸',
-  sand: '🟨',
-};
-
-// Pokemon
-const landPokemon = ['🐛', '🐦', '🐀', '🐱', '🦋', '🐝', '🐞', '🦎'];
-const waterPokemon = ['🐟', '🐠', '🐡', '🦑', '🐙', '🦐', '🦞', '🐚', '🐳', '🐬'];
-
-type Direction = 'up' | 'down' | 'left' | 'right';
-type WorldType = 'overworld' | 'waterworld';
-
 export function PokemonWelt() {
   const [overworld] = useState(() => generateOverworld());
   const [waterWorld] = useState(() => generateWaterWorld());
@@ -128,19 +148,17 @@ export function PokemonWelt() {
 
   const [playerX, setPlayerX] = useState(CANVAS_WIDTH / 2);
   const [playerY, setPlayerY] = useState(CANVAS_HEIGHT / 2);
-  const [, setDirection] = useState<Direction>('down');
+  const [direction, setDirection] = useState<Direction>('down');
   const [pokemonCount, setPokemonCount] = useState(0);
-  const [encounteredPokemon, setEncounteredPokemon] = useState<string | null>(null);
-  const [caughtPokemon, setCaughtPokemon] = useState<string[]>([]);
+  const [encounteredPokemon, setEncounteredPokemon] = useState<Pokemon | null>(null);
+  const [caughtPokemon, setCaughtPokemon] = useState<Pokemon[]>([]);
   const [teleportAnimation, setTeleportAnimation] = useState(false);
 
   const keys = useKeyboard();
 
   const world = currentWorld === 'overworld' ? overworld : waterWorld;
-  const tileEmojis = currentWorld === 'overworld' ? overworldEmojis : waterWorldEmojis;
   const currentPokemonList = currentWorld === 'overworld' ? landPokemon : waterPokemon;
 
-  // Teleport zur anderen Welt
   const teleportTo = useCallback((targetWorld: WorldType) => {
     setTeleportAnimation(true);
     setTimeout(() => {
@@ -151,7 +169,6 @@ export function PokemonWelt() {
     }, 1000);
   }, []);
 
-  // Prüfe Tile-Typ an Position
   const getTileAt = useCallback((x: number, y: number) => {
     return world.find(t =>
       x >= t.x && x < t.x + TILE_SIZE &&
@@ -159,16 +176,14 @@ export function PokemonWelt() {
     );
   }, [world]);
 
-  // Prüfe ob Position blockiert ist
   const isBlocked = useCallback((x: number, y: number) => {
     const tile = getTileAt(x, y);
     if (currentWorld === 'overworld') {
       return tile && (tile.type === 'tree' || tile.type === 'house');
     }
-    return false; // In der Wasserwelt kann man überall schwimmen
+    return false;
   }, [getTileAt, currentWorld]);
 
-  // Pokemon fangen
   const catchPokemon = () => {
     if (encounteredPokemon) {
       setCaughtPokemon(prev => [...prev, encounteredPokemon]);
@@ -181,34 +196,36 @@ export function PokemonWelt() {
     setEncounteredPokemon(null);
   };
 
-  // Spiel-Schleife
   useGameLoop((deltaTime) => {
     if (encounteredPokemon || teleportAnimation) return;
 
     let newX = playerX;
     let newY = playerY;
     let moved = false;
+    let newDir = direction;
 
     if (keys.ArrowUp || keys.w || keys.W) {
       newY -= PLAYER_SPEED * deltaTime;
-      setDirection('up');
+      newDir = 'up';
       moved = true;
     }
     if (keys.ArrowDown || keys.s || keys.S) {
       newY += PLAYER_SPEED * deltaTime;
-      setDirection('down');
+      newDir = 'down';
       moved = true;
     }
     if (keys.ArrowLeft || keys.a || keys.A) {
       newX -= PLAYER_SPEED * deltaTime;
-      setDirection('left');
+      newDir = 'left';
       moved = true;
     }
     if (keys.ArrowRight || keys.d || keys.D) {
       newX += PLAYER_SPEED * deltaTime;
-      setDirection('right');
+      newDir = 'right';
       moved = true;
     }
+
+    if (moved) setDirection(newDir);
 
     if (!isBlocked(newX + 16, newY + 16)) {
       newX = clamp(newX, TILE_SIZE, CANVAS_WIDTH - TILE_SIZE * 2);
@@ -218,19 +235,16 @@ export function PokemonWelt() {
 
       const tile = getTileAt(newX + 16, newY + 16);
 
-      // Teleport zur Wasserwelt wenn auf Wasser
       if (currentWorld === 'overworld' && tile?.type === 'water') {
         teleportTo('waterworld');
         return;
       }
 
-      // Zurück zur Überwelt wenn auf Koralle
       if (currentWorld === 'waterworld' && tile?.type === 'coral') {
         teleportTo('overworld');
         return;
       }
 
-      // Pokemon Encounter
       const encounterTiles = currentWorld === 'overworld'
         ? ['tall_grass']
         : ['seaweed', 'deep_water'];
@@ -244,40 +258,72 @@ export function PokemonWelt() {
     }
   });
 
-  const playerEmoji = currentWorld === 'overworld' ? '🧑🏽' : '🧑🏽‍🦱';
-  const bgColor = currentWorld === 'overworld' ? '#3d8b40' : '#1a5276';
-  const worldName = currentWorld === 'overworld' ? 'Pokemon Welt' : '🌊 Wasserwelt';
+  const bgColor = currentWorld === 'overworld' ? '#9bbc0f' : '#0a3060';
+  const worldName = currentWorld === 'overworld' ? 'Pokemon Welt' : 'Unterwasser';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-      <h2 style={{ color: 'white', margin: 0 }}>{worldName}</h2>
+      <h2 style={{ color: 'white', margin: 0, fontFamily: 'monospace' }}>{worldName}</h2>
 
       <GameCanvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} backgroundColor={bgColor}>
-        {/* Welt zeichnen */}
-        {world.map((tile, i) => (
-          <Sprite key={i} x={tile.x} y={tile.y} emoji={tileEmojis[tile.type] || '❓'} size={TILE_SIZE} />
-        ))}
+        {/* Render tiles */}
+        {world.map((tile, i) => {
+          const TileComponent = TileComponents[tile.type];
+          return (
+            <div key={i} style={{ position: 'absolute', left: tile.x, top: tile.y }}>
+              <TileComponent size={TILE_SIZE} />
+            </div>
+          );
+        })}
 
-        {/* Spieler */}
-        <Sprite x={playerX} y={playerY} emoji={playerEmoji} size={TILE_SIZE} />
+        {/* Player */}
+        <div style={{ position: 'absolute', left: playerX, top: playerY }}>
+          <PixelPlayer size={TILE_SIZE} direction={direction} />
+        </div>
 
         {/* UI */}
-        <GameText x={10} y={10} size="medium">
-          Pokemon: {pokemonCount}
-        </GameText>
+        <div style={{
+          position: 'absolute',
+          top: 8,
+          left: 8,
+          background: 'rgba(0,0,0,0.7)',
+          padding: '4px 8px',
+          borderRadius: 4,
+        }}>
+          <GameText size="medium">Pokemon: {pokemonCount}</GameText>
+        </div>
 
-        {/* Gefangene Pokemon */}
-        <div style={{ position: 'absolute', top: 40, left: 10, display: 'flex', gap: 4, flexWrap: 'wrap', maxWidth: 200 }}>
+        {/* Caught Pokemon */}
+        <div style={{
+          position: 'absolute',
+          top: 40,
+          left: 8,
+          display: 'flex',
+          gap: 4,
+          flexWrap: 'wrap',
+          maxWidth: 200,
+        }}>
           {caughtPokemon.map((p, i) => (
-            <span key={i} style={{ fontSize: 18 }}>{p}</span>
+            <div key={i} style={{ width: 24, height: 24 }}>
+              {p.component}
+            </div>
           ))}
         </div>
 
-        <GameText x={10} y={CANVAS_HEIGHT - 30} size="small" color="#ccc">
-          {currentWorld === 'overworld'
-            ? 'Gehe ins Wasser 🌊 für die Wasserwelt!'
-            : 'Gehe zur Koralle 🪸 um zurückzukehren!'}
-        </GameText>
+        <div style={{
+          position: 'absolute',
+          bottom: 8,
+          left: 8,
+          background: 'rgba(0,0,0,0.7)',
+          padding: '4px 8px',
+          borderRadius: 4,
+        }}>
+          <GameText size="small" color="#ccc">
+            {currentWorld === 'overworld'
+              ? 'Wasser = Tauchen | Hohes Gras = Pokemon'
+              : 'Koralle = Auftauchen | Überall = Pokemon'}
+          </GameText>
+        </div>
 
         {/* Teleport Animation */}
         {teleportAnimation && (
@@ -287,14 +333,13 @@ export function PokemonWelt() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: currentWorld === 'overworld' ? '#1a5276' : '#3d8b40',
+            backgroundColor: currentWorld === 'overworld' ? '#0a3060' : '#9bbc0f',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            animation: 'fadeIn 0.5s',
           }}>
-            <GameText size="huge" centered color="white">
-              {currentWorld === 'overworld' ? '🌊 Tauche ab!' : '🌲 Auftauchen!'}
+            <GameText size="huge" centered color="white" style={{ fontFamily: 'monospace' }}>
+              {currentWorld === 'overworld' ? '~ TAUCHE AB ~' : '~ AUFTAUCHEN ~'}
             </GameText>
           </div>
         )}
@@ -307,25 +352,25 @@ export function PokemonWelt() {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: currentWorld === 'overworld' ? 'rgba(0,0,0,0.8)' : 'rgba(0,50,100,0.9)',
+            backgroundColor: '#000',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             gap: 20,
           }}>
-            <GameText size="large" centered>
-              {currentWorld === 'overworld'
-                ? 'Ein wildes Pokemon erscheint!'
-                : 'Ein Wasser-Pokemon schwimmt vorbei!'}
+            <GameText size="large" centered style={{ fontFamily: 'monospace' }}>
+              Ein wildes {encounteredPokemon.name} erscheint!
             </GameText>
-            <span style={{ fontSize: 80 }}>{encounteredPokemon}</span>
+            <div style={{ transform: 'scale(2)' }}>
+              {encounteredPokemon.component}
+            </div>
             <div style={{ display: 'flex', gap: 16 }}>
               <GameButton onClick={catchPokemon} color="success">
                 Fangen!
               </GameButton>
               <GameButton onClick={runAway} color="secondary">
-                Weglaufen
+                Flucht
               </GameButton>
             </div>
           </div>
