@@ -17,6 +17,7 @@ import type { GameInfo } from '../types';
 // import { MeinSpiel } from './mein-spiel/MeinSpiel';
 import { BeispielSpiel } from './beispiel-spiel/BeispielSpiel';
 import { PokemonWelt } from './pokemon-welt/PokemonWelt';
+import { Fussball } from './fussball/Fussball';
 
 // === SPIELE REGISTRIEREN / REGISTER GAMES ===
 export const games: GameInfo[] = [
@@ -33,6 +34,13 @@ export const games: GameInfo[] = [
     description: 'Erkunde die Welt und fange Pokemon im hohen Gras!',
     author: 'Kind',
     component: PokemonWelt,
+  },
+  {
+    id: 'fussball',
+    name: 'Fussball',
+    description: 'Schieße Tore! Laufe gegen den Ball um zu schießen.',
+    author: 'Kind',
+    component: Fussball,
   },
   // Füge hier neue Spiele hinzu / Add new games here:
   // {

@@ -108,11 +108,15 @@ export const games: GameInfo[] = [
 </GameCanvas>
 ```
 
-### Sprite - Bewegliche Objekte (mit Emojis!)
+### Sprite - Bewegliche Objekte
 ```tsx
-<Sprite x={100} y={200} emoji="🚀" size={40} />
-<Sprite x={200} y={100} emoji="⭐" size={30} rotation={45} />
-<Sprite x={300} y={150} emoji="👾" onClick={() => console.log('Getroffen!')} />
+// Mit SVG-Komponente (bevorzugt!)
+<Sprite x={100} y={200} size={40}>
+  <Player hairColor="#5D4037" skinColor="#D7A574" />
+</Sprite>
+
+// Mit Emoji (nur für schnelle Tests)
+<Sprite x={200} y={100} emoji="⭐" size={30} />
 ```
 
 ### GameText - Text anzeigen
@@ -236,14 +240,49 @@ Frage: "Wann soll man Punkte bekommen? Wenn man etwas fängt, wenn man etwas tri
 ### Kind: "Das Spiel ist zu einfach/schwer"
 Frage: "Okay! Soll ich [das Objekt schneller/langsamer machen] oder [mehr/weniger Objekte hinzufügen]?"
 
-## EMOJI-BIBLIOTHEK / EMOJI LIBRARY
+## SVG SPRITES / CUSTOM GRAPHICS
 
-Nützliche Emojis für Spiele:
-- Spieler: 🚀 🚗 🐱 🐶 🦊 🐸 🤖 👾 🎮 🧙 🦸 🏃
-- Gegner: 👻 👹 🦇 🐍 💀 👽 🦖 🦈
-- Items: ⭐ 💎 🍎 🍕 🎁 💰 🔑 ❤️ 🏆 🎯
-- Effekte: 💥 ✨ 🔥 ⚡ 💫 🌟
-- Umgebung: 🌲 🏠 🌵 🗻 ☁️ 🌙 ☀️
+**BEVORZUGE SVG SPRITES STATT EMOJIS!**
+Emojis nur für schnelle Tests verwenden. Für richtige Spiele immer SVGs erstellen.
+
+### Verfügbare Sprites / Available Sprites
+```tsx
+import { Player, Tree, Grass, Water, Ball } from '../../sprites';
+
+<Player hairColor="#5D4037" skinColor="#D7A574" shirtColor="#2196F3" />
+<Tree leafColor="#2E7D32" trunkColor="#5D4037" />
+<Grass color="#4CAF50" tall={true} />
+<Water color="#2196F3" />
+<Ball type="soccer" />  // oder "basketball", "tennis"
+```
+
+### Neue Sprites erstellen / Creating New Sprites
+
+Wenn ein Kind ein neues Sprite beschreibt:
+1. Erstelle eine neue Datei in `src/sprites/`
+2. Verwende einfache SVG-Formen (rect, circle, polygon, path)
+3. Mache Farben anpassbar via Props
+4. Exportiere in `src/sprites/index.ts`
+
+Beispiel für ein neues Sprite:
+```tsx
+// src/sprites/Star.tsx
+interface StarProps {
+  size?: number;
+  color?: string;
+}
+
+export function Star({ size = 32, color = '#FFD700' }: StarProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32">
+      <polygon
+        points="16,2 20,12 30,12 22,18 25,28 16,22 7,28 10,18 2,12 12,12"
+        fill={color}
+      />
+    </svg>
+  );
+}
+```
 
 ## BEI FEHLERN / WHEN ERRORS OCCUR
 
