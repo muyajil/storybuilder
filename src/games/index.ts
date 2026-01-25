@@ -13,43 +13,25 @@
 import type { GameInfo } from '../types';
 
 // === SPIELE IMPORTIEREN / IMPORT GAMES ===
-// Beispiel / Example:
-// import { MeinSpiel } from './mein-spiel/MeinSpiel';
-import { BeispielSpiel } from './beispiel-spiel/BeispielSpiel';
-import { PokemonWelt } from './pokemon-welt/PokemonWelt';
-import { Fussball } from './fussball/Fussball';
+import { MagicForest } from './magic-forest/MagicForest';
+import { LianasOzeanAbenteuer } from './liana-abenteuer/LianasOzeanAbenteuer';
 
 // === SPIELE REGISTRIEREN / REGISTER GAMES ===
 export const games: GameInfo[] = [
   {
-    id: 'beispiel-spiel',
-    name: 'Beispiel Spiel',
-    description: 'Ein einfaches Beispiel-Spiel zum Lernen',
-    author: 'System',
-    component: BeispielSpiel,
+    id: 'magic-forest',
+    name: 'Der Magische Wald',
+    description: 'Eine interaktive Geschichte mit Entscheidungen durch verschiedene Welten!',
+    author: 'Kind',
+    component: MagicForest,
   },
   {
-    id: 'pokemon-welt',
-    name: 'Pokemon Welt',
-    description: 'Erkunde die Welt und fange Pokemon im hohen Gras!',
+    id: 'liana-abenteuer',
+    name: 'Lianas Ozean-Abenteuer',
+    description: 'Prinzessin Liana erlebt ein spannendes Abenteuer am Ozean',
+    component: LianasOzeanAbenteuer,
     author: 'Kind',
-    component: PokemonWelt,
   },
-  {
-    id: 'fussball',
-    name: 'Fussball',
-    description: 'Schieße Tore! Laufe gegen den Ball um zu schießen.',
-    author: 'Kind',
-    component: Fussball,
-  },
-  // Füge hier neue Spiele hinzu / Add new games here:
-  // {
-  //   id: 'mein-spiel',
-  //   name: 'Mein Tolles Spiel',
-  //   description: 'Beschreibung des Spiels',
-  //   author: 'Dein Name',
-  //   component: MeinSpiel,
-  // },
 ];
 
 /**

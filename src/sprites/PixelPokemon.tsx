@@ -7,6 +7,47 @@ interface PokemonProps {
   size?: number;
 }
 
+// PIKACHU - The Electric Mouse!
+export function PixelPikachu({ size = 32 }: PokemonProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" style={{ imageRendering: 'pixelated' }}>
+      {/* Ears */}
+      <rect x="2" y="0" width="2" height="4" fill="#ffd700" />
+      <rect x="1" y="1" width="1" height="2" fill="#ffd700" />
+      <rect x="2" y="0" width="1" height="1" fill="#222" />
+      <rect x="12" y="0" width="2" height="4" fill="#ffd700" />
+      <rect x="14" y="1" width="1" height="2" fill="#ffd700" />
+      <rect x="13" y="0" width="1" height="1" fill="#222" />
+      {/* Head */}
+      <rect x="3" y="3" width="10" height="6" fill="#ffd700" />
+      <rect x="2" y="4" width="1" height="4" fill="#ffd700" />
+      <rect x="13" y="4" width="1" height="4" fill="#ffd700" />
+      {/* Cheeks */}
+      <rect x="2" y="6" width="2" height="2" fill="#ff4444" />
+      <rect x="12" y="6" width="2" height="2" fill="#ff4444" />
+      {/* Eyes */}
+      <rect x="5" y="5" width="2" height="2" fill="#222" />
+      <rect x="9" y="5" width="2" height="2" fill="#222" />
+      <rect x="5" y="5" width="1" height="1" fill="#fff" />
+      <rect x="9" y="5" width="1" height="1" fill="#fff" />
+      {/* Nose */}
+      <rect x="7" y="7" width="2" height="1" fill="#222" />
+      {/* Body */}
+      <rect x="4" y="9" width="8" height="5" fill="#ffd700" />
+      <rect x="3" y="10" width="1" height="3" fill="#ffd700" />
+      <rect x="12" y="10" width="1" height="3" fill="#ffd700" />
+      {/* Tail (lightning bolt shape) */}
+      <rect x="13" y="9" width="2" height="1" fill="#b8860b" />
+      <rect x="14" y="10" width="2" height="1" fill="#b8860b" />
+      <rect x="13" y="11" width="2" height="1" fill="#ffd700" />
+      <rect x="12" y="12" width="2" height="1" fill="#ffd700" />
+      {/* Feet */}
+      <rect x="5" y="14" width="2" height="2" fill="#b8860b" />
+      <rect x="9" y="14" width="2" height="2" fill="#b8860b" />
+    </svg>
+  );
+}
+
 // A simple bug Pokemon
 export function PixelBug({ size = 32 }: PokemonProps) {
   return (

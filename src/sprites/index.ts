@@ -27,6 +27,7 @@ export {
   PixelSand,
 } from './PixelTiles';
 export {
+  PixelPikachu,
   PixelBug,
   PixelBird,
   PixelRat,

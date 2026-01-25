@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "play": "./scripts/play.sh",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.975.0",
+    "@aws-sdk/credential-provider-env": "^3.972.1",
+    "@aws-sdk/credential-provider-ini": "^3.972.1",
+    "@aws-sdk/credential-provider-sso": "^3.972.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

@@ -15,3 +15,16 @@ export {
   randomBetween,
   randomIntBetween,
 } from './useCollision';
+
+// Sound System
+export {
+  useSound,
+  playSound,
+  playCustomSound,
+  playMelody,
+  playVictoryFanfare,
+  playGameOver,
+  playCoinCollect,
+  playCountdownBeep,
+  type SoundEffect,
+} from './useSound';

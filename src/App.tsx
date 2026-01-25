@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { games, getGameById } from './games';
-import { GameButton, PromptBox } from './components';
+import { GameButton, SidePanel } from './components';
+import type { SidePanelHandle } from './components/SidePanel';
 import './App.css';
 
 /**
@@ -11,50 +12,82 @@ import './App.css';
  */
 function App() {
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
+  const sidePanelRef = useRef<SidePanelHandle>(null);
 
-  // Wenn ein Spiel ausgewählt ist, zeige es an / If a game is selected, show it
-  if (selectedGameId) {
-    const game = getGameById(selectedGameId);
+  const selectedGame = selectedGameId ? getGameById(selectedGameId) : null;
+
+  // Build context for SidePanel
+  const sidePanelContext = selectedGame
+    ? { screen: 'game' as const, gameId: selectedGame.id, gameName: selectedGame.name }
+    : { screen: 'menu' as const };
+
+  // Start new game creation process
+  const handleCreateNewGame = () => {
+    sidePanelRef.current?.sendMessage('Ich möchte eine Geschichte erfinden!');
+  };
+
+  // Load existing game and continue building
+  const handleSelectGame = (gameId: string) => {
+    const game = getGameById(gameId);
+    setSelectedGameId(gameId);
     if (game) {
-      const GameComponent = game.component;
-      return (
-        <div className="game-container">
-          <div className="game-header">
-            <GameButton onClick={() => setSelectedGameId(null)} color="secondary" size="small">
-              Zurück zum Menü
-            </GameButton>
-            <span className="game-title">{game.name}</span>
-          </div>
-          <GameComponent />
-          <PromptBox context={{ screen: 'game', gameId: game.id, gameName: game.name }} />
-        </div>
-      );
+      // Send message to load game context and continue iterating
+      setTimeout(() => {
+        sidePanelRef.current?.sendMessage(`Ich möchte an "${game.name}" weiterarbeiten! Lies bitte die Datei und zeig mir was wir schon haben.`);
+      }, 100);
     }
-  }
+  };
 
-  // Spielemenü anzeigen / Show game menu
   return (
-    <div className="menu-container">
-      <h1 className="menu-title">Spiele-Spielplatz</h1>
-      <p className="menu-subtitle">Wähle ein Spiel aus!</p>
-
-      <div className="game-list">
-        {games.map((game) => (
-          <div key={game.id} className="game-card" onClick={() => setSelectedGameId(game.id)}>
-            <h3 className="game-card-title">{game.name}</h3>
-            <p className="game-card-description">{game.description}</p>
-            <p className="game-card-author">von {game.author}</p>
+    <div className="app-layout">
+      {/* Main content area - centered in space left of chat */}
+      <div className="main-content">
+        {selectedGame ? (
+          <div className="game-container">
+            <div className="game-header">
+              <GameButton onClick={() => setSelectedGameId(null)} color="secondary" size="small">
+                Zurück zum Menü
+              </GameButton>
+              <span className="game-title">{selectedGame.name}</span>
+            </div>
+            <selectedGame.component />
           </div>
-        ))}
+        ) : (
+          <div className="menu-container">
+            <h1 className="menu-title">Spiele-Spielplatz</h1>
+            <p className="menu-subtitle">Wähle ein Spiel aus oder erstelle dein eigenes!</p>
+
+            {/* Create New Game Button */}
+            <button
+              onClick={handleCreateNewGame}
+              className="create-game-button"
+            >
+              <span className="create-game-icon">✨</span>
+              <span className="create-game-text">Neue Geschichte erfinden</span>
+              <span className="create-game-hint">Wer ist dein Held?</span>
+            </button>
+
+            <div className="game-list">
+              {games.map((game) => (
+                <div key={game.id} className="game-card" onClick={() => handleSelectGame(game.id)}>
+                  <h3 className="game-card-title">{game.name}</h3>
+                  <p className="game-card-description">{game.description}</p>
+                  <p className="game-card-author">von {game.author}</p>
+                </div>
+              ))}
+            </div>
+
+            {games.length === 0 && (
+              <p className="no-games">
+                Noch keine Spiele vorhanden. Lass uns eines erstellen!
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
-      {games.length === 0 && (
-        <p className="no-games">
-          Noch keine Spiele vorhanden. Lass uns eines erstellen!
-        </p>
-      )}
-
-      <PromptBox context={{ screen: 'menu' }} />
+      {/* Chat panel - always visible on right side */}
+      <SidePanel ref={sidePanelRef} context={sidePanelContext} />
     </div>
   );
 }
