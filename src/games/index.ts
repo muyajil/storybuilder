@@ -16,6 +16,7 @@ import type { GameInfo } from '../types';
 // Beispiel / Example:
 // import { MeinSpiel } from './mein-spiel/MeinSpiel';
 import { BeispielSpiel } from './beispiel-spiel/BeispielSpiel';
+import { PokemonWelt } from './pokemon-welt/PokemonWelt';
 
 // === SPIELE REGISTRIEREN / REGISTER GAMES ===
 export const games: GameInfo[] = [
@@ -25,6 +26,13 @@ export const games: GameInfo[] = [
     description: 'Ein einfaches Beispiel-Spiel zum Lernen',
     author: 'System',
     component: BeispielSpiel,
+  },
+  {
+    id: 'pokemon-welt',
+    name: 'Pokemon Welt',
+    description: 'Erkunde die Welt und fange Pokemon im hohen Gras!',
+    author: 'Kind',
+    component: PokemonWelt,
   },
   // Füge hier neue Spiele hinzu / Add new games here:
   // {

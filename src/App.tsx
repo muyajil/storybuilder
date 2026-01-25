@@ -26,7 +26,7 @@ function App() {
             <span className="game-title">{game.name}</span>
           </div>
           <GameComponent />
-          <PromptBox />
+          <PromptBox context={{ screen: 'game', gameId: game.id, gameName: game.name }} />
         </div>
       );
     }
@@ -54,7 +54,7 @@ function App() {
         </p>
       )}
 
-      <PromptBox />
+      <PromptBox context={{ screen: 'menu' }} />
     </div>
   );
 }
