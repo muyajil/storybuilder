@@ -9,3 +9,4 @@ export { GameCanvas } from './GameCanvas';
 export { Sprite } from './Sprite';
 export { GameButton } from './GameButton';
 export { GameText } from './GameText';
+export { PromptBox } from './PromptBox';

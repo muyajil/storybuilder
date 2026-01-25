@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { games, getGameById } from './games';
-import { GameButton } from './components';
+import { GameButton, PromptBox } from './components';
 import './App.css';
 
 /**
@@ -26,6 +26,7 @@ function App() {
             <span className="game-title">{game.name}</span>
           </div>
           <GameComponent />
+          <PromptBox />
         </div>
       );
     }
@@ -52,6 +53,8 @@ function App() {
           Noch keine Spiele vorhanden. Lass uns eines erstellen!
         </p>
       )}
+
+      <PromptBox />
     </div>
   );
 }

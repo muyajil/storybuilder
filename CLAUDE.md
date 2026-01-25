@@ -3,6 +3,31 @@
 Dies ist ein Spiele-Spielplatz für Kinder. Die Kinder werden auf Deutsch prompten, um Spiele zu erstellen.
 This is a game playground for kids. Kids will prompt in German to create games.
 
+## PROMPT-MONITORING / PROMPT MONITORING
+
+Die Kinder können Anfragen über die PromptBox im Browser senden. Diese werden in `prompts.log` gespeichert.
+Kids can send requests via the PromptBox in the browser. These are saved to `prompts.log`.
+
+### Workflow für Eltern / Workflow for Parents
+
+1. **Spiele starten**: `npm run play`
+2. **Prompts überwachen**: Sag Claude "watch prompts" oder "überwache prompts"
+3. **Claude arbeitet**: Claude liest neue Anfragen und setzt sie um
+
+### Befehle / Commands
+
+- `watch prompts` / `überwache prompts` - Startet die Überwachung der prompts.log
+- `check prompts` / `prüfe prompts` - Liest einmalig die neuen Prompts
+- `clear prompts` / `lösche prompts` - Leert die prompts.log Datei
+
+### So funktioniert es / How it Works
+
+1. Kind tippt Wunsch in die Chat-Box (💬 Button unten rechts)
+2. Wunsch wird in `prompts.log` gespeichert
+3. Claude liest die Datei und führt die Änderungen durch
+4. Vite lädt die Änderungen automatisch neu (Hot Reload)
+5. Kind sieht das Ergebnis sofort im Browser!
+
 ## WICHTIGE REGELN / IMPORTANT RULES
 
 ### Sprache / Language
