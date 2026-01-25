@@ -54,8 +54,8 @@ function App() {
           </div>
         ) : (
           <div className="menu-container">
-            <h1 className="menu-title">Spiele-Spielplatz</h1>
-            <p className="menu-subtitle">Wähle ein Spiel aus oder erstelle dein eigenes!</p>
+            <h1 className="menu-title">Storybuilder</h1>
+            <p className="menu-subtitle">Build interactive stories with AI</p>
 
             {/* Create New Game Button */}
             <button

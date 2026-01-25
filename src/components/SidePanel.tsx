@@ -232,7 +232,7 @@ export const SidePanel = forwardRef<SidePanelHandle, SidePanelProps>(function Si
               </span>
             </>
           ) : (
-            '💬 Geschichten-Werkstatt'
+            '💬 Storybuilder'
           )}
         </span>
         <div style={{ display: 'flex', gap: 6 }}>

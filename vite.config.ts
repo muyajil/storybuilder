@@ -1532,11 +1532,16 @@ Du hast den Code bereits - nutze edit_file mit EXAKTEM Text zum Ändern!]`
                 const { fromIni } = await import('@aws-sdk/credential-provider-ini')
                 const os = await import('os')
 
-                process.env.AWS_CONFIG_FILE = `${os.homedir()}/.claude/aws.config`
+                // Use env vars for AWS config
+                const awsRegion = env.AWS_REGION || process.env.AWS_REGION || 'eu-central-1'
+                const awsProfile = env.AWS_PROFILE || process.env.AWS_PROFILE || 'default'
+                const awsConfigFile = env.AWS_CONFIG_FILE || process.env.AWS_CONFIG_FILE || `${os.homedir()}/.aws/config`
+
+                process.env.AWS_CONFIG_FILE = awsConfigFile
 
                 const client = new BedrockRuntimeClient({
-                  region: process.env.AWS_REGION || 'eu-central-1',
-                  credentials: fromIni({ profile: 'personal' }),
+                  region: awsRegion,
+                  credentials: fromIni({ profile: awsProfile }),
                 })
 
                 let continueLoop = true
@@ -1908,11 +1913,15 @@ Du hast den Code bereits - nutze edit_file mit EXAKTEM Text zum Ändern!]`
                 const { fromIni } = await import('@aws-sdk/credential-provider-ini')
                 const os = await import('os')
 
-                process.env.AWS_CONFIG_FILE = `${os.homedir()}/.claude/aws.config`
+                const awsRegion = env.AWS_REGION || process.env.AWS_REGION || 'eu-central-1'
+                const awsProfile = env.AWS_PROFILE || process.env.AWS_PROFILE || 'default'
+                const awsConfigFile = env.AWS_CONFIG_FILE || process.env.AWS_CONFIG_FILE || `${os.homedir()}/.aws/config`
+
+                process.env.AWS_CONFIG_FILE = awsConfigFile
 
                 const client = new BedrockRuntimeClient({
-                  region: process.env.AWS_REGION || 'eu-central-1',
-                  credentials: fromIni({ profile: 'personal' }),
+                  region: awsRegion,
+                  credentials: fromIni({ profile: awsProfile }),
                 })
 
                 const command = new ConverseCommand({
