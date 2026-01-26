@@ -453,9 +453,18 @@ export function createClickGame(config: ClickGameConfig) {
         }}>
           ⏱️ {(timeLeft / 1000).toFixed(1)}s
         </div>
-        <Sprite x={target.x} y={target.y} size={60}>
+        <div style={{
+          position: 'absolute',
+          left: target.x,
+          top: target.y,
+          width: 60,
+          height: 60,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
           {targetSprite}
-        </Sprite>
+        </div>
         <div style={{
           position: 'absolute',
           bottom: 10,

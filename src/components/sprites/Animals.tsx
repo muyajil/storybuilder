@@ -2368,3 +2368,848 @@ export function RoundBird({ size = 64, color = '#FF6347' }: SpriteProps) {
     </svg>
   );
 }
+
+// ===== WEITERE TIERE / MORE ANIMALS =====
+
+export function Deer({ size = 64, color = '#C19A6B' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="40" rx="16" ry="14" fill={color} />
+      <circle cx="32" cy="22" r="12" fill={color} />
+      <path d="M24 10 L20 2 M20 2 L18 6 M20 2 L22 6" stroke="#8B4513" strokeWidth="2" fill="none" />
+      <path d="M40 10 L44 2 M44 2 L46 6 M44 2 L42 6" stroke="#8B4513" strokeWidth="2" fill="none" />
+      <ellipse cx="26" cy="20" rx="3" ry="4" fill="white" />
+      <ellipse cx="38" cy="20" rx="3" ry="4" fill="white" />
+      <circle cx="26" cy="20" r="2" fill="black" />
+      <circle cx="38" cy="20" r="2" fill="black" />
+      <ellipse cx="32" cy="28" rx="3" ry="2" fill="black" />
+      <path d="M24 54 L24 60" stroke={color} strokeWidth="3" strokeLinecap="round" />
+      <path d="M40 54 L40 60" stroke={color} strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function Moose({ size = 64, color = '#5D4037' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="42" rx="18" ry="14" fill={color} />
+      <ellipse cx="32" cy="26" rx="10" ry="12" fill={color} />
+      <path d="M18 20 L8 8 L4 12 L10 10 L8 16 L14 12 L12 18 L18 14" fill="#8B4513" />
+      <path d="M46 20 L56 8 L60 12 L54 10 L56 16 L50 12 L52 18 L46 14" fill="#8B4513" />
+      <circle cx="28" cy="24" r="2" fill="black" />
+      <circle cx="36" cy="24" r="2" fill="black" />
+      <ellipse cx="32" cy="32" rx="4" ry="3" fill="#1a1a1a" />
+      <path d="M24 56 L24 62" stroke={color} strokeWidth="4" strokeLinecap="round" />
+      <path d="M40 56 L40 62" stroke={color} strokeWidth="4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function Raccoon({ size = 64, color = '#808080' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="38" rx="16" ry="14" fill={color} />
+      <circle cx="32" cy="24" r="14" fill={color} />
+      <circle cx="32" cy="26" r="10" fill="white" />
+      <ellipse cx="24" cy="24" rx="6" ry="5" fill="#1a1a1a" />
+      <ellipse cx="40" cy="24" rx="6" ry="5" fill="#1a1a1a" />
+      <circle cx="24" cy="24" r="3" fill="white" />
+      <circle cx="40" cy="24" r="3" fill="white" />
+      <circle cx="24" cy="24" r="2" fill="black" />
+      <circle cx="40" cy="24" r="2" fill="black" />
+      <ellipse cx="32" cy="30" rx="3" ry="2" fill="black" />
+      <polygon points="24,10 20,4 28,10" fill={color} />
+      <polygon points="40,10 44,4 36,10" fill={color} />
+      <path d="M48 40 Q56 40 54 50 Q52 56 48 52" stroke={color} strokeWidth="5" fill="none" />
+      <path d="M48 42 L54 48" stroke="#1a1a1a" strokeWidth="2" />
+      <path d="M50 44 L54 52" stroke="#1a1a1a" strokeWidth="2" />
+    </svg>
+  );
+}
+
+export function Skunk({ size = 64, color = '#1a1a1a' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="40" rx="16" ry="12" fill={color} />
+      <path d="M20 40 L20 28 Q32 20 44 28 L44 40" fill={color} />
+      <path d="M32 28 L32 52" stroke="white" strokeWidth="6" />
+      <circle cx="32" cy="26" r="10" fill={color} />
+      <ellipse cx="32" cy="28" rx="6" ry="4" fill="white" />
+      <circle cx="28" cy="24" r="2" fill="white" />
+      <circle cx="36" cy="24" r="2" fill="white" />
+      <circle cx="28" cy="24" r="1" fill="black" />
+      <circle cx="36" cy="24" r="1" fill="black" />
+      <ellipse cx="32" cy="30" rx="2" ry="1.5" fill="black" />
+      <path d="M48 34 Q58 28 56 40 Q54 52 48 48" fill={color} />
+      <path d="M52 32 Q56 34 54 44 Q52 50 50 46" fill="white" />
+    </svg>
+  );
+}
+
+export function Beaver({ size = 64, color = '#8B4513' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="38" rx="18" ry="14" fill={color} />
+      <circle cx="32" cy="24" r="14" fill={color} />
+      <circle cx="26" cy="22" r="3" fill="white" />
+      <circle cx="38" cy="22" r="3" fill="white" />
+      <circle cx="26" cy="22" r="2" fill="black" />
+      <circle cx="38" cy="22" r="2" fill="black" />
+      <ellipse cx="32" cy="30" rx="3" ry="2" fill="black" />
+      <rect x="28" y="32" width="3" height="6" fill="white" />
+      <rect x="33" y="32" width="3" height="6" fill="white" />
+      <path d="M48 44 Q60 44 58 50 Q56 56 48 52" fill="#4a3728" />
+      <line x1="50" y1="46" x2="56" y2="46" stroke={color} strokeWidth="1" />
+      <line x1="50" y1="48" x2="56" y2="48" stroke={color} strokeWidth="1" />
+      <line x1="50" y1="50" x2="56" y2="50" stroke={color} strokeWidth="1" />
+    </svg>
+  );
+}
+
+export function Otter({ size = 64, color = '#8B6914' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="14" ry="18" fill={color} />
+      <ellipse cx="32" cy="44" rx="10" ry="8" fill="#D2B48C" />
+      <circle cx="32" cy="20" r="12" fill={color} />
+      <ellipse cx="32" cy="24" rx="8" ry="6" fill="#D2B48C" />
+      <circle cx="27" cy="18" r="2" fill="black" />
+      <circle cx="37" cy="18" r="2" fill="black" />
+      <ellipse cx="32" cy="24" rx="2" ry="1.5" fill="black" />
+      <circle cx="24" cy="22" r="3" fill={color} />
+      <circle cx="40" cy="22" r="3" fill={color} />
+    </svg>
+  );
+}
+
+export function Badger({ size = 64, color = '#696969' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="40" rx="20" ry="14" fill={color} />
+      <ellipse cx="32" cy="28" rx="14" ry="12" fill={color} />
+      <path d="M20 20 L32 36 L44 20" fill="white" />
+      <path d="M18 24 L32 18 L46 24" fill={color} />
+      <circle cx="26" cy="26" r="3" fill="black" />
+      <circle cx="38" cy="26" r="3" fill="black" />
+      <ellipse cx="32" cy="32" rx="3" ry="2" fill="black" />
+    </svg>
+  );
+}
+
+export function Porcupine({ size = 64, color = '#8B4513' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="40" rx="18" ry="14" fill={color} />
+      {[...Array(12)].map((_, i) => (
+        <line key={i} x1={20 + i * 2} y1={26} x2={18 + i * 3} y2={12 + (i % 3) * 4} stroke="#4a3728" strokeWidth="2" />
+      ))}
+      <circle cx="24" cy="42" r="8" fill={color} />
+      <circle cx="20" cy="40" r="2" fill="black" />
+      <ellipse cx="16" cy="44" rx="3" ry="2" fill="black" />
+    </svg>
+  );
+}
+
+export function Armadillo({ size = 64, color = '#A0522D' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="40" rx="20" ry="12" fill={color} />
+      {[...Array(5)].map((_, i) => (
+        <ellipse key={i} cx={20 + i * 6} cy="40" rx="3" ry="12" fill="#8B7355" stroke={color} />
+      ))}
+      <circle cx="12" cy="42" r="8" fill={color} />
+      <circle cx="8" cy="40" r="2" fill="black" />
+      <ellipse cx="6" cy="44" rx="3" ry="2" fill="#D2B48C" />
+      <path d="M52 42 Q58 42 56 46" stroke={color} strokeWidth="4" fill="none" />
+    </svg>
+  );
+}
+
+export function Sloth({ size = 64, color = '#A0522D' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="16" ry="20" fill={color} />
+      <ellipse cx="32" cy="42" rx="10" ry="10" fill="#D2B48C" />
+      <circle cx="32" cy="20" r="14" fill={color} />
+      <ellipse cx="32" cy="24" rx="10" ry="8" fill="#D2B48C" />
+      <ellipse cx="26" cy="20" rx="4" ry="2" fill="black" />
+      <ellipse cx="38" cy="20" rx="4" ry="2" fill="black" />
+      <path d="M28 28 Q32 32 36 28" stroke="black" strokeWidth="2" fill="none" />
+      <path d="M14 24 Q8 20 10 32 Q12 44 16 40" stroke={color} strokeWidth="6" fill="none" />
+      <path d="M50 24 Q56 20 54 32 Q52 44 48 40" stroke={color} strokeWidth="6" fill="none" />
+    </svg>
+  );
+}
+
+export function Mole({ size = 64, color = '#4a3728' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="40" rx="18" ry="14" fill={color} />
+      <ellipse cx="32" cy="30" rx="12" ry="14" fill={color} />
+      <ellipse cx="32" cy="36" rx="4" ry="6" fill="#FFB6C1" />
+      <circle cx="26" cy="26" r="2" fill="black" />
+      <circle cx="38" cy="26" r="2" fill="black" />
+      <ellipse cx="14" cy="44" rx="8" ry="4" fill={color} />
+      <ellipse cx="50" cy="44" rx="8" ry="4" fill={color} />
+    </svg>
+  );
+}
+
+export function Wombat({ size = 64, color = '#8B7355' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="42" rx="20" ry="14" fill={color} />
+      <circle cx="32" cy="26" r="14" fill={color} />
+      <circle cx="26" cy="24" r="3" fill="black" />
+      <circle cx="38" cy="24" r="3" fill="black" />
+      <ellipse cx="32" cy="32" rx="5" ry="4" fill="#1a1a1a" />
+      <circle cx="22" cy="16" r="4" fill={color} />
+      <circle cx="42" cy="16" r="4" fill={color} />
+    </svg>
+  );
+}
+
+export function Platypus({ size = 64, color = '#8B6914' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="38" rx="16" ry="12" fill={color} />
+      <ellipse cx="18" cy="44" rx="10" ry="4" fill="#FF8C00" />
+      <circle cx="32" cy="28" r="10" fill={color} />
+      <circle cx="28" cy="26" r="2" fill="black" />
+      <circle cx="36" cy="26" r="2" fill="black" />
+      <path d="M50 40 Q58 38 56 44 Q54 50 50 46" fill={color} />
+    </svg>
+  );
+}
+
+export function Lemur({ size = 64, color = '#808080' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="40" rx="14" ry="12" fill={color} />
+      <ellipse cx="32" cy="38" rx="10" ry="8" fill="white" />
+      <circle cx="32" cy="24" r="12" fill={color} />
+      <circle cx="32" cy="26" r="10" fill="white" />
+      <circle cx="27" cy="24" r="5" fill="#FFD700" stroke="black" strokeWidth="2" />
+      <circle cx="37" cy="24" r="5" fill="#FFD700" stroke="black" strokeWidth="2" />
+      <circle cx="27" cy="24" r="3" fill="black" />
+      <circle cx="37" cy="24" r="3" fill="black" />
+      <ellipse cx="32" cy="32" rx="2" ry="1.5" fill="black" />
+      <path d="M48 40 Q52 36 52 48 Q52 60 48 56" stroke={color} strokeWidth="4" fill="none" />
+      <path d="M48 42 L52 46 M48 48 L52 52" stroke="white" strokeWidth="3" />
+    </svg>
+  );
+}
+
+export function Gorilla({ size = 64, color = '#2F2F2F' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="42" rx="18" ry="16" fill={color} />
+      <ellipse cx="32" cy="44" rx="12" ry="10" fill="#696969" />
+      <circle cx="32" cy="24" r="14" fill={color} />
+      <circle cx="26" cy="22" r="3" fill="white" />
+      <circle cx="38" cy="22" r="3" fill="white" />
+      <circle cx="26" cy="22" r="2" fill="black" />
+      <circle cx="38" cy="22" r="2" fill="black" />
+      <ellipse cx="32" cy="30" rx="6" ry="5" fill="#696969" />
+      <circle cx="30" cy="30" r="2" fill="black" />
+      <circle cx="34" cy="30" r="2" fill="black" />
+      <path d="M10 36 Q6 40 8 50 Q10 58 16 54" stroke={color} strokeWidth="8" fill="none" />
+      <path d="M54 36 Q58 40 56 50 Q54 58 48 54" stroke={color} strokeWidth="8" fill="none" />
+    </svg>
+  );
+}
+
+export function Chimpanzee({ size = 64, color = '#4a3728' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="42" rx="14" ry="14" fill={color} />
+      <circle cx="32" cy="24" r="14" fill={color} />
+      <ellipse cx="32" cy="28" rx="10" ry="8" fill="#DEB887" />
+      <circle cx="16" cy="24" r="6" fill={color} />
+      <circle cx="48" cy="24" r="6" fill={color} />
+      <circle cx="16" cy="24" r="4" fill="#DEB887" />
+      <circle cx="48" cy="24" r="4" fill="#DEB887" />
+      <circle cx="27" cy="22" r="2" fill="black" />
+      <circle cx="37" cy="22" r="2" fill="black" />
+      <ellipse cx="32" cy="30" rx="4" ry="3" fill="#DEB887" />
+      <circle cx="30" cy="30" r="1.5" fill="black" />
+      <circle cx="34" cy="30" r="1.5" fill="black" />
+      <path d="M28 34 Q32 38 36 34" stroke="black" strokeWidth="2" fill="none" />
+    </svg>
+  );
+}
+
+export function Orangutan({ size = 64, color = '#FF6600' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="40" rx="16" ry="16" fill={color} />
+      <circle cx="32" cy="24" r="14" fill={color} />
+      <ellipse cx="32" cy="28" rx="12" ry="10" fill="#DEB887" />
+      <circle cx="26" cy="22" r="3" fill="black" />
+      <circle cx="38" cy="22" r="3" fill="black" />
+      <ellipse cx="32" cy="32" rx="5" ry="4" fill="#DEB887" />
+      <path d="M8 30 Q4 40 8 52 Q12 60 18 54" stroke={color} strokeWidth="8" fill="none" />
+      <path d="M56 30 Q60 40 56 52 Q52 60 46 54" stroke={color} strokeWidth="8" fill="none" />
+    </svg>
+  );
+}
+
+// ===== MEHR VÖGEL / MORE BIRDS =====
+
+export function Crow({ size = 64, color = '#1a1a1a' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="14" ry="16" fill={color} />
+      <circle cx="32" cy="20" r="10" fill={color} />
+      <polygon points="32,24 24,32 40,32" fill="#4a4a4a" />
+      <circle cx="28" cy="18" r="2" fill="white" />
+      <circle cx="36" cy="18" r="2" fill="white" />
+      <circle cx="28" cy="18" r="1" fill="black" />
+      <circle cx="36" cy="18" r="1" fill="black" />
+      <path d="M18 32 Q8 28 12 40" fill={color} />
+      <path d="M46 32 Q56 28 52 40" fill={color} />
+    </svg>
+  );
+}
+
+export function Sparrow({ size = 64, color = '#A0522D' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="38" rx="12" ry="14" fill={color} />
+      <ellipse cx="32" cy="42" rx="8" ry="6" fill="#D2B48C" />
+      <circle cx="32" cy="22" r="10" fill={color} />
+      <circle cx="28" cy="20" r="2" fill="black" />
+      <circle cx="36" cy="20" r="2" fill="black" />
+      <polygon points="32,24 26,28 38,28" fill="#FF8C00" />
+      <path d="M20 36 Q14 34 16 42" fill={color} />
+      <path d="M44 36 Q50 34 48 42" fill={color} />
+    </svg>
+  );
+}
+
+export function Hummingbird({ size = 64, color = '#00CED1' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="32" rx="10" ry="12" fill={color} />
+      <circle cx="32" cy="18" r="8" fill={color} />
+      <path d="M32 22 L32 38" stroke="#FF69B4" strokeWidth="2" />
+      <circle cx="29" cy="16" r="2" fill="black" />
+      <circle cx="35" cy="16" r="2" fill="black" />
+      <ellipse cx="20" cy="30" rx="10" ry="4" fill={color} opacity="0.7" />
+      <ellipse cx="44" cy="30" rx="10" ry="4" fill={color} opacity="0.7" />
+    </svg>
+  );
+}
+
+export function Woodpecker({ size = 64, color = '#1a1a1a' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="38" rx="10" ry="16" fill={color} />
+      <circle cx="32" cy="18" r="10" fill="#FF0000" />
+      <circle cx="32" cy="22" r="8" fill={color} />
+      <circle cx="28" cy="20" r="2" fill="white" />
+      <circle cx="36" cy="20" r="2" fill="white" />
+      <circle cx="28" cy="20" r="1" fill="black" />
+      <circle cx="36" cy="20" r="1" fill="black" />
+      <polygon points="32,24 32,36 38,30" fill="#808080" />
+    </svg>
+  );
+}
+
+export function Stork({ size = 64, color = 'white' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="30" rx="12" ry="14" fill={color} />
+      <circle cx="32" cy="14" r="8" fill={color} />
+      <polygon points="32,18 32,28 44,22" fill="#FF6347" />
+      <circle cx="28" cy="12" r="2" fill="black" />
+      <path d="M32 44 L32 58" stroke="#FF6347" strokeWidth="3" />
+      <path d="M28 44 L24 58" stroke="#FF6347" strokeWidth="3" />
+      <path d="M20 26 Q10 28 14 38" fill="black" />
+      <path d="M44 26 Q54 28 50 38" fill="black" />
+    </svg>
+  );
+}
+
+export function Pelican({ size = 64, color = 'white' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="14" ry="16" fill={color} />
+      <circle cx="32" cy="18" r="10" fill={color} />
+      <path d="M32 22 L32 42 Q38 48 32 50 Q26 48 32 42" fill="#FFD700" />
+      <circle cx="28" cy="16" r="2" fill="black" />
+      <path d="M18 32 Q8 30 12 42" fill={color} />
+      <path d="M46 32 Q56 30 52 42" fill={color} />
+    </svg>
+  );
+}
+
+export function Swan({ size = 64, color = 'white' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="38" cy="44" rx="16" ry="12" fill={color} />
+      <path d="M22 44 Q16 30 24 16 Q28 12 32 16" stroke={color} strokeWidth="8" fill="none" />
+      <circle cx="32" cy="16" r="6" fill={color} />
+      <polygon points="32,18 24,22 32,20" fill="#FF6347" />
+      <circle cx="30" cy="14" r="1.5" fill="black" />
+      <path d="M52 40 Q58 42 54 50" fill={color} />
+    </svg>
+  );
+}
+
+export function Seagull({ size = 64, color = 'white' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="12" ry="10" fill={color} />
+      <circle cx="32" cy="24" r="8" fill={color} />
+      <polygon points="32,28 26,34 38,34" fill="#FFD700" />
+      <circle cx="29" cy="22" r="2" fill="black" />
+      <circle cx="35" cy="22" r="2" fill="black" />
+      <path d="M20 32 Q8 24 10 36" fill="#808080" />
+      <path d="M44 32 Q56 24 54 36" fill="#808080" />
+    </svg>
+  );
+}
+
+// ===== MEHR MEERESBEWOHNER / MORE SEA CREATURES =====
+
+export function Starfish({ size = 64, color = '#FF6347' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <polygon points="32,8 38,24 56,24 42,36 48,54 32,44 16,54 22,36 8,24 26,24" fill={color} />
+      <circle cx="32" cy="32" r="8" fill="#FF8C00" />
+      <circle cx="32" cy="32" r="4" fill={color} />
+    </svg>
+  );
+}
+
+export function Clownfish({ size = 64, color = '#FF6347' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="32" rx="20" ry="14" fill={color} />
+      <ellipse cx="18" cy="32" rx="4" ry="10" fill="white" />
+      <ellipse cx="32" cy="32" rx="4" ry="10" fill="white" />
+      <ellipse cx="46" cy="32" rx="4" ry="10" fill="white" />
+      <circle cx="14" cy="28" r="3" fill="white" />
+      <circle cx="14" cy="28" r="2" fill="black" />
+      <polygon points="52,32 60,26 60,38" fill={color} />
+    </svg>
+  );
+}
+
+export function Pufferfish({ size = 64, color = '#FFD700' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="22" fill={color} />
+      {[...Array(16)].map((_, i) => (
+        <line key={i} x1={32 + 22 * Math.cos(i * Math.PI / 8)} y1={32 + 22 * Math.sin(i * Math.PI / 8)}
+              x2={32 + 28 * Math.cos(i * Math.PI / 8)} y2={32 + 28 * Math.sin(i * Math.PI / 8)}
+              stroke="#8B4513" strokeWidth="2" />
+      ))}
+      <circle cx="24" cy="28" r="4" fill="white" />
+      <circle cx="40" cy="28" r="4" fill="white" />
+      <circle cx="24" cy="28" r="2" fill="black" />
+      <circle cx="40" cy="28" r="2" fill="black" />
+      <ellipse cx="32" cy="38" rx="4" ry="2" fill="#8B4513" />
+    </svg>
+  );
+}
+
+export function Swordfish({ size = 64, color = '#4682B4' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="36" cy="32" rx="18" ry="10" fill={color} />
+      <polygon points="4,32 18,28 18,36" fill="#C0C0C0" />
+      <polygon points="54,32 62,24 62,40" fill={color} />
+      <polygon points="36,22 42,12 38,22" fill={color} />
+      <circle cx="22" cy="30" r="3" fill="white" />
+      <circle cx="22" cy="30" r="2" fill="black" />
+    </svg>
+  );
+}
+
+export function Manta({ size = 64, color = '#2F4F4F' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="32" rx="28" ry="16" fill={color} />
+      <ellipse cx="32" cy="36" rx="20" ry="10" fill="white" />
+      <polygon points="4,28 8,20 16,30" fill={color} />
+      <polygon points="60,28 56,20 48,30" fill={color} />
+      <circle cx="20" cy="28" r="2" fill="black" />
+      <circle cx="44" cy="28" r="2" fill="black" />
+      <path d="M32 48 L32 58" stroke={color} strokeWidth="4" />
+    </svg>
+  );
+}
+
+export function Lobster({ size = 64, color = '#FF4500' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="12" ry="16" fill={color} />
+      <circle cx="32" cy="18" r="8" fill={color} />
+      <path d="M26 12 L22 4" stroke={color} strokeWidth="2" />
+      <path d="M38 12 L42 4" stroke={color} strokeWidth="2" />
+      <circle cx="28" cy="16" r="2" fill="black" />
+      <circle cx="36" cy="16" r="2" fill="black" />
+      <path d="M20 28 L8 24 L6 20 L10 22 L8 18 L12 22 L14 26" fill={color} />
+      <path d="M44 28 L56 24 L58 20 L54 22 L56 18 L52 22 L50 26" fill={color} />
+      <path d="M32 52 L28 58 M32 52 L32 60 M32 52 L36 58" stroke={color} strokeWidth="2" />
+    </svg>
+  );
+}
+
+export function Shrimp({ size = 64, color = '#FF69B4' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <path d="M20 32 Q32 20 44 32 Q48 40 44 48 Q32 54 20 48 Q16 40 20 32" fill={color} />
+      <circle cx="18" cy="30" r="6" fill={color} />
+      <path d="M14 26 L8 18" stroke={color} strokeWidth="2" />
+      <path d="M16 24 L10 14" stroke={color} strokeWidth="2" />
+      <circle cx="16" cy="28" r="2" fill="black" />
+      <path d="M44 48 Q50 52 48 58" stroke={color} strokeWidth="3" />
+    </svg>
+  );
+}
+
+export function Squid({ size = 64, color = '#9932CC' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="24" rx="14" ry="18" fill={color} />
+      <circle cx="26" cy="20" r="4" fill="white" />
+      <circle cx="38" cy="20" r="4" fill="white" />
+      <circle cx="26" cy="20" r="2" fill="black" />
+      <circle cx="38" cy="20" r="2" fill="black" />
+      {[...Array(8)].map((_, i) => (
+        <path key={i} d={`M${24 + i * 2.5} 42 Q${22 + i * 3} 52 ${20 + i * 3.5} 60`} stroke={color} strokeWidth="3" fill="none" />
+      ))}
+    </svg>
+  );
+}
+
+export function Eel({ size = 64, color = '#4a5568' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <path d="M8 32 Q16 24 32 28 Q48 32 56 24 Q60 20 58 28 Q54 36 40 32 Q26 28 12 36 Q6 40 8 32" fill={color} stroke={color} strokeWidth="8" />
+      <circle cx="12" cy="30" r="2" fill="white" />
+      <circle cx="12" cy="30" r="1" fill="black" />
+    </svg>
+  );
+}
+
+// ===== MEHR INSEKTEN / MORE INSECTS =====
+
+export function Ladybug({ size = 64, color = '#FF0000' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="18" ry="16" fill={color} />
+      <line x1="32" y1="20" x2="32" y2="52" stroke="black" strokeWidth="2" />
+      <circle cx="24" cy="30" r="4" fill="black" />
+      <circle cx="40" cy="30" r="4" fill="black" />
+      <circle cx="28" cy="42" r="3" fill="black" />
+      <circle cx="36" cy="42" r="3" fill="black" />
+      <circle cx="32" cy="20" r="8" fill="black" />
+      <circle cx="29" cy="18" r="2" fill="white" />
+      <circle cx="35" cy="18" r="2" fill="white" />
+      <path d="M26 12 L22 6" stroke="black" strokeWidth="2" />
+      <path d="M38 12 L42 6" stroke="black" strokeWidth="2" />
+    </svg>
+  );
+}
+
+export function Dragonfly({ size = 64, color = '#00CED1' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="32" rx="4" ry="20" fill={color} />
+      <circle cx="32" cy="12" r="6" fill={color} />
+      <circle cx="29" cy="10" r="3" fill="#1a1a1a" />
+      <circle cx="35" cy="10" r="3" fill="#1a1a1a" />
+      <ellipse cx="18" cy="28" rx="14" ry="4" fill={color} opacity="0.6" />
+      <ellipse cx="46" cy="28" rx="14" ry="4" fill={color} opacity="0.6" />
+      <ellipse cx="18" cy="34" rx="14" ry="4" fill={color} opacity="0.6" />
+      <ellipse cx="46" cy="34" rx="14" ry="4" fill={color} opacity="0.6" />
+    </svg>
+  );
+}
+
+export function Grasshopper({ size = 64, color = '#32CD32' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="16" ry="10" fill={color} />
+      <circle cx="18" cy="32" r="8" fill={color} />
+      <circle cx="15" cy="30" r="3" fill="black" />
+      <path d="M12 26 L8 18" stroke={color} strokeWidth="2" />
+      <path d="M14 24 L12 14" stroke={color} strokeWidth="2" />
+      <path d="M38 46 Q50 36 54 50 Q56 58 50 56" stroke={color} strokeWidth="4" fill="none" />
+      <path d="M26 46 Q20 50 18 56" stroke={color} strokeWidth="3" fill="none" />
+    </svg>
+  );
+}
+
+export function Ant({ size = 64, color = '#2F2F2F' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <circle cx="16" cy="32" r="8" fill={color} />
+      <ellipse cx="32" cy="32" rx="10" ry="8" fill={color} />
+      <ellipse cx="50" cy="32" rx="8" ry="6" fill={color} />
+      <circle cx="13" cy="30" r="2" fill="white" />
+      <path d="M12 26 L8 18" stroke={color} strokeWidth="2" />
+      <path d="M16 24 L14 16" stroke={color} strokeWidth="2" />
+      <path d="M26 40 L22 50" stroke={color} strokeWidth="2" />
+      <path d="M32 40 L32 52" stroke={color} strokeWidth="2" />
+      <path d="M38 40 L42 50" stroke={color} strokeWidth="2" />
+    </svg>
+  );
+}
+
+export function Caterpillar({ size = 64, color = '#32CD32' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      {[...Array(5)].map((_, i) => (
+        <circle key={i} cx={12 + i * 10} cy={36 - Math.sin(i * 0.5) * 4} r="8" fill={i === 0 ? '#90EE90' : color} />
+      ))}
+      <circle cx="8" cy="32" r="2" fill="black" />
+      <path d="M6 28 L4 22" stroke={color} strokeWidth="2" />
+      <path d="M10 28 L12 22" stroke={color} strokeWidth="2" />
+    </svg>
+  );
+}
+
+export function Firefly({ size = 64, color = '#2F2F2F' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="32" rx="10" ry="14" fill={color} />
+      <ellipse cx="32" cy="44" rx="6" ry="8" fill="#FFFF00" opacity="0.8" />
+      <circle cx="32" cy="18" r="8" fill={color} />
+      <circle cx="28" cy="16" r="2" fill="#FFFF00" />
+      <circle cx="36" cy="16" r="2" fill="#FFFF00" />
+      <path d="M26 12 L22 6" stroke={color} strokeWidth="2" />
+      <path d="M38 12 L42 6" stroke={color} strokeWidth="2" />
+      <ellipse cx="20" cy="28" rx="12" ry="4" fill={color} opacity="0.5" />
+      <ellipse cx="44" cy="28" rx="12" ry="4" fill={color} opacity="0.5" />
+    </svg>
+  );
+}
+
+export function Beetle({ size = 64, color = '#228B22' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="16" ry="18" fill={color} />
+      <line x1="32" y1="18" x2="32" y2="54" stroke="#1a1a1a" strokeWidth="1" />
+      <circle cx="32" cy="18" r="8" fill="#1a1a1a" />
+      <circle cx="29" cy="16" r="2" fill="white" />
+      <circle cx="35" cy="16" r="2" fill="white" />
+      <path d="M24 12 L18 6 L16 10" stroke="#1a1a1a" strokeWidth="2" fill="none" />
+      <path d="M40 12 L46 6 L48 10" stroke="#1a1a1a" strokeWidth="2" fill="none" />
+      <path d="M16 30 L8 26" stroke="#1a1a1a" strokeWidth="2" />
+      <path d="M16 36 L6 36" stroke="#1a1a1a" strokeWidth="2" />
+      <path d="M16 42 L8 46" stroke="#1a1a1a" strokeWidth="2" />
+      <path d="M48 30 L56 26" stroke="#1a1a1a" strokeWidth="2" />
+      <path d="M48 36 L58 36" stroke="#1a1a1a" strokeWidth="2" />
+      <path d="M48 42 L56 46" stroke="#1a1a1a" strokeWidth="2" />
+    </svg>
+  );
+}
+
+export function Moth({ size = 64, color = '#D2B48C' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="6" ry="12" fill="#8B7355" />
+      <circle cx="32" cy="22" r="6" fill="#8B7355" />
+      <circle cx="29" cy="20" r="2" fill="black" />
+      <circle cx="35" cy="20" r="2" fill="black" />
+      <path d="M28 16 Q24 8 20 12" stroke="#8B7355" strokeWidth="2" fill="none" />
+      <path d="M36 16 Q40 8 44 12" stroke="#8B7355" strokeWidth="2" fill="none" />
+      <ellipse cx="18" cy="32" rx="14" ry="10" fill={color} />
+      <ellipse cx="46" cy="32" rx="14" ry="10" fill={color} />
+      <circle cx="14" cy="32" r="4" fill="#8B4513" />
+      <circle cx="50" cy="32" r="4" fill="#8B4513" />
+    </svg>
+  );
+}
+
+// ===== REPTILIEN / REPTILES =====
+
+export function Lizard({ size = 64, color = '#32CD32' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="32" rx="14" ry="8" fill={color} />
+      <circle cx="18" cy="30" r="8" fill={color} />
+      <circle cx="15" cy="28" r="2" fill="#FFD700" />
+      <circle cx="15" cy="28" r="1" fill="black" />
+      <path d="M10 30 L4 32" stroke={color} strokeWidth="2" />
+      <path d="M46 32 Q54 30 58 36 Q60 42 56 40" stroke={color} strokeWidth="4" fill="none" />
+      <path d="M24 40 L20 50" stroke={color} strokeWidth="3" fill="none" />
+      <path d="M28 40 L26 52" stroke={color} strokeWidth="3" fill="none" />
+      <path d="M36 40 L38 52" stroke={color} strokeWidth="3" fill="none" />
+      <path d="M40 40 L44 50" stroke={color} strokeWidth="3" fill="none" />
+    </svg>
+  );
+}
+
+export function Gecko({ size = 64, color = '#90EE90' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="32" rx="12" ry="6" fill={color} />
+      <circle cx="20" cy="30" r="8" fill={color} />
+      <circle cx="16" cy="26" r="4" fill="#FFD700" />
+      <circle cx="16" cy="26" r="2" fill="black" />
+      <circle cx="24" cy="26" r="4" fill="#FFD700" />
+      <circle cx="24" cy="26" r="2" fill="black" />
+      <path d="M44 32 Q52 30 56 36 Q58 42 54 40" stroke={color} strokeWidth="3" fill="none" />
+      <circle cx="22" cy="44" r="4" fill={color} />
+      <circle cx="30" cy="46" r="4" fill={color} />
+      <circle cx="34" cy="46" r="4" fill={color} />
+      <circle cx="42" cy="44" r="4" fill={color} />
+    </svg>
+  );
+}
+
+export function Chameleon({ size = 64, color = '#32CD32' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="36" cy="32" rx="16" ry="12" fill={color} />
+      <circle cx="20" cy="28" r="10" fill={color} />
+      <circle cx="16" cy="26" r="6" fill="#90EE90" />
+      <circle cx="16" cy="26" r="3" fill="black" />
+      <path d="M52 32 Q60 28 58 36 Q56 44 52 40" stroke={color} strokeWidth="4" fill="none" />
+      <path d="M52 38 Q48 46 44 42" stroke={color} strokeWidth="3" fill="none" />
+      <path d="M10 32 L2 28 Q0 30 4 34" stroke="#FF69B4" strokeWidth="2" fill="none" />
+    </svg>
+  );
+}
+
+export function Iguana({ size = 64, color = '#228B22' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="36" cy="36" rx="18" ry="10" fill={color} />
+      <path d="M32 26 L34 20 L36 26 L38 18 L40 26 L42 22 L44 26" fill={color} />
+      <circle cx="18" cy="32" r="10" fill={color} />
+      <circle cx="14" cy="30" r="3" fill="#FFD700" />
+      <circle cx="14" cy="30" r="1.5" fill="black" />
+      <path d="M54 36 Q62 34 60 42 Q58 50 54 46" stroke={color} strokeWidth="4" fill="none" />
+      <ellipse cx="26" cy="48" rx="4" ry="2" fill={color} />
+      <ellipse cx="46" cy="48" rx="4" ry="2" fill={color} />
+    </svg>
+  );
+}
+
+export function Tortoise({ size = 64, color = '#556B2F' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="22" ry="16" fill="#8B7355" />
+      <ellipse cx="32" cy="34" rx="18" ry="12" fill={color} />
+      <path d="M20 34 L20 28 L26 34 L26 26 L32 34 L32 26 L38 34 L38 28 L44 34" fill="#6B8E23" />
+      <circle cx="12" cy="40" r="6" fill="#8B7355" />
+      <circle cx="10" cy="38" r="2" fill="black" />
+      <ellipse cx="18" cy="50" rx="4" ry="3" fill="#8B7355" />
+      <ellipse cx="46" cy="50" rx="4" ry="3" fill="#8B7355" />
+      <path d="M52 42 Q56 42 54 46" stroke="#8B7355" strokeWidth="4" fill="none" />
+    </svg>
+  );
+}
+
+// ===== MYTHISCHE TIERE / MYTHICAL CREATURES =====
+
+export function Phoenix({ size = 64, color = '#FF4500' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="36" rx="14" ry="16" fill={color} />
+      <circle cx="32" cy="20" r="10" fill={color} />
+      <path d="M28 10 L24 2 L30 8" fill="#FFD700" />
+      <path d="M32 8 L32 0 L34 8" fill="#FFD700" />
+      <path d="M36 10 L40 2 L34 8" fill="#FFD700" />
+      <circle cx="28" cy="18" r="2" fill="black" />
+      <circle cx="36" cy="18" r="2" fill="black" />
+      <polygon points="32,24 28,30 36,30" fill="#FFD700" />
+      <path d="M18 30 Q6 26 10 42 Q14 54 22 48" fill={color} />
+      <path d="M46 30 Q58 26 54 42 Q50 54 42 48" fill={color} />
+      <path d="M32 52 Q26 60 20 56 M32 52 L32 62 M32 52 Q38 60 44 56" stroke="#FFD700" strokeWidth="3" fill="none" />
+    </svg>
+  );
+}
+
+export function Griffin({ size = 64, color = '#DAA520' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="36" cy="38" rx="16" ry="14" fill="#8B4513" />
+      <circle cx="24" cy="24" r="12" fill={color} />
+      <polygon points="24,28 16,36 32,36" fill="#FF8C00" />
+      <circle cx="20" cy="22" r="3" fill="white" />
+      <circle cx="28" cy="22" r="3" fill="white" />
+      <circle cx="20" cy="22" r="2" fill="black" />
+      <circle cx="28" cy="22" r="2" fill="black" />
+      <polygon points="20,12 16,4 24,12" fill={color} />
+      <polygon points="28,12 32,4 24,12" fill={color} />
+      <path d="M20 34 Q8 30 12 44 Q16 54 24 48" fill={color} />
+      <path d="M52 34 Q60 30 56 44 Q52 54 46 48" fill={color} />
+      <path d="M28 52 L24 60" stroke="#8B4513" strokeWidth="4" />
+      <path d="M44 52 L48 60" stroke="#8B4513" strokeWidth="4" />
+    </svg>
+  );
+}
+
+export function Pegasus({ size = 64, color = 'white' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="34" cy="38" rx="18" ry="12" fill={color} />
+      <path d="M16 36 Q12 28 18 20 Q22 16 26 20" stroke={color} strokeWidth="6" fill="none" />
+      <circle cx="26" cy="20" r="8" fill={color} />
+      <circle cx="23" cy="18" r="2" fill="black" />
+      <path d="M20 12 L16 6 L22 10 L20 4 L26 12" fill="#E6E6FA" />
+      <path d="M20 34 Q10 28 8 38 Q6 48 16 46" fill={color} />
+      <path d="M48 34 Q58 28 56 38 Q54 48 46 46" fill={color} />
+      <path d="M52 42 Q58 40 56 48 Q54 56 50 52" stroke={color} strokeWidth="4" fill="none" />
+      <path d="M28 50 L26 60" stroke={color} strokeWidth="3" />
+      <path d="M40 50 L42 60" stroke={color} strokeWidth="3" />
+    </svg>
+  );
+}
+
+export function Centaur({ size = 64, color = '#8B4513' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="38" cy="42" rx="18" ry="10" fill={color} />
+      <path d="M20 42 L20 58" stroke={color} strokeWidth="4" />
+      <path d="M30 42 L30 58" stroke={color} strokeWidth="4" />
+      <path d="M46 42 L46 58" stroke={color} strokeWidth="4" />
+      <path d="M56 42 L56 58" stroke={color} strokeWidth="4" />
+      <ellipse cx="22" cy="32" rx="8" ry="12" fill="#FFE4C4" />
+      <circle cx="22" cy="18" r="8" fill="#FFE4C4" />
+      <circle cx="19" cy="16" r="1.5" fill="black" />
+      <circle cx="25" cy="16" r="1.5" fill="black" />
+      <path d="M18 8 Q14 4 18 12 Q22 6 26 12 Q30 4 26 8" fill="#4a3728" />
+      <path d="M56 46 Q62 44 60 50" stroke={color} strokeWidth="4" fill="none" />
+    </svg>
+  );
+}
+
+export function Yeti({ size = 64, color = 'white' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="42" rx="20" ry="16" fill={color} />
+      <circle cx="32" cy="22" r="14" fill={color} />
+      <circle cx="26" cy="20" r="4" fill="white" stroke="#ADD8E6" strokeWidth="1" />
+      <circle cx="38" cy="20" r="4" fill="white" stroke="#ADD8E6" strokeWidth="1" />
+      <circle cx="26" cy="20" r="2" fill="#4169E1" />
+      <circle cx="38" cy="20" r="2" fill="#4169E1" />
+      <ellipse cx="32" cy="28" rx="4" ry="3" fill="#ADD8E6" />
+      <path d="M10 36 Q6 42 10 52" stroke={color} strokeWidth="8" fill="none" />
+      <path d="M54 36 Q58 42 54 52" stroke={color} strokeWidth="8" fill="none" />
+    </svg>
+  );
+}
+
+export function Kraken({ size = 64, color = '#4B0082' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="24" rx="18" ry="16" fill={color} />
+      <circle cx="24" cy="20" r="5" fill="#FFD700" />
+      <circle cx="40" cy="20" r="5" fill="#FFD700" />
+      <circle cx="24" cy="20" r="3" fill="black" />
+      <circle cx="40" cy="20" r="3" fill="black" />
+      {[...Array(8)].map((_, i) => (
+        <path key={i} d={`M${20 + i * 3.5} 40 Q${16 + i * 4} 52 ${14 + i * 5} 60`} stroke={color} strokeWidth="4" fill="none" />
+      ))}
+    </svg>
+  );
+}

@@ -1,0 +1,931 @@
+{
+  "id": "liana-ozean",
+  "title": "Lianas Ozean-Abenteuer",
+  "description": "Prinzessin Liana sucht ihr verlorenes Amulett in der Unterwasserwelt",
+  "author": "Storybuilder",
+  "scenes": [
+    {
+      "id": "start",
+      "background": "SunnyBeach",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 100,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Prinzessin Liana steht am Ufer eines weiten Ozeans.",
+        "Die Wellen rauschen sanft und die Sonne glitzert auf dem Wasser.",
+        "Plötzlich bemerkt sie einen besonderen Seestern im Sand!"
+      ],
+      "findTarget": {
+        "sprite": "Starfish",
+        "size": 40,
+        "position": {
+          "x": 70,
+          "y": 80
+        },
+        "hint": "Wo könnte der besondere Seestern sein?",
+        "foundText": "Da ist er ja!",
+        "nextSceneId": "seestern_gefunden"
+      }
+    },
+    {
+      "id": "seestern_gefunden",
+      "background": "SunnyBeach",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 100,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Super! Liana hat den besonderen Seestern gefunden.",
+        "Aber jetzt bemerkt sie, dass noch etwas anderes nicht stimmt..."
+      ],
+      "choices": [
+        {
+          "text": "🔍 Was ist los?",
+          "nextSceneId": "amulett_verloren"
+        },
+        {
+          "text": "☕ Kaffee mit Freunden trinken",
+          "nextSceneId": "kaffee_trinken"
+        },
+        {
+          "text": "🍽️ Mittag essen",
+          "nextSceneId": "mittag_essen"
+        }
+      ]
+    },
+    {
+      "id": "kaffee_trinken",
+      "background": "EnchantedForest",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 100,
+          "bottom": 80
+        },
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90,
+          "bottom": 80
+        },
+        {
+          "sprite": "Princess",
+          "position": "right",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana trifft sich mit ihren Freunden im verzauberten Wald für ein Picknick.",
+        "Sie plaudern, lachen und genießen leckeren Kuchen zusammen.",
+        "Plötzlich bemerkt Liana, dass ihr Amulett verschwunden ist!"
+      ],
+      "choices": [
+        {
+          "text": "😱 Oh nein! Was nun?",
+          "nextSceneId": "amulett_verloren"
+        }
+      ]
+    },
+    {
+      "id": "amulett_verloren",
+      "background": "EnchantedForest",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Oh nein! Liana bemerkt, dass ihr Amulett der Unsichtbarkeit verschwunden ist!",
+        "Sie erfährt, dass die Meerjungfrauen aus der Unterwasserwelt es gestohlen haben.",
+        "Um es zurückzuholen, muss sie zuerst einen Papagei finden, der ihr einen Schlüssel gibt."
+      ],
+      "choices": [
+        {
+          "text": "🦜 Papagei im Wald suchen",
+          "nextSceneId": "papagei_suche"
+        },
+        {
+          "text": "🔍 Nach Spuren suchen",
+          "nextSceneId": "spuren_suchen"
+        },
+        {
+          "text": "👩‍👧 Mutter um Rat fragen",
+          "nextSceneId": "mutter_rat"
+        }
+      ]
+    },
+    {
+      "id": "spuren_suchen",
+      "background": "EnchantedForest",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana sucht aufmerksam nach Spuren...",
+        "Sie entdeckt seltsame Fußabdrücke, die zum Wasser führen!",
+        "Vielleicht gehören sie den Meerjungfrauen?"
+      ],
+      "choices": [
+        {
+          "text": "🦜 Jetzt den Papagei suchen",
+          "nextSceneId": "papagei_suche"
+        },
+        {
+          "text": "🌊 Den Spuren zum Wasser folgen",
+          "nextSceneId": "zum_ozean"
+        }
+      ]
+    },
+    {
+      "id": "papagei_suche",
+      "background": "EnchantedForest",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana betritt den verzauberten Wald.",
+        "Irgendwo zwischen den Bäumen versteckt sich der Papagei..."
+      ],
+      "findTarget": {
+        "sprite": "Parrot",
+        "size": 45,
+        "position": {
+          "x": 78,
+          "y": 35
+        },
+        "hint": "Wo versteckt sich der Papagei?",
+        "foundText": "Da ist er!",
+        "nextSceneId": "papagei_gefunden"
+      },
+      "onFindTargetActions": [
+        {
+          "type": "add_item",
+          "item": "golden_key",
+          "message": "🔑 Du hast einen goldenen Schlüssel erhalten!"
+        }
+      ]
+    },
+    {
+      "id": "papagei_gefunden",
+      "background": "EnchantedForest",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80,
+          "bottom": 80
+        },
+        {
+          "sprite": "Parrot",
+          "position": "right",
+          "size": 70,
+          "bottom": 100
+        }
+      ],
+      "dialogue": [
+        "🦜 \"Krraa! Du hast mich gefunden!\"",
+        "\"Nimm diesen Schlüssel zur Unterwasserwelt!\"",
+        "\"Aber sei vorsichtig! Der Ozean ist voller Gefahren!\""
+      ],
+      "choices": [
+        {
+          "text": "🏊‍♀️ Direkt in den Ozean tauchen",
+          "nextSceneId": "tauchen"
+        },
+        {
+          "text": "🚣‍♀️ Nach einem magischen Boot suchen",
+          "nextSceneId": "boot_suchen"
+        },
+        {
+          "text": "🔑 Vorsichtig zum Ozean gehen",
+          "nextSceneId": "zum_ozean"
+        }
+      ]
+    },
+    {
+      "id": "tauchen",
+      "background": "DeepOcean",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana taucht mutig in die Wellen!",
+        "Unter Wasser sieht sie ein großes goldenes Tor...",
+        "Aber plötzlich bemerkt sie etwas Gefährliches in der Nähe!"
+      ],
+      "choices": [
+        {
+          "text": "🦈 Was ist das?",
+          "nextSceneId": "hai_begegnung"
+        },
+        {
+          "text": "🔙 Schnell zurück an die Oberfläche",
+          "nextSceneId": "papagei_gefunden"
+        }
+      ]
+    },
+    {
+      "id": "hai_begegnung",
+      "background": "DeepOcean",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80,
+          "bottom": 80
+        },
+        {
+          "sprite": "Shark",
+          "position": "right",
+          "size": 120,
+          "bottom": 100
+        }
+      ],
+      "dialogue": [
+        "Oh nein! Ein riesiger Hai schwimmt auf Liana zu!",
+        "Was soll sie tun?"
+      ],
+      "choices": [
+        {
+          "text": "🏊‍♀️ Schnell wegschwimmen",
+          "nextSceneId": "hai_flucht"
+        },
+        {
+          "text": "🎵 Versuchen, mit dem Hai zu sprechen",
+          "nextSceneId": "hai_gesprach"
+        },
+        {
+          "text": "🔑 Das goldene Tor öffnen",
+          "nextSceneId": "unterwasser_palast",
+          "requiresItems": [
+            "golden_key"
+          ],
+          "showWhenLocked": true,
+          "lockedText": "🔒 Das goldene Tor (verschlossen)"
+        }
+      ]
+    },
+    {
+      "id": "hai_flucht",
+      "background": "DeepOcean",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana schwimmt so schnell sie kann!",
+        "Der Hai folgt ihr... aber dann verliert er das Interesse.",
+        "Puh, das war knapp!"
+      ],
+      "choices": [
+        {
+          "text": "🔑 Zum goldenen Tor schwimmen",
+          "nextSceneId": "unterwasser_palast",
+          "requiresItems": [
+            "golden_key"
+          ],
+          "showWhenLocked": true,
+          "lockedText": "🔒 Zum goldenen Tor (verschlossen)"
+        },
+        {
+          "text": "🔙 Zurück an die Oberfläche",
+          "nextSceneId": "papagei_gefunden"
+        }
+      ]
+    },
+    {
+      "id": "hai_gesprach",
+      "background": "DeepOcean",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80,
+          "bottom": 80
+        },
+        {
+          "sprite": "Shark",
+          "position": "right",
+          "size": 120,
+          "bottom": 100
+        }
+      ],
+      "dialogue": [
+        "Liana singt ein altes Meerlied...",
+        "Der Hai hält inne und hört zu!",
+        "🦈 \"Was für eine schöne Stimme! Ich helfe dir gerne!\"",
+        "Der Hai zeigt ihr den Weg zum Unterwasser-Palast."
+      ],
+      "choices": [
+        {
+          "text": "🏛️ Dem Hai folgen",
+          "nextSceneId": "unterwasser_palast",
+          "requiresItems": [
+            "golden_key"
+          ],
+          "showWhenLocked": true,
+          "lockedText": "🔒 Dem Hai folgen (Schlüssel fehlt)"
+        },
+        {
+          "text": "🔙 Lieber zurück schwimmen",
+          "nextSceneId": "papagei_gefunden"
+        },
+        {
+          "text": "🏃‍♀️ Den Hai jagen",
+          "nextSceneId": "hai_jagd"
+        }
+      ]
+    },
+    {
+      "id": "boot_suchen",
+      "background": "DeepOcean",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana sucht am Strand nach einem Boot...",
+        "Aber sie findet keins. Vielleicht sollte sie einfach schwimmen?"
+      ],
+      "choices": [
+        {
+          "text": "🏊‍♀️ Doch lieber tauchen",
+          "nextSceneId": "tauchen"
+        },
+        {
+          "text": "🔙 Zurück zum Papagei",
+          "nextSceneId": "papagei_gefunden"
+        }
+      ]
+    },
+    {
+      "id": "zum_ozean",
+      "background": "DeepOcean",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana geht vorsichtig zum Ozean.",
+        "Die Wellen umspülen ihre Füße..."
+      ],
+      "choices": [
+        {
+          "text": "🏊‍♀️ Jetzt tauchen!",
+          "nextSceneId": "tauchen"
+        },
+        {
+          "text": "🔙 Noch mal nachdenken",
+          "nextSceneId": "papagei_gefunden"
+        }
+      ]
+    },
+    {
+      "id": "unterwasser_palast",
+      "background": "DeepOcean",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Der goldene Schlüssel passt! Das Tor öffnet sich...",
+        "Liana betritt den geheimen Unterwasser-Palast!",
+        "Hier muss ihr Amulett sein...",
+        "(Fortsetzung folgt!)"
+      ],
+      "onEnterActions": [
+        {
+          "type": "complete_task",
+          "task": "entered_palace"
+        }
+      ]
+    },
+    {
+      "id": "mutter_rat",
+      "background": "CastleCourtyard",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90,
+          "bottom": 80
+        },
+        {
+          "sprite": "Queen",
+          "position": "right",
+          "size": 100,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana erzählt ihrer Mutter von dem verlorenen Amulett.",
+        "Die Königin hört aufmerksam zu und denkt nach..."
+      ],
+      "choices": [
+        {
+          "text": "🤔 Was rät die Mutter?",
+          "nextSceneId": "mutter_ratschlag"
+        },
+        {
+          "text": "📜 Nach der Geschichte des Amuletts fragen",
+          "nextSceneId": "amulett_geschichte"
+        }
+      ]
+    },
+    {
+      "id": "mutter_ratschlag",
+      "background": "CastleCourtyard",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90,
+          "bottom": 80
+        },
+        {
+          "sprite": "Queen",
+          "position": "right",
+          "size": 100,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Die Königin lächelt und holt ein glänzendes Schwert hervor.",
+        "\"Liana, nimm dieses magische Schwert. Es leuchtet, wenn Gefahr naht.\"",
+        "Liana nimmt das Schwert vorsichtig entgegen. Es fühlt sich warm an."
+      ],
+      "choices": [
+        {
+          "text": "🗡️ Das Schwert mitnehmen",
+          "nextSceneId": "schwert_erhalten"
+        }
+      ],
+      "onEnterActions": [
+        {
+          "type": "add_item",
+          "item": "magisches_schwert",
+          "message": "🗡️✨ Magisches Schwert erhalten!"
+        }
+      ]
+    },
+    {
+      "id": "amulett_geschichte",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90,
+          "bottom": 80
+        },
+        {
+          "sprite": "Queen",
+          "position": "right",
+          "size": 100,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana und ihre Mutter betreten die uralte Bibliothek des Schlosses.",
+        "Staubige Bücher und magische Artefakte umgeben sie.",
+        "Die Königin nimmt ein altes Buch aus dem Regal und beginnt zu erzählen..."
+      ],
+      "choices": [
+        {
+          "text": "📖 Die Geschichte des Amuletts hören",
+          "nextSceneId": "amulett_legende"
+        },
+        {
+          "text": "🔍 Nach Hinweisen in der Bibliothek suchen",
+          "nextSceneId": "bibliothek_suche"
+        },
+        {
+          "text": "🏖️ Zurück zum Strand gehen",
+          "nextSceneId": "start"
+        }
+      ]
+    },
+    {
+      "id": "amulett_legende",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90,
+          "bottom": 80
+        },
+        {
+          "sprite": "Queen",
+          "position": "right",
+          "size": 100,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Die Königin öffnet das alte Buch und beginnt zu erzählen:",
+        "\"Vor langer Zeit erschuf eine mächtige Zauberin das Amulett der Unsichtbarkeit.\"",
+        "\"Es sollte unser Königreich vor dunklen Mächten schützen.\"",
+        "\"Doch die Meerjungfrauen glauben, es gehöre ihnen...\"",
+        "Liana hört gespannt zu. Was wird sie als nächstes tun?"
+      ],
+      "choices": [
+        {
+          "text": "🌊 Sofort ins Meer tauchen!",
+          "nextSceneId": "tauchen"
+        },
+        {
+          "text": "🤔 Nach mehr Infos fragen",
+          "nextSceneId": "mehr_infos"
+        },
+        {
+          "text": "🏰 Im Schloss nach Hilfe suchen",
+          "nextSceneId": "schloss_hilfe"
+        }
+      ]
+    },
+    {
+      "id": "mehr_infos",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90,
+          "bottom": 80
+        },
+        {
+          "sprite": "Queen",
+          "position": "right",
+          "size": 100,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana fragt: \"Mutter, erzähl mir mehr über die Zauberin und das Amulett!\"",
+        "Die Königin nickt und blättert im alten Buch.",
+        "\"Die Zauberin lebte auf einer geheimen Insel zwischen den Welten.\"",
+        "\"Sie schuf das Amulett aus Mondlicht und Meerschaum.\"",
+        "\"Es heißt, wer es trägt, kann nicht nur unsichtbar werden...\"",
+        "\"...sondern auch mit allen Meereswesen sprechen!\""
+      ],
+      "choices": [
+        {
+          "text": "🏝️ Nach der geheimen Insel suchen",
+          "nextSceneId": "insel_suche"
+        },
+        {
+          "text": "🐠 Versuchen, mit Fischen zu sprechen",
+          "nextSceneId": "fisch_gesprach"
+        },
+        {
+          "text": "🌊 Jetzt ins Meer tauchen",
+          "nextSceneId": "tauchen"
+        }
+      ]
+    },
+    {
+      "id": "insel_suche",
+      "background": "VolcanicIsland",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana erreicht eine geheimnisvolle vulkanische Insel.",
+        "Sie erinnert sich an die Worte ihrer Mutter:",
+        "\"Suche nach einem leuchtenden Stein. Er wird dir den Weg weisen.\"",
+        "Kannst du Liana helfen, den Stein zu finden?"
+      ],
+      "findTarget": {
+        "sprite": "Crystal",
+        "size": 40,
+        "position": {
+          "x": 75,
+          "y": 60
+        },
+        "hint": "Der Stein leuchtet schwach... Wo könnte er sein?",
+        "foundText": "Du hast den magischen Stein gefunden!",
+        "nextSceneId": "stein_gefunden"
+      }
+    },
+    {
+      "id": "stein_gefunden",
+      "background": "VolcanicIsland",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Der magische Stein beginnt hell zu leuchten!",
+        "Er zeigt Liana eine Vision: Das Amulett befindet sich im Unterwasser-Palast.",
+        "Der Stein flüstert: \"Nimm mich mit. Ich werde dir helfen, die Meerjungfrauen zu überzeugen.\"",
+        "Was möchtest du als nächstes tun?"
+      ],
+      "choices": [
+        {
+          "text": "💎 Mit dem Stein ins Meer tauchen",
+          "nextSceneId": "tauchen"
+        },
+        {
+          "text": "🤔 Was soll ich tun?",
+          "nextSceneId": "stein_hilfe"
+        }
+      ],
+      "onEnterActions": [
+        {
+          "type": "add_item",
+          "item": "magic_crystal",
+          "message": "💎✨ Magischer Kristall erhalten!"
+        }
+      ]
+    },
+    {
+      "id": "stein_hilfe",
+      "background": "VolcanicIsland",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Der Stein leuchtet sanft und spricht zu dir:",
+        "\"Du hast jetzt einen magischen Kristall, der dir hilft!\"",
+        "\"Du könntest direkt ins Meer tauchen und nach dem Palast suchen.\"",
+        "\"Oder du suchst erst den Papagei, um einen Schlüssel zu bekommen.\"",
+        "\"Was klingt besser für dich?\""
+      ],
+      "choices": [
+        {
+          "text": "🌊 Ins Meer tauchen!",
+          "nextSceneId": "tauchen"
+        },
+        {
+          "text": "🦜 Den Papagei suchen",
+          "nextSceneId": "papagei_suche"
+        }
+      ]
+    },
+    {
+      "id": "fisch_gesprach",
+      "background": "DeepOcean",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80,
+          "bottom": 80
+        },
+        {
+          "sprite": "Fish",
+          "position": "right",
+          "size": 60,
+          "bottom": 120
+        }
+      ],
+      "dialogue": [
+        "Liana versucht, mit den Fischen zu sprechen...",
+        "Ohne das Amulett verstehen sie sie nicht ganz.",
+        "Aber ein kleiner Fisch scheint sie zu mögen!",
+        "Er schwimmt aufgeregt um sie herum und zeigt in eine Richtung."
+      ],
+      "choices": [
+        {
+          "text": "🐠 Dem Fisch folgen",
+          "nextSceneId": "tauchen"
+        },
+        {
+          "text": "🔙 Zurück zur Oberfläche",
+          "nextSceneId": "start"
+        }
+      ]
+    },
+    {
+      "id": "bibliothek_suche",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana durchsucht die alte Bibliothek...",
+        "Zwischen verstaubten Büchern findet sie eine alte Karte!",
+        "Die Karte zeigt den Weg zum geheimen Unterwasser-Palast."
+      ],
+      "choices": [
+        {
+          "text": "🗺️ Der Karte folgen",
+          "nextSceneId": "tauchen"
+        },
+        {
+          "text": "📚 Weiter in Büchern suchen",
+          "nextSceneId": "amulett_legende"
+        }
+      ],
+      "onEnterActions": [
+        {
+          "type": "add_item",
+          "item": "alte_karte",
+          "message": "🗺️ Alte Karte gefunden!"
+        }
+      ]
+    },
+    {
+      "id": "schloss_hilfe",
+      "background": "CastleCourtyard",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90,
+          "bottom": 80
+        },
+        {
+          "sprite": "Knight",
+          "position": "right",
+          "size": 100,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Im Schlosshof trifft Liana auf einen mutigen Ritter.",
+        "\"Prinzessin! Ich habe gehört, dass Ihr Amulett gestohlen wurde!\"",
+        "\"Ich würde Euch gerne auf Eurer Reise begleiten!\""
+      ],
+      "choices": [
+        {
+          "text": "⚔️ Den Ritter mitnehmen",
+          "nextSceneId": "mit_ritter"
+        },
+        {
+          "text": "👋 Alleine weitergehen",
+          "nextSceneId": "papagei_suche"
+        }
+      ]
+    },
+    {
+      "id": "mit_ritter",
+      "background": "EnchantedForest",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90,
+          "bottom": 80
+        },
+        {
+          "sprite": "Knight",
+          "position": "right",
+          "size": 100,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Der mutige Ritter begleitet Liana durch den verzauberten Wald.",
+        "\"Keine Sorge, Prinzessin. Ich werde Euch beschützen!\"",
+        "Zusammen fühlt sich alles viel sicherer an."
+      ],
+      "choices": [
+        {
+          "text": "🦜 Den Papagei suchen",
+          "nextSceneId": "papagei_suche"
+        },
+        {
+          "text": "🌊 Direkt zum Ozean gehen",
+          "nextSceneId": "zum_ozean"
+        }
+      ],
+      "onEnterActions": [
+        {
+          "type": "add_item",
+          "item": "ritter_begleitung",
+          "message": "⚔️ Der Ritter begleitet dich nun!"
+        }
+      ]
+    },
+    {
+      "id": "schwert_erhalten",
+      "background": "CastleCourtyard",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 90,
+          "bottom": 80
+        }
+      ],
+      "dialogue": [
+        "Liana hält das magische Schwert in ihren Händen.",
+        "Es leuchtet sanft und fühlt sich warm an.",
+        "Sie ist jetzt bereit für ihr Abenteuer!"
+      ],
+      "choices": [
+        {
+          "text": "🦜 Den Papagei im Wald suchen",
+          "nextSceneId": "papagei_suche"
+        },
+        {
+          "text": "🌊 Direkt zum Ozean gehen",
+          "nextSceneId": "zum_ozean"
+        },
+        {
+          "text": "🏝️ Die geheime Insel suchen",
+          "nextSceneId": "insel_suche"
+        }
+      ]
+    },
+    {
+      "id": "hai_jagd",
+      "background": "DeepOcean",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80,
+          "bottom": 80
+        },
+        {
+          "sprite": "Shark",
+          "position": "right",
+          "size": 120,
+          "bottom": 100
+        }
+      ],
+      "dialogue": [
+        "Liana schwimmt mutig auf den Hai zu!",
+        "Der Hai ist überrascht und schwimmt weg.",
+        "Was für ein Abenteuer! Was soll Liana als nächstes tun?"
+      ],
+      "choices": [
+        {
+          "text": "🏊‍♀️ Weiter schwimmen",
+          "nextSceneId": "unterwasser_palast"
+        },
+        {
+          "text": "🔙 Zurück zur Oberfläche",
+          "nextSceneId": "start"
+        }
+      ]
+    }
+  ]
+}

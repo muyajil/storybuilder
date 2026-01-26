@@ -712,40 +712,58 @@ export function Knight({ size = 64, color = '#C0C0C0' }: SpriteProps) {
   );
 }
 
-export function Princess({ size = 64, color = '#FF69B4' }: SpriteProps) {
+export function Princess({ size = 64, color = '#00CED1' }: SpriteProps) {
+  const skinTone = '#C68642'; // Olive/tan skin like Jasmine
+  const hairColor = '#1a1a1a'; // Black hair
   return (
     <svg width={size} height={size} viewBox="0 0 64 64">
-      {/* Krone / Crown */}
-      <polygon points="20,14 24,6 28,14 32,4 36,14 40,6 44,14" fill="#FFD700" />
-      <rect x="20" y="14" width="24" height="4" fill="#FFD700" />
-      {/* Juwelen / Jewels */}
-      <circle cx="24" cy="10" r="2" fill="#FF0000" />
-      <circle cx="32" cy="8" r="2" fill="#00BFFF" />
-      <circle cx="40" cy="10" r="2" fill="#FF0000" />
-      {/* Haare / Hair */}
-      <ellipse cx="32" cy="24" rx="14" ry="16" fill="#FFD700" />
-      <ellipse cx="18" cy="32" rx="4" ry="12" fill="#FFD700" />
-      <ellipse cx="46" cy="32" rx="4" ry="12" fill="#FFD700" />
+      {/* Langes schwarzes Haar / Long black hair */}
+      <ellipse cx="32" cy="28" rx="16" ry="18" fill={hairColor} />
+      <ellipse cx="18" cy="38" rx="6" ry="16" fill={hairColor} />
+      <ellipse cx="46" cy="38" rx="6" ry="16" fill={hairColor} />
+      <ellipse cx="14" cy="48" rx="4" ry="10" fill={hairColor} />
+      <ellipse cx="50" cy="48" rx="4" ry="10" fill={hairColor} />
+      {/* Haarband / Headband */}
+      <ellipse cx="32" cy="14" rx="12" ry="4" fill={color} />
+      <circle cx="32" cy="14" r="4" fill="#FFD700" />
+      <circle cx="32" cy="14" r="2" fill="#00BFFF" />
       {/* Kopf / Head */}
-      <circle cx="32" cy="24" r="10" fill="#FFDAB9" />
-      {/* Augen / Eyes */}
-      <circle cx="28" cy="22" r="2" fill="black" />
-      <circle cx="36" cy="22" r="2" fill="black" />
+      <circle cx="32" cy="24" r="10" fill={skinTone} />
+      {/* Augen / Eyes - bigger, expressive */}
+      <ellipse cx="28" cy="22" rx="3" ry="2.5" fill="white" />
+      <ellipse cx="36" cy="22" rx="3" ry="2.5" fill="white" />
+      <circle cx="28" cy="22" r="2" fill="#3D2314" />
+      <circle cx="36" cy="22" r="2" fill="#3D2314" />
+      <circle cx="28" cy="21.5" r="0.8" fill="white" />
+      <circle cx="36" cy="21.5" r="0.8" fill="white" />
+      {/* Augenbrauen / Eyebrows */}
+      <path d="M25 18 Q28 17 30 18" stroke={hairColor} strokeWidth="1" fill="none" />
+      <path d="M34 18 Q36 17 39 18" stroke={hairColor} strokeWidth="1" fill="none" />
       {/* Wimpern / Eyelashes */}
-      <line x1="26" y1="20" x2="24" y2="18" stroke="black" strokeWidth="1" />
-      <line x1="38" y1="20" x2="40" y2="18" stroke="black" strokeWidth="1" />
+      <line x1="25" y1="20" x2="24" y2="18" stroke="black" strokeWidth="1" />
+      <line x1="39" y1="20" x2="40" y2="18" stroke="black" strokeWidth="1" />
       {/* Mund / Mouth */}
-      <path d="M29 28 Q32 30 35 28" stroke="#FF69B4" strokeWidth="1" fill="none" />
-      {/* Kleid / Dress */}
-      <path d="M22 34 L14 64 L50 64 L42 34 Z" fill={color} />
-      {/* Gürtel / Sash */}
-      <rect x="20" y="36" width="24" height="4" fill="#FFD700" />
+      <path d="M29 28 Q32 31 35 28" stroke="#C44536" strokeWidth="1.5" fill="none" />
+      {/* Ohrringe / Earrings */}
+      <circle cx="21" cy="26" r="2" fill="#FFD700" />
+      <circle cx="43" cy="26" r="2" fill="#FFD700" />
+      {/* Top - bauchfrei wie Jasmine / Crop top like Jasmine */}
+      <path d="M24 34 L22 44 L42 44 L40 34 Z" fill={color} />
+      <path d="M26 34 Q32 38 38 34" fill={color} />
+      {/* Halskette / Necklace */}
+      <path d="M26 32 Q32 34 38 32" stroke="#FFD700" strokeWidth="2" fill="none" />
+      {/* Hose / Pants - pluderhose like Jasmine */}
+      <ellipse cx="28" cy="54" rx="10" ry="12" fill={color} />
+      <ellipse cx="36" cy="54" rx="10" ry="12" fill={color} />
       {/* Arme / Arms */}
-      <path d="M22 36 L12 46" stroke="#FFDAB9" strokeWidth="5" strokeLinecap="round" />
-      <path d="M42 36 L52 46" stroke="#FFDAB9" strokeWidth="5" strokeLinecap="round" />
+      <path d="M24 36 L14 44" stroke={skinTone} strokeWidth="5" strokeLinecap="round" />
+      <path d="M40 36 L50 44" stroke={skinTone} strokeWidth="5" strokeLinecap="round" />
+      {/* Armreifen / Bracelets */}
+      <circle cx="16" cy="42" r="3" fill="none" stroke="#FFD700" strokeWidth="2" />
+      <circle cx="48" cy="42" r="3" fill="none" stroke="#FFD700" strokeWidth="2" />
       {/* Hände / Hands */}
-      <circle cx="12" cy="46" r="4" fill="#FFDAB9" />
-      <circle cx="52" cy="46" r="4" fill="#FFDAB9" />
+      <circle cx="14" cy="44" r="3" fill={skinTone} />
+      <circle cx="50" cy="44" r="3" fill={skinTone} />
     </svg>
   );
 }
@@ -1667,6 +1685,96 @@ export function GreenNinja({ size = 64 }: { size?: number }) {
   );
 }
 
+export function LightningNinja({ size = 64 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      {/* Kapuze / Hood */}
+      <circle cx="32" cy="18" r="14" fill="#FFD700" />
+      {/* Augen-Schlitz / Eye slit */}
+      <rect x="20" y="14" width="24" height="8" fill="#FFDAB9" />
+      {/* Augen / Eyes - electric blue */}
+      <circle cx="26" cy="18" r="2" fill="#00BFFF" />
+      <circle cx="38" cy="18" r="2" fill="#00BFFF" />
+      {/* Stirnband / Headband */}
+      <rect x="18" y="10" width="28" height="4" fill="#1E90FF" />
+      {/* Körper / Body */}
+      <rect x="20" y="32" width="24" height="20" fill="#FFD700" rx="2" />
+      {/* Gürtel / Belt */}
+      <rect x="18" y="40" width="28" height="4" fill="#1E90FF" />
+      {/* Blitz-Symbol / Lightning symbol */}
+      <polygon points="32,33 28,38 30,38 28,44 36,37 33,37 36,33" fill="#1E90FF" />
+      {/* Arme / Arms */}
+      <rect x="8" y="32" width="12" height="5" fill="#FFD700" rx="2" />
+      <rect x="44" y="32" width="12" height="5" fill="#FFD700" rx="2" />
+      {/* Lightning bolts in hands */}
+      <polygon points="6,28 4,36 6,34 4,42" fill="#1E90FF" strokeWidth="0.5" stroke="#FFF" />
+      <polygon points="58,28 60,36 58,34 60,42" fill="#1E90FF" strokeWidth="0.5" stroke="#FFF" />
+      {/* Beine / Legs */}
+      <rect x="22" y="52" width="8" height="12" fill="#FFD700" rx="2" />
+      <rect x="34" y="52" width="8" height="12" fill="#FFD700" rx="2" />
+      {/* Electric sparks */}
+      <circle cx="10" cy="26" r="2" fill="#00BFFF" opacity="0.8" />
+      <circle cx="54" cy="26" r="2" fill="#00BFFF" opacity="0.8" />
+    </svg>
+  );
+}
+
+export function RainbowNinja({ size = 64 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <defs>
+        <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FF0000" />
+          <stop offset="20%" stopColor="#FF7F00" />
+          <stop offset="40%" stopColor="#FFFF00" />
+          <stop offset="60%" stopColor="#00FF00" />
+          <stop offset="80%" stopColor="#0000FF" />
+          <stop offset="100%" stopColor="#8B00FF" />
+        </linearGradient>
+        <linearGradient id="rainbowVertical" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#FF0000" />
+          <stop offset="17%" stopColor="#FF7F00" />
+          <stop offset="33%" stopColor="#FFFF00" />
+          <stop offset="50%" stopColor="#00FF00" />
+          <stop offset="67%" stopColor="#0000FF" />
+          <stop offset="100%" stopColor="#8B00FF" />
+        </linearGradient>
+      </defs>
+      {/* Kapuze / Hood */}
+      <circle cx="32" cy="18" r="14" fill="url(#rainbowGradient)" />
+      {/* Augen-Schlitz / Eye slit */}
+      <rect x="20" y="14" width="24" height="8" fill="#FFDAB9" />
+      {/* Augen / Eyes - sparkly */}
+      <circle cx="26" cy="18" r="2" fill="#FF69B4" />
+      <circle cx="38" cy="18" r="2" fill="#FF69B4" />
+      <circle cx="25" cy="17" r="0.5" fill="white" />
+      <circle cx="37" cy="17" r="0.5" fill="white" />
+      {/* Stirnband / Headband */}
+      <rect x="18" y="10" width="28" height="4" fill="url(#rainbowGradient)" />
+      {/* Körper / Body */}
+      <rect x="20" y="32" width="24" height="20" fill="url(#rainbowVertical)" rx="2" />
+      {/* Gürtel / Belt */}
+      <rect x="18" y="40" width="28" height="4" fill="#FFD700" />
+      {/* Regenbogen-Symbol / Rainbow symbol */}
+      <path d="M26,36 Q32,32 38,36" fill="none" stroke="#FF0000" strokeWidth="1" />
+      <path d="M26,38 Q32,34 38,38" fill="none" stroke="#FFFF00" strokeWidth="1" />
+      <path d="M26,40 Q32,36 38,40" fill="none" stroke="#00FF00" strokeWidth="1" />
+      {/* Arme / Arms */}
+      <rect x="8" y="32" width="12" height="5" fill="url(#rainbowGradient)" rx="2" />
+      <rect x="44" y="32" width="12" height="5" fill="url(#rainbowGradient)" rx="2" />
+      {/* Rainbow fans */}
+      <ellipse cx="6" cy="30" rx="4" ry="6" fill="url(#rainbowVertical)" opacity="0.7" />
+      <ellipse cx="58" cy="30" rx="4" ry="6" fill="url(#rainbowVertical)" opacity="0.7" />
+      {/* Beine / Legs */}
+      <rect x="22" y="52" width="8" height="12" fill="#8B00FF" rx="2" />
+      <rect x="34" y="52" width="8" height="12" fill="#0000FF" rx="2" />
+      {/* Sparkles */}
+      <circle cx="16" cy="24" r="1.5" fill="#FFD700" />
+      <circle cx="48" cy="24" r="1.5" fill="#FFD700" />
+    </svg>
+  );
+}
+
 // ===== NATURE RANGERS =====
 
 export function RedRanger({ size = 64, color = '#FF0000' }: SpriteProps) {
@@ -1898,6 +2006,629 @@ export function LionKing({ size = 64, color = '#DAA520' }: SpriteProps) {
       {/* Beine / Legs */}
       <rect x="20" y="56" width="8" height="8" fill={color} rx="2" />
       <rect x="36" y="56" width="8" height="8" fill={color} rx="2" />
+    </svg>
+  );
+}
+
+// ===== WEITERE CHARAKTERE / MORE CHARACTERS =====
+
+export function Teacher({ size = 64, color = '#4682B4' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <circle cx="32" cy="14" r="10" fill="#FFDAB9" />
+      <rect x="20" y="6" width="24" height="8" fill="#8B4513" rx="2" />
+      <rect x="26" cy="12" width="12" height="2" fill="#333" />
+      <circle cx="28" cy="12" r="2" fill="white" />
+      <circle cx="36" cy="12" r="2" fill="white" />
+      <circle cx="28" cy="12" r="1" fill="black" />
+      <circle cx="36" cy="12" r="1" fill="black" />
+      <path d="M28 18 Q32 20 36 18" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="22" y="24" width="20" height="24" fill={color} rx="2" />
+      <rect x="28" y="24" width="8" height="4" fill="white" />
+      <rect x="10" y="26" width="12" height="5" fill={color} rx="2" />
+      <rect x="42" y="26" width="12" height="5" fill={color} rx="2" />
+      <circle cx="10" cy="28" r="3" fill="#FFDAB9" />
+      <circle cx="54" cy="28" r="3" fill="#FFDAB9" />
+      <rect x="24" y="48" width="6" height="14" fill="#333" rx="1" />
+      <rect x="34" y="48" width="6" height="14" fill="#333" rx="1" />
+      <ellipse cx="27" cy="62" rx="4" ry="2" fill="black" />
+      <ellipse cx="37" cy="62" rx="4" ry="2" fill="black" />
+      <rect x="50" y="24" width="10" height="14" fill="#8B4513" />
+      <rect x="52" y="26" width="6" height="10" fill="white" />
+    </svg>
+  );
+}
+
+export function Farmer({ size = 64, color = '#8B4513' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="8" rx="14" ry="4" fill="#DAA520" />
+      <ellipse cx="32" cy="8" rx="10" ry="8" fill="#DAA520" />
+      <circle cx="32" cy="18" r="10" fill="#FFDAB9" />
+      <circle cx="28" cy="16" r="2" fill="black" />
+      <circle cx="36" cy="16" r="2" fill="black" />
+      <path d="M28 22 Q32 24 36 22" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="22" y="28" width="20" height="20" fill={color} />
+      <rect x="24" y="30" width="8" height="12" fill="#4169E1" />
+      <rect x="32" y="30" width="8" height="12" fill="#4169E1" />
+      <rect x="10" y="30" width="12" height="5" fill={color} rx="2" />
+      <rect x="42" y="30" width="12" height="5" fill={color} rx="2" />
+      <circle cx="10" cy="32" r="3" fill="#FFDAB9" />
+      <circle cx="54" cy="32" r="3" fill="#FFDAB9" />
+      <rect x="24" y="48" width="6" height="14" fill="#4169E1" rx="1" />
+      <rect x="34" y="48" width="6" height="14" fill="#4169E1" rx="1" />
+      <ellipse cx="27" cy="62" rx="5" ry="2" fill="#8B4513" />
+      <ellipse cx="37" cy="62" rx="5" ry="2" fill="#8B4513" />
+    </svg>
+  );
+}
+
+export function Scientist({ size = 64, color = 'white' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="8" rx="12" ry="6" fill="#E0E0E0" />
+      <circle cx="32" cy="16" r="10" fill="#FFDAB9" />
+      <rect x="24" y="10" width="16" height="3" fill="#333" />
+      <circle cx="26" cy="14" r="4" fill="#87CEEB" stroke="#333" strokeWidth="1" />
+      <circle cx="38" cy="14" r="4" fill="#87CEEB" stroke="#333" strokeWidth="1" />
+      <circle cx="26" cy="14" r="1.5" fill="black" />
+      <circle cx="38" cy="14" r="1.5" fill="black" />
+      <path d="M28 20 Q32 22 36 20" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="20" y="26" width="24" height="24" fill={color} rx="2" />
+      <rect x="22" y="28" width="20" height="4" fill="#87CEEB" />
+      <circle cx="28" cy="36" r="2" fill="#32CD32" />
+      <circle cx="36" cy="36" r="2" fill="#FF6347" />
+      <rect x="8" y="28" width="12" height="5" fill={color} rx="2" />
+      <rect x="44" y="28" width="12" height="5" fill={color} rx="2" />
+      <circle cx="8" cy="30" r="3" fill="#FFDAB9" />
+      <circle cx="56" cy="30" r="3" fill="#FFDAB9" />
+      <rect x="24" y="50" width="6" height="12" fill="#333" rx="1" />
+      <rect x="34" y="50" width="6" height="12" fill="#333" rx="1" />
+      <ellipse cx="54" cy="36" rx="6" ry="4" fill="#32CD32" />
+      <path d="M52 36 L56 30 L56 36" fill="none" stroke="#333" strokeWidth="1" />
+    </svg>
+  );
+}
+
+export function Artist({ size = 64, color = '#9370DB' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="6" rx="14" ry="8" fill="#1a1a1a" />
+      <circle cx="32" cy="16" r="10" fill="#FFDAB9" />
+      <circle cx="28" cy="14" r="2" fill="black" />
+      <circle cx="36" cy="14" r="2" fill="black" />
+      <path d="M28 20 Q32 24 36 20" stroke="black" strokeWidth="1" fill="none" />
+      <ellipse cx="26" cy="20" rx="2" ry="1" fill="#FF69B4" />
+      <rect x="20" y="26" width="24" height="22" fill={color} rx="2" />
+      <path d="M24 26 L32 34 L40 26" fill="#FFD700" />
+      <rect x="8" y="28" width="12" height="5" fill={color} rx="2" />
+      <rect x="44" y="28" width="12" height="5" fill={color} rx="2" />
+      <circle cx="8" cy="30" r="3" fill="#FFDAB9" />
+      <circle cx="56" cy="30" r="3" fill="#FFDAB9" />
+      <rect x="24" y="48" width="6" height="14" fill="#333" rx="1" />
+      <rect x="34" y="48" width="6" height="14" fill="#333" rx="1" />
+      <ellipse cx="8" cy="38" rx="8" ry="6" fill="#DEB887" />
+      <circle cx="4" cy="36" r="3" fill="#FF0000" />
+      <circle cx="8" cy="34" r="3" fill="#00FF00" />
+      <circle cx="12" cy="36" r="3" fill="#0000FF" />
+      <circle cx="6" cy="40" r="3" fill="#FFFF00" />
+      <circle cx="10" cy="40" r="3" fill="#FF00FF" />
+    </svg>
+  );
+}
+
+export function Superhero({ size = 64, color = '#FF0000' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <circle cx="32" cy="14" r="10" fill="#FFDAB9" />
+      <rect x="22" y="4" width="20" height="6" fill={color} rx="2" />
+      <circle cx="28" cy="12" r="2" fill="black" />
+      <circle cx="36" cy="12" r="2" fill="black" />
+      <path d="M28 18 Q32 20 36 18" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="20" y="24" width="24" height="24" fill={color} rx="2" />
+      <polygon points="32,26 26,38 38,38" fill="#FFD700" />
+      <path d="M20 24 L8 36 L8 52 L20 40" fill={color} />
+      <path d="M44 24 L56 36 L56 52 L44 40" fill={color} />
+      <circle cx="8" cy="38" r="4" fill="#FFDAB9" />
+      <circle cx="56" cy="38" r="4" fill="#FFDAB9" />
+      <rect x="24" y="48" width="6" height="14" fill="#0000FF" rx="1" />
+      <rect x="34" y="48" width="6" height="14" fill="#0000FF" rx="1" />
+      <ellipse cx="27" cy="62" rx="4" ry="2" fill={color} />
+      <ellipse cx="37" cy="62" rx="4" ry="2" fill={color} />
+    </svg>
+  );
+}
+
+export function King({ size = 64, color = '#8B0000' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <polygon points="20,8 24,0 28,6 32,0 36,6 40,0 44,8 42,14 22,14" fill="#FFD700" />
+      <circle cx="32" cy="4" r="3" fill="#FF0000" />
+      <circle cx="32" cy="18" r="10" fill="#FFDAB9" />
+      <rect x="22" y="10" width="20" height="6" fill="#E0E0E0" />
+      <circle cx="28" cy="16" r="2" fill="black" />
+      <circle cx="36" cy="16" r="2" fill="black" />
+      <path d="M28 22 Q32 24 36 22" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="18" y="28" width="28" height="24" fill={color} rx="2" />
+      <rect x="28" y="28" width="8" height="10" fill="white" />
+      <path d="M18 50 L14 62 L50 62 L46 50" fill={color} />
+      <rect x="24" y="52" width="16" height="4" fill="#FFD700" />
+      <circle cx="8" cy="36" r="4" fill="#FFDAB9" />
+      <circle cx="56" cy="36" r="4" fill="#FFDAB9" />
+      <rect x="8" y="28" width="10" height="6" fill={color} rx="2" />
+      <rect x="46" y="28" width="10" height="6" fill={color} rx="2" />
+    </svg>
+  );
+}
+
+export function Queen({ size = 64, color = '#4B0082' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <polygon points="22,10 26,2 30,8 32,0 34,8 38,2 42,10" fill="#FFD700" />
+      <circle cx="26" cy="4" r="2" fill="#FF69B4" />
+      <circle cx="32" cy="2" r="2" fill="#00CED1" />
+      <circle cx="38" cy="4" r="2" fill="#FF69B4" />
+      <ellipse cx="32" cy="20" rx="14" ry="18" fill="#FFD700" />
+      <circle cx="32" cy="18" r="10" fill="#FFDAB9" />
+      <circle cx="28" cy="16" r="2" fill="black" />
+      <circle cx="36" cy="16" r="2" fill="black" />
+      <line x1="26" y1="14" x2="24" y2="12" stroke="black" strokeWidth="1" />
+      <line x1="38" y1="14" x2="40" y2="12" stroke="black" strokeWidth="1" />
+      <path d="M28 22 Q32 24 36 22" stroke="#FF69B4" strokeWidth="1" fill="none" />
+      <path d="M18 30 L14 62 L50 62 L46 30" fill={color} />
+      <ellipse cx="32" cy="34" rx="12" ry="4" fill="#FFD700" />
+      <circle cx="32" cy="44" r="4" fill="#FF69B4" />
+      <rect x="6" y="32" width="12" height="5" fill={color} rx="2" />
+      <rect x="46" y="32" width="12" height="5" fill={color} rx="2" />
+      <circle cx="6" cy="34" r="3" fill="#FFDAB9" />
+      <circle cx="58" cy="34" r="3" fill="#FFDAB9" />
+    </svg>
+  );
+}
+
+export function Prince({ size = 64, color = '#4169E1' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="4" rx="10" ry="4" fill="#FFD700" />
+      <polygon points="28,4 32,0 36,4" fill="#FFD700" />
+      <circle cx="32" cy="2" r="2" fill="#FF0000" />
+      <rect x="22" y="6" width="20" height="6" fill="#8B4513" rx="2" />
+      <circle cx="32" cy="16" r="10" fill="#FFDAB9" />
+      <circle cx="28" cy="14" r="2" fill="black" />
+      <circle cx="36" cy="14" r="2" fill="black" />
+      <path d="M28 20 Q32 22 36 20" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="20" y="26" width="24" height="22" fill={color} rx="2" />
+      <rect x="28" y="26" width="8" height="10" fill="white" />
+      <rect x="30" y="38" width="4" height="8" fill="#FFD700" />
+      <rect x="8" y="28" width="12" height="5" fill={color} rx="2" />
+      <rect x="44" y="28" width="12" height="5" fill={color} rx="2" />
+      <circle cx="8" cy="30" r="3" fill="#FFDAB9" />
+      <circle cx="56" cy="30" r="3" fill="#FFDAB9" />
+      <rect x="24" y="48" width="6" height="14" fill="#333" rx="1" />
+      <rect x="34" y="48" width="6" height="14" fill="#333" rx="1" />
+      <ellipse cx="27" cy="62" rx="4" ry="2" fill="black" />
+      <ellipse cx="37" cy="62" rx="4" ry="2" fill="black" />
+    </svg>
+  );
+}
+
+export function Elf({ size = 64, color = '#228B22' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <polygon points="18,18 10,10 22,16" fill="#FFDAB9" />
+      <polygon points="46,18 54,10 42,16" fill="#FFDAB9" />
+      <ellipse cx="32" cy="8" rx="10" ry="6" fill="#FFD700" />
+      <circle cx="32" cy="16" r="10" fill="#FFDAB9" />
+      <circle cx="28" cy="14" r="2" fill="#228B22" />
+      <circle cx="36" cy="14" r="2" fill="#228B22" />
+      <path d="M28 20 Q32 22 36 20" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="22" y="26" width="20" height="20" fill={color} rx="2" />
+      <polygon points="22,46 32,56 42,46" fill={color} />
+      <rect x="10" y="28" width="12" height="4" fill={color} rx="2" />
+      <rect x="42" y="28" width="12" height="4" fill={color} rx="2" />
+      <circle cx="10" cy="30" r="3" fill="#FFDAB9" />
+      <circle cx="54" cy="30" r="3" fill="#FFDAB9" />
+      <rect x="26" y="56" width="4" height="6" fill="#8B4513" rx="1" />
+      <rect x="34" y="56" width="4" height="6" fill="#8B4513" rx="1" />
+      <ellipse cx="28" cy="62" rx="4" ry="2" fill="#228B22" />
+      <ellipse cx="36" cy="62" rx="4" ry="2" fill="#228B22" />
+    </svg>
+  );
+}
+
+export function Dwarf({ size = 64, color = '#8B4513' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="10" rx="8" ry="6" fill="#CD853F" />
+      <circle cx="32" cy="16" r="12" fill="#FFDAB9" />
+      <ellipse cx="32" cy="30" rx="14" ry="10" fill="#CD853F" />
+      <circle cx="28" cy="14" r="2" fill="black" />
+      <circle cx="36" cy="14" r="2" fill="black" />
+      <ellipse cx="32" cy="22" rx="4" ry="2" fill="#CD853F" />
+      <rect x="18" y="36" width="28" height="16" fill={color} rx="2" />
+      <rect x="22" y="38" width="8" height="12" fill="#4169E1" />
+      <rect x="34" y="38" width="8" height="12" fill="#4169E1" />
+      <circle cx="32" cy="42" r="3" fill="#FFD700" />
+      <rect x="8" y="38" width="10" height="6" fill={color} rx="2" />
+      <rect x="46" y="38" width="10" height="6" fill={color} rx="2" />
+      <circle cx="8" cy="40" r="4" fill="#FFDAB9" />
+      <circle cx="56" cy="40" r="4" fill="#FFDAB9" />
+      <rect x="22" y="52" width="8" height="10" fill="#4169E1" rx="2" />
+      <rect x="34" y="52" width="8" height="10" fill="#4169E1" rx="2" />
+      <ellipse cx="26" cy="62" rx="6" ry="3" fill="#8B4513" />
+      <ellipse cx="38" cy="62" rx="6" ry="3" fill="#8B4513" />
+    </svg>
+  );
+}
+
+export function Goblin({ size = 64, color = '#228B22' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <polygon points="16,20 8,8 24,18" fill={color} />
+      <polygon points="48,20 56,8 40,18" fill={color} />
+      <circle cx="32" cy="20" r="14" fill={color} />
+      <circle cx="26" cy="18" r="4" fill="#FFFF00" />
+      <circle cx="38" cy="18" r="4" fill="#FFFF00" />
+      <circle cx="26" cy="18" r="2" fill="black" />
+      <circle cx="38" cy="18" r="2" fill="black" />
+      <ellipse cx="32" cy="26" rx="6" ry="3" fill="#1a1a1a" />
+      <polygon points="28,26 30,30 32,26 34,30 36,26" fill="white" />
+      <ellipse cx="32" cy="44" rx="12" ry="10" fill={color} />
+      <rect x="8" y="36" width="10" height="6" fill={color} rx="2" />
+      <rect x="46" y="36" width="10" height="6" fill={color} rx="2" />
+      <circle cx="8" cy="38" r="4" fill={color} />
+      <circle cx="56" cy="38" r="4" fill={color} />
+      <rect x="24" y="54" width="6" height="8" fill={color} rx="1" />
+      <rect x="34" y="54" width="6" height="8" fill={color} rx="1" />
+    </svg>
+  );
+}
+
+export function Troll({ size = 64, color = '#696969' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="20" rx="18" ry="16" fill={color} />
+      <circle cx="24" cy="16" r="5" fill="#FFFF00" />
+      <circle cx="40" cy="16" r="5" fill="#FFFF00" />
+      <circle cx="24" cy="16" r="2" fill="black" />
+      <circle cx="40" cy="16" r="2" fill="black" />
+      <ellipse cx="32" cy="28" rx="8" ry="4" fill="#4a4a4a" />
+      <polygon points="26,28 28,34 32,28 36,34 38,28" fill="#FFFF00" />
+      <ellipse cx="32" cy="48" rx="16" ry="14" fill={color} />
+      <rect x="6" y="36" width="12" height="10" fill={color} rx="3" />
+      <rect x="46" y="36" width="12" height="10" fill={color} rx="3" />
+      <circle cx="6" cy="42" r="5" fill={color} />
+      <circle cx="58" cy="42" r="5" fill={color} />
+      <rect x="20" y="58" width="10" height="6" fill={color} rx="2" />
+      <rect x="34" y="58" width="10" height="6" fill={color} rx="2" />
+    </svg>
+  );
+}
+
+export function Witch({ size = 64, color = '#1a1a1a' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <polygon points="32,0 20,20 44,20" fill={color} />
+      <ellipse cx="32" cy="20" rx="14" ry="4" fill={color} />
+      <circle cx="32" cy="24" r="10" fill="#90EE90" />
+      <ellipse cx="32" cy="30" rx="4" ry="3" fill="#90EE90" />
+      <circle cx="28" cy="22" r="2" fill="black" />
+      <circle cx="36" cy="22" r="2" fill="black" />
+      <path d="M28 28 Q32 30 36 28" stroke="black" strokeWidth="1" fill="none" />
+      <ellipse cx="32" cy="32" rx="2" ry="1" fill="#1a1a1a" />
+      <path d="M20 34 L16 60 L48 60 L44 34" fill={color} />
+      <rect x="6" y="36" width="14" height="5" fill={color} rx="2" />
+      <rect x="44" y="36" width="14" height="5" fill={color} rx="2" />
+      <circle cx="6" cy="38" r="3" fill="#90EE90" />
+      <circle cx="58" cy="38" r="3" fill="#90EE90" />
+      <rect x="56" y="30" width="4" height="30" fill="#8B4513" />
+      <ellipse cx="58" cy="26" rx="6" ry="4" fill="#FFD700" />
+    </svg>
+  );
+}
+
+export function Genie({ size = 64, color = '#4169E1' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="6" rx="8" ry="4" fill={color} />
+      <circle cx="32" cy="6" r="3" fill="#FFD700" />
+      <circle cx="32" cy="16" r="10" fill={color} />
+      <polygon points="18,14 14,6 24,12" fill={color} />
+      <polygon points="46,14 50,6 40,12" fill={color} />
+      <circle cx="28" cy="14" r="2" fill="white" />
+      <circle cx="36" cy="14" r="2" fill="white" />
+      <circle cx="28" cy="14" r="1" fill="black" />
+      <circle cx="36" cy="14" r="1" fill="black" />
+      <path d="M28 20 Q32 22 36 20" stroke="white" strokeWidth="1" fill="none" />
+      <ellipse cx="32" cy="38" rx="14" ry="12" fill={color} />
+      <rect x="6" y="28" width="14" height="6" fill={color} rx="3" />
+      <rect x="44" y="28" width="14" height="6" fill={color} rx="3" />
+      <ellipse cx="6" cy="32" rx="5" ry="4" fill={color} />
+      <ellipse cx="58" cy="32" rx="5" ry="4" fill={color} />
+      <path d="M20 50 Q24 64 32 60 Q40 64 44 50" fill={color} opacity="0.7" />
+      <ellipse cx="32" cy="58" rx="12" ry="6" fill={color} opacity="0.5" />
+      <circle cx="26" cy="36" r="3" fill="#FFD700" />
+      <circle cx="38" cy="36" r="3" fill="#FFD700" />
+    </svg>
+  );
+}
+
+export function Angel({ size = 64, color = 'white' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="4" rx="8" ry="3" fill="#FFD700" />
+      <ellipse cx="32" cy="20" rx="14" ry="18" fill="#FFD700" />
+      <circle cx="32" cy="18" r="10" fill="#FFDAB9" />
+      <circle cx="28" cy="16" r="2" fill="#87CEEB" />
+      <circle cx="36" cy="16" r="2" fill="#87CEEB" />
+      <path d="M28 22 Q32 24 36 22" stroke="#FF69B4" strokeWidth="1" fill="none" />
+      <path d="M18 26 L8 40 L18 50" fill={color} />
+      <path d="M46 26 L56 40 L46 50" fill={color} />
+      <path d="M20 28 L12 44 L20 56 L44 56 L52 44 L44 28" fill={color} />
+      <rect x="26" y="56" width="4" height="6" fill="#FFDAB9" />
+      <rect x="34" y="56" width="4" height="6" fill="#FFDAB9" />
+      <ellipse cx="28" cy="62" rx="4" ry="2" fill={color} />
+      <ellipse cx="36" cy="62" rx="4" ry="2" fill={color} />
+    </svg>
+  );
+}
+
+export function Leprechaun({ size = 64, color = '#228B22' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="10" rx="14" ry="6" fill={color} />
+      <rect x="22" y="4" width="20" height="8" fill={color} />
+      <rect x="28" y="6" width="8" height="6" fill="#FFD700" />
+      <circle cx="32" cy="20" r="10" fill="#FFDAB9" />
+      <ellipse cx="32" cy="30" rx="8" ry="4" fill="#FF8C00" />
+      <circle cx="28" cy="18" r="2" fill="#228B22" />
+      <circle cx="36" cy="18" r="2" fill="#228B22" />
+      <path d="M28 24 Q32 26 36 24" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="20" y="32" width="24" height="18" fill={color} rx="2" />
+      <rect x="28" y="34" width="8" height="4" fill="#FFD700" />
+      <rect x="8" y="34" width="12" height="5" fill={color} rx="2" />
+      <rect x="44" y="34" width="12" height="5" fill={color} rx="2" />
+      <circle cx="8" cy="36" r="3" fill="#FFDAB9" />
+      <circle cx="56" cy="36" r="3" fill="#FFDAB9" />
+      <rect x="24" y="50" width="6" height="12" fill={color} rx="1" />
+      <rect x="34" y="50" width="6" height="12" fill={color} rx="1" />
+      <ellipse cx="27" cy="62" rx="5" ry="2" fill="#8B4513" />
+      <ellipse cx="37" cy="62" rx="5" ry="2" fill="#8B4513" />
+    </svg>
+  );
+}
+
+export function Cowboy({ size = 64, color = '#8B4513' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="10" rx="18" ry="4" fill={color} />
+      <ellipse cx="32" cy="8" rx="10" ry="6" fill={color} />
+      <circle cx="32" cy="18" r="10" fill="#FFDAB9" />
+      <circle cx="28" cy="16" r="2" fill="black" />
+      <circle cx="36" cy="16" r="2" fill="black" />
+      <path d="M28 22 Q32 24 36 22" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="22" y="28" width="20" height="20" fill="#DAA520" rx="2" />
+      <polygon points="32,32 28,40 36,40" fill={color} />
+      <rect x="8" y="30" width="14" height="5" fill="#DAA520" rx="2" />
+      <rect x="42" y="30" width="14" height="5" fill="#DAA520" rx="2" />
+      <circle cx="8" cy="32" r="3" fill="#FFDAB9" />
+      <circle cx="56" cy="32" r="3" fill="#FFDAB9" />
+      <rect x="24" y="48" width="6" height="14" fill="#4169E1" rx="1" />
+      <rect x="34" y="48" width="6" height="14" fill="#4169E1" rx="1" />
+      <ellipse cx="27" cy="62" rx="5" ry="2" fill={color} />
+      <ellipse cx="37" cy="62" rx="5" ry="2" fill={color} />
+      <ellipse cx="27" cy="60" rx="2" ry="2" fill="#C0C0C0" />
+      <ellipse cx="37" cy="60" rx="2" ry="2" fill="#C0C0C0" />
+    </svg>
+  );
+}
+
+export function ScubaDiver({ size = 64, color = '#1a1a1a' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <circle cx="32" cy="16" r="12" fill="#333" />
+      <ellipse cx="32" cy="14" rx="10" ry="8" fill="#87CEEB" stroke="#FFD700" strokeWidth="2" />
+      <circle cx="28" cy="14" r="2" fill="black" />
+      <circle cx="36" cy="14" r="2" fill="black" />
+      <ellipse cx="32" cy="20" rx="4" ry="2" fill="#333" />
+      <rect x="20" y="28" width="24" height="22" fill={color} rx="2" />
+      <rect x="26" y="30" width="4" height="4" fill="#C0C0C0" />
+      <rect x="34" y="30" width="4" height="4" fill="#C0C0C0" />
+      <ellipse cx="32" cy="42" rx="6" ry="4" fill="#FFD700" />
+      <rect x="8" y="30" width="12" height="6" fill={color} rx="2" />
+      <rect x="44" y="30" width="12" height="6" fill={color} rx="2" />
+      <ellipse cx="8" cy="34" rx="4" ry="3" fill="#FFD700" />
+      <ellipse cx="56" cy="34" rx="4" ry="3" fill="#FFD700" />
+      <rect x="24" y="50" width="6" height="12" fill={color} rx="1" />
+      <rect x="34" y="50" width="6" height="12" fill={color} rx="1" />
+      <ellipse cx="27" cy="62" rx="6" ry="3" fill="#FFD700" />
+      <ellipse cx="37" cy="62" rx="6" ry="3" fill="#FFD700" />
+      <ellipse cx="50" cy="10" rx="6" ry="8" fill="#C0C0C0" />
+      <path d="M44 10 L50 14" stroke="#333" strokeWidth="2" />
+    </svg>
+  );
+}
+
+export function Skier({ size = 64, color = '#FF0000' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="6" rx="10" ry="4" fill="#1a1a1a" />
+      <rect x="24" y="8" width="16" height="4" fill="#1a1a1a" />
+      <circle cx="32" cy="16" r="8" fill="#FFDAB9" />
+      <rect x="26" y="12" width="12" height="4" fill="#FF6347" />
+      <circle cx="29" cy="14" r="1" fill="black" />
+      <circle cx="35" cy="14" r="1" fill="black" />
+      <rect x="24" y="24" width="16" height="18" fill={color} rx="2" />
+      <rect x="8" y="26" width="16" height="4" fill={color} rx="2" />
+      <rect x="40" y="26" width="16" height="4" fill={color} rx="2" />
+      <circle cx="8" cy="28" r="3" fill="#1a1a1a" />
+      <circle cx="56" cy="28" r="3" fill="#1a1a1a" />
+      <rect x="26" y="42" width="4" height="14" fill="#333" rx="1" />
+      <rect x="34" y="42" width="4" height="14" fill="#333" rx="1" />
+      <rect x="16" y="56" width="32" height="4" rx="2" fill="#1a1a1a" />
+      <rect x="10" y="26" width="2" height="34" fill="#C0C0C0" />
+      <rect x="52" y="26" width="2" height="34" fill="#C0C0C0" />
+    </svg>
+  );
+}
+
+export function Ballerina({ size = 64, color = '#FF69B4' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="10" rx="8" ry="6" fill="#8B4513" />
+      <circle cx="32" cy="6" r="4" fill="#8B4513" />
+      <circle cx="32" cy="16" r="8" fill="#FFDAB9" />
+      <circle cx="29" cy="14" r="1.5" fill="black" />
+      <circle cx="35" cy="14" r="1.5" fill="black" />
+      <path d="M29 18 Q32 20 35 18" stroke="#FF69B4" strokeWidth="1" fill="none" />
+      <rect x="28" y="24" width="8" height="12" fill={color} rx="2" />
+      <ellipse cx="32" cy="38" rx="16" ry="6" fill={color} />
+      <rect x="12" y="26" width="16" height="3" fill={color} rx="1" />
+      <rect x="36" y="26" width="16" height="3" fill={color} rx="1" />
+      <circle cx="12" cy="28" r="2" fill="#FFDAB9" />
+      <circle cx="52" cy="28" r="2" fill="#FFDAB9" />
+      <rect x="28" y="44" width="3" height="16" fill="#FFDAB9" />
+      <rect x="33" y="44" width="3" height="16" fill="#FFDAB9" />
+      <ellipse cx="29" cy="60" rx="3" ry="4" fill={color} />
+      <ellipse cx="35" cy="60" rx="3" ry="4" fill={color} />
+    </svg>
+  );
+}
+
+export function Surfer({ size = 64, color = '#00CED1' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="8" rx="8" ry="6" fill="#FFD700" />
+      <circle cx="32" cy="14" r="8" fill="#FFDAB9" />
+      <circle cx="29" cy="12" r="1.5" fill="black" />
+      <circle cx="35" cy="12" r="1.5" fill="black" />
+      <path d="M29 16 Q32 18 35 16" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="26" y="22" width="12" height="16" fill={color} rx="2" />
+      <path d="M26 22 L32 30 L38 22" fill="white" />
+      <rect x="12" y="24" width="14" height="4" fill={color} rx="2" />
+      <rect x="38" y="24" width="14" height="4" fill={color} rx="2" />
+      <circle cx="12" cy="26" r="3" fill="#FFDAB9" />
+      <circle cx="52" cy="26" r="3" fill="#FFDAB9" />
+      <rect x="26" y="38" width="4" height="10" fill={color} rx="1" />
+      <rect x="34" y="38" width="4" height="10" fill={color} rx="1" />
+      <ellipse cx="28" cy="48" rx="3" ry="2" fill="#FFDAB9" />
+      <ellipse cx="36" cy="48" rx="3" ry="2" fill="#FFDAB9" />
+      <ellipse cx="32" cy="56" rx="24" ry="4" fill="#FFD700" />
+      <path d="M8 56 Q32 48 56 56" fill="#FF6347" />
+    </svg>
+  );
+}
+
+export function MountainClimber({ size = 64, color = '#FF4500' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="6" rx="8" ry="4" fill="#FF0000" />
+      <circle cx="32" cy="14" r="8" fill="#FFDAB9" />
+      <circle cx="29" cy="12" r="1.5" fill="black" />
+      <circle cx="35" cy="12" r="1.5" fill="black" />
+      <path d="M29 16 Q32 18 35 16" stroke="black" strokeWidth="1" fill="none" />
+      <rect x="24" y="22" width="16" height="18" fill={color} rx="2" />
+      <rect x="28" y="24" width="8" height="6" fill="#FFD700" />
+      <rect x="8" y="24" width="16" height="4" fill={color} rx="2" />
+      <rect x="40" y="24" width="16" height="4" fill={color} rx="2" />
+      <circle cx="8" cy="26" r="3" fill="#1a1a1a" />
+      <circle cx="56" cy="26" r="3" fill="#1a1a1a" />
+      <rect x="26" y="40" width="4" height="14" fill="#333" rx="1" />
+      <rect x="34" y="40" width="4" height="14" fill="#333" rx="1" />
+      <ellipse cx="28" cy="54" rx="4" ry="3" fill="#8B4513" />
+      <ellipse cx="36" cy="54" rx="4" ry="3" fill="#8B4513" />
+      <rect x="18" y="38" width="4" height="20" fill="#C0C0C0" />
+      <circle cx="20" cy="60" r="3" fill="#C0C0C0" />
+    </svg>
+  );
+}
+
+export function Ambulance({ size = 64, color = 'white' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <rect x="4" y="20" width="56" height="28" fill={color} rx="4" />
+      <rect x="4" y="20" width="20" height="28" fill={color} rx="4" />
+      <rect x="6" y="24" width="16" height="12" fill="#87CEEB" rx="2" />
+      <rect x="28" y="24" width="8" height="12" fill="#FF0000" />
+      <rect x="30" y="28" width="4" height="4" fill={color} />
+      <rect x="44" y="26" width="12" height="8" fill="#87CEEB" rx="2" />
+      <circle cx="14" cy="52" r="6" fill="#333" />
+      <circle cx="14" cy="52" r="3" fill="#C0C0C0" />
+      <circle cx="50" cy="52" r="6" fill="#333" />
+      <circle cx="50" cy="52" r="3" fill="#C0C0C0" />
+      <rect x="4" y="44" width="56" height="4" fill="#FF0000" />
+      <ellipse cx="58" cy="16" rx="4" ry="6" fill="#FF0000" />
+    </svg>
+  );
+}
+
+export function FireTruck({ size = 64, color = '#FF0000' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <rect x="4" y="24" width="56" height="24" fill={color} rx="2" />
+      <rect x="4" y="24" width="20" height="24" fill={color} rx="2" />
+      <rect x="6" y="28" width="16" height="10" fill="#87CEEB" rx="2" />
+      <rect x="28" y="26" width="28" height="8" fill="#C0C0C0" />
+      <rect x="30" y="28" width="24" height="4" fill="#808080" />
+      <rect x="32" y="38" width="20" height="8" fill="#333" />
+      <circle cx="14" cy="52" r="6" fill="#333" />
+      <circle cx="14" cy="52" r="3" fill="#C0C0C0" />
+      <circle cx="40" cy="52" r="6" fill="#333" />
+      <circle cx="40" cy="52" r="3" fill="#C0C0C0" />
+      <circle cx="54" cy="52" r="6" fill="#333" />
+      <circle cx="54" cy="52" r="3" fill="#C0C0C0" />
+      <rect x="4" y="20" width="8" height="4" fill="#FFD700" />
+      <rect x="52" y="20" width="8" height="4" fill="#FFD700" />
+    </svg>
+  );
+}
+
+export function PoliceCar({ size = 64, color = 'white' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <rect x="8" y="28" width="48" height="20" fill={color} rx="4" />
+      <polygon points="14,28 20,16 44,16 50,28" fill={color} />
+      <rect x="22" y="18" width="20" height="10" fill="#87CEEB" rx="2" />
+      <rect x="10" y="32" width="10" height="6" fill="#87CEEB" rx="1" />
+      <rect x="44" y="32" width="10" height="6" fill="#87CEEB" rx="1" />
+      <rect x="8" y="44" width="48" height="4" fill="#191970" />
+      <rect x="28" y="10" width="8" height="6" fill="#FF0000" />
+      <rect x="28" y="10" width="4" height="6" fill="#0000FF" />
+      <circle cx="18" cy="52" r="5" fill="#333" />
+      <circle cx="18" cy="52" r="2" fill="#C0C0C0" />
+      <circle cx="46" cy="52" r="5" fill="#333" />
+      <circle cx="46" cy="52" r="2" fill="#C0C0C0" />
+      <polygon points="30,36 32,32 34,36 32,38" fill="#FFD700" />
+    </svg>
+  );
+}
+
+export function UFO({ size = 64, color = '#C0C0C0' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <ellipse cx="32" cy="32" rx="28" ry="8" fill={color} />
+      <ellipse cx="32" cy="28" rx="16" ry="12" fill="#87CEEB" />
+      <ellipse cx="32" cy="24" rx="12" ry="8" fill="#ADD8E6" />
+      <circle cx="28" cy="22" r="2" fill="#1a1a1a" />
+      <circle cx="36" cy="22" r="2" fill="#1a1a1a" />
+      <circle cx="10" cy="34" r="3" fill="#FFD700" />
+      <circle cx="22" cy="36" r="3" fill="#FF0000" />
+      <circle cx="32" cy="38" r="3" fill="#00FF00" />
+      <circle cx="42" cy="36" r="3" fill="#0000FF" />
+      <circle cx="54" cy="34" r="3" fill="#FFD700" />
+      <path d="M28 40 L24 56 M36 40 L40 56" stroke="#87CEEB" strokeWidth="3" opacity="0.5" />
+    </svg>
+  );
+}
+
+export function Sailboat({ size = 64, color = '#8B4513' }: SpriteProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <rect x="30" y="10" width="4" height="40" fill={color} />
+      <polygon points="34,12 34,44 58,44" fill="white" stroke="#ddd" strokeWidth="1" />
+      <polygon points="30,16 30,40 12,40" fill="#FF6347" stroke="#ddd" strokeWidth="1" />
+      <path d="M8 48 Q16 40 32 44 Q48 40 56 48 L60 54 Q32 60 4 54 Z" fill={color} />
+      <ellipse cx="32" cy="58" rx="28" ry="4" fill="#4169E1" opacity="0.5" />
     </svg>
   );
 }

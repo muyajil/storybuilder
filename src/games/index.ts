@@ -11,10 +11,16 @@
  */
 
 import type { GameInfo } from '../types';
+import type { StoryJson } from '../components/story/StorySchema';
 
 // === SPIELE IMPORTIEREN / IMPORT GAMES ===
 import { MagicForest } from './magic-forest/MagicForest';
 import { LianasOzeanAbenteuer } from './liana-abenteuer/LianasOzeanAbenteuer';
+import { DiemagischenGeschwister } from './magische-geschwister/DiemagischenGeschwister';
+
+// === STORY JSON IMPORTIEREN / IMPORT STORY JSON ===
+import lianaStoryData from './liana-abenteuer/story.json';
+import magischeGeschwisterStoryData from './magische-geschwister/story.json';
 
 // === SPIELE REGISTRIEREN / REGISTER GAMES ===
 export const games: GameInfo[] = [
@@ -24,6 +30,7 @@ export const games: GameInfo[] = [
     description: 'Eine interaktive Geschichte mit Entscheidungen durch verschiedene Welten!',
     author: 'Kind',
     component: MagicForest,
+    // Note: This game uses React-based Story, not JSON
   },
   {
     id: 'liana-abenteuer',
@@ -31,6 +38,15 @@ export const games: GameInfo[] = [
     description: 'Prinzessin Liana erlebt ein spannendes Abenteuer am Ozean',
     component: LianasOzeanAbenteuer,
     author: 'Kind',
+    storyJson: lianaStoryData as StoryJson,
+  },
+  {
+    id: 'magische-geschwister',
+    name: 'Die magischen Geschwister',
+    description: 'Eine spannende Geschichte über drei magische Geschwister: eine Zauberin, ein Blitz-Ninja und ein Regenbogen-Ninja.',
+    component: DiemagischenGeschwister,
+    author: 'Kind',
+    storyJson: magischeGeschwisterStoryData as StoryJson,
   },
 ];
 

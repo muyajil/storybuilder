@@ -11,6 +11,7 @@ export { GameButton } from './GameButton';
 export { GameText } from './GameText';
 export { SidePanel, type SidePanelHandle } from './SidePanel';
 export { ConfigModal, loadAIConfig, saveAIConfig, type AIConfig } from './ConfigModal';
+export { StoryBuildProvider, useStoryBuild } from './StoryBuildProvider';
 
 // Sprite-Bibliothek / Sprite Library
 export * from './sprites';

@@ -116,7 +116,7 @@ export default defineConfig({
                     id: { type: 'string', description: 'Kurze ID für das Spiel (z.B. "racing", "puzzle"). Kleinbuchstaben, keine Leerzeichen!' },
                     name: { type: 'string', description: 'Anzeigename des Spiels (z.B. "Rennspiel", "Puzzle Welt")' },
                     description: { type: 'string', description: 'Kurze Beschreibung was das Spiel macht' },
-                    type: { type: 'string', description: 'Art des Spiels: "canvas" (für Action/Arcade), "cards" (Karten/Memory), "quiz" (Fragen), "simple" (Minimal)' }
+                    type: { type: 'string', description: 'Art des Spiels: "story" (interaktive Geschichte mit JSON), "canvas" (für Action/Arcade), "cards" (Karten/Memory), "quiz" (Fragen), "simple" (Minimal)' }
                   },
                   required: ['id', 'name', 'description', 'type']
                 }
@@ -222,8 +222,51 @@ export default defineConfig({
           },
           {
             toolSpec: {
+              name: 'validate_code',
+              description: '🚨 PFLICHT vor write_file/edit_file! Prüft deinen Code und zeigt ALLE Fehler. IMMER ZUERST aufrufen bevor du schreibst!',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    content: { type: 'string', description: 'Der Code den du validieren möchtest' }
+                  },
+                  required: ['content']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'get_story_schema',
+              description: 'Zeigt das komplette JSON-Schema für Geschichten. IMMER AUFRUFEN bevor du eine Geschichte erstellst! Zeigt alle möglichen Felder und Werte.',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {},
+                  required: []
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'validate_json',
+              description: '🚨 PFLICHT vor write_file! Prüft dein Story-JSON und zeigt ALLE Fehler. IMMER ZUERST aufrufen bevor du schreibst!',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    content: { type: 'string', description: 'Das JSON das du validieren möchtest' }
+                  },
+                  required: ['content']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
               name: 'get_story_system',
-              description: 'Zeigt wie man Geschichten mit StoryPlayer und createLinearStory erstellt. IMMER AUFRUFEN bevor du eine Geschichte implementierst!',
+              description: 'Zeigt wie man JSON-Geschichten erstellt. IMMER AUFRUFEN bevor du eine Geschichte implementierst!',
               inputSchema: {
                 json: {
                   type: 'object',
@@ -260,74 +303,381 @@ export default defineConfig({
                 }
               }
             }
+          },
+          {
+            toolSpec: {
+              name: 'list_scenes',
+              description: 'Zeigt alle Szenen-IDs einer Geschichte mit kurzer Info. Gut um Überblick zu bekommen ohne alles zu laden.',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID (z.B. "liana-abenteuer")' }
+                  },
+                  required: ['gameId']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'get_scene',
+              description: 'Liest eine einzelne Szene aus der Geschichte. Spart Kontext wenn du nur eine Szene brauchst!',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID (z.B. "start", "strand")' }
+                  },
+                  required: ['gameId', 'sceneId']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'add_scene',
+              description: 'Fügt eine neue Szene zur Geschichte hinzu. Validiert automatisch!',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    scene: { type: 'string', description: 'Die neue Szene als JSON-String' }
+                  },
+                  required: ['gameId', 'scene']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'update_scene',
+              description: 'Aktualisiert eine existierende Szene. Validiert automatisch!',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID die aktualisiert werden soll' },
+                    scene: { type: 'string', description: 'Die aktualisierte Szene als JSON-String' }
+                  },
+                  required: ['gameId', 'sceneId', 'scene']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'delete_scene',
+              description: 'Löscht eine Szene aus der Geschichte. Warnt wenn andere Szenen darauf verweisen!',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID die gelöscht werden soll' }
+                  },
+                  required: ['gameId', 'sceneId']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'add_choice',
+              description: 'Fügt eine neue Auswahl-Option zu einer Szene hinzu.',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID' },
+                    text: { type: 'string', description: 'Button-Text (z.B. "🌊 Zum Strand")' },
+                    nextSceneId: { type: 'string', description: 'Ziel-Szene' },
+                    requiresItems: { type: 'string', description: 'Optional: Komma-getrennte Items (z.B. "key,map")' }
+                  },
+                  required: ['gameId', 'sceneId', 'text', 'nextSceneId']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'remove_choice',
+              description: 'Entfernt eine Auswahl-Option aus einer Szene.',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID' },
+                    choiceIndex: { type: 'string', description: 'Index der Choice (0 = erste)' }
+                  },
+                  required: ['gameId', 'sceneId', 'choiceIndex']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'set_dialogue',
+              description: 'Setzt die Dialoge einer Szene.',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID' },
+                    dialogue: { type: 'string', description: 'Dialog-Texte als JSON-Array (z.B. ["Hallo!", "Wie gehts?"])' }
+                  },
+                  required: ['gameId', 'sceneId', 'dialogue']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'add_character',
+              description: 'Fügt einen Charakter zu einer Szene hinzu.',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID' },
+                    sprite: { type: 'string', description: 'Sprite-Name (z.B. "Princess", "Dolphin")' },
+                    position: { type: 'string', description: 'Position: "left", "center", oder "right"' },
+                    size: { type: 'string', description: 'Größe (10-300, Standard: 80)' }
+                  },
+                  required: ['gameId', 'sceneId', 'sprite', 'position']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'remove_character',
+              description: 'Entfernt einen Charakter aus einer Szene.',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID' },
+                    characterIndex: { type: 'string', description: 'Index des Charakters (0 = erster)' }
+                  },
+                  required: ['gameId', 'sceneId', 'characterIndex']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'set_findTarget',
+              description: 'Setzt oder aktualisiert das Suchspiel einer Szene.',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID' },
+                    sprite: { type: 'string', description: 'Was gefunden werden soll (z.B. "Starfish")' },
+                    x: { type: 'string', description: 'X-Position in % (0-100)' },
+                    y: { type: 'string', description: 'Y-Position in % (0-100)' },
+                    hint: { type: 'string', description: 'Hinweis-Text' },
+                    foundText: { type: 'string', description: 'Text wenn gefunden' },
+                    nextSceneId: { type: 'string', description: 'Nächste Szene' }
+                  },
+                  required: ['gameId', 'sceneId', 'sprite', 'x', 'y', 'hint', 'nextSceneId']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'set_miniGame',
+              description: 'Setzt oder aktualisiert das Mini-Spiel einer Szene.',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID' },
+                    miniGame: { type: 'string', description: 'Mini-Spiel als JSON-String' }
+                  },
+                  required: ['gameId', 'sceneId', 'miniGame']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'add_item_action',
+              description: 'Fügt eine Item-Aktion zu einer Szene hinzu (gibt dem Spieler ein Item).',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID' },
+                    item: { type: 'string', description: 'Item-Name (z.B. "key", "map")' },
+                    message: { type: 'string', description: 'Nachricht wenn erhalten (z.B. "🔑 Schlüssel gefunden!")' },
+                    trigger: { type: 'string', description: '"onEnter" oder "onFindTarget" (Standard: onEnter)' }
+                  },
+                  required: ['gameId', 'sceneId', 'item', 'message']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'set_background',
+              description: 'Ändert den Hintergrund einer Szene.',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {
+                    gameId: { type: 'string', description: 'Die Game-ID' },
+                    sceneId: { type: 'string', description: 'Die Szenen-ID' },
+                    background: { type: 'string', description: 'Hintergrund-Name (z.B. "DeepOcean", "EnchantedForest")' }
+                  },
+                  required: ['gameId', 'sceneId', 'background']
+                }
+              }
+            }
+          },
+          {
+            toolSpec: {
+              name: 'get_state_system',
+              description: 'Zeigt wie man Spielstand, Items und Hindernisse verwendet. Für: Schlüssel sammeln, gesperrte Optionen, Aufgaben-System. AUFRUFEN wenn das Kind ein Rätsel/Hindernis einbauen will!',
+              inputSchema: {
+                json: {
+                  type: 'object',
+                  properties: {},
+                  required: []
+                }
+              }
+            }
           }
         ]
 
-        // System prompt for story-based game creation
-        const SYSTEM_PROMPT = `Du bist ein Geschichten-Regisseur für Kinder!
+        // System prompt for story-based game creation (JSON-based)
+        const SYSTEM_PROMPT = `Du bist ein freundlicher Geschichten-Helfer für Kinder! 🎮✨
 
-=== ZIEL: LANGE GESCHICHTEN! ===
-🎯 Das Ziel ist VIELE Szenen zu bauen - 30+ Schritte bis zum Ende ist PERFEKT!
-❌ NICHT zu schnell zum Ende kommen
-✅ Immer weiter entwickeln, neue Abenteuer, neue Wege!
-✅ Jede Session 2-3 neue Szenen hinzufügen
+=== SO REDEST DU ===
+• KURZ! Max 1-2 Sätze + eine Frage
+• Freundlich & aufgeregt wie ein Freund
+• Viele Emojis! 🎉🌟🎮
+• Einfache Wörter
 
-=== TOOLS IMMER ZUERST! ===
-BEVOR du Code schreibst, rufe IMMER diese Tools auf:
-• get_story_system() → wie man Geschichten baut
-• get_available_sprites() → welche Figuren existieren
-• get_available_scenes() → welche Hintergründe existieren
-• get_available_minigames() → welche Spiel-Templates existieren
-• get_patterns() → Best Practices, wann was verwenden
+Beispiele:
+✅ "Cool! 🎉 Was passiert dann?"
+✅ "Ooh spannend! 🌟 Wohin geht sie?"
+✅ "Super Idee! Was sagt sie?"
+❌ NICHT: Lange Erklärungen oder mehrere Fragen
 
-❌ NIEMALS Komponenten erfinden die nicht in den Tools stehen!
+=== WICHTIG ===
+🚨 Das KIND erfindet die Geschichte - du hilfst nur beim Bauen!
+• Frag was passieren soll
+• Warte auf Antwort
+• Bau genau das
+• Frag was als nächstes kommt
 
-=== STIL ===
-- Max 2 Sätze, EINE Frage auf einmal
-- Viel Emoji! 🎮
-- Direkt implementieren, dann fragen!
+⚠️ KEINE VORAUSGEFÜLLTEN OPTIONEN!
+• NIEMALS 2-3 Optionen vorschlagen ohne zu fragen!
+• Frag IMMER erst: "Was soll passieren?" oder "Was für Optionen willst du?"
+• Das Kind entscheidet was als nächstes kommt - nicht du!
+• Eine Szene kann auch OHNE Optionen sein (nur Text/Dialog)
 
-=== WEITERARBEITEN ===
-Wenn "weiterarbeiten" oder "was haben wir":
-1. analyze_story(gameId) → Struktur analysieren!
-2. Zeige die Empfehlungen dem Kind
-3. IMMER VON HINTEN NACH VORNE:
-   - Erst tiefste unvollständige Szenen erweitern
-   - Dann Sackgassen fortführen
-   - Dann Branches zusammenführen
-   - Erst zuletzt neue Wege vom Start öffnen!
+=== JSON-BASIERTES SYSTEM ===
+Du arbeitest NUR mit JSON! Kein React-Code nötig!
+• Geschichten werden als story.json Dateien gespeichert
+• get_story_schema() → zeigt das komplette JSON-Format
+• validate_json(content) → prüft ob JSON gültig ist
 
-=== NEUE GESCHICHTE ===
-1. "Wer ist der Held? 🦊🐰👸🤖"
-2. "Wo spielt es? 🌲🏰🌊"
-3. get_story_system() aufrufen → Code-Vorlage holen
-4. get_available_sprites/scenes() → verfügbare Komponenten
-5. Szene implementieren!
-6. Pro Szene fragen: "Was muss hier passieren?"
-   - Nur Dialog? → choices für nächste Szenen
-   - Suchen? → findTarget verwenden!
-   - Spielen? → miniGame einbauen!
-7. "Was passiert als nächstes?"
-8. Wiederholen...
+=== TOOLS (Kontext-sparend!) ===
 
-=== VERZWEIGUNGEN PFLEGEN ===
-❌ SCHLECHT: Szenen mit nur EINER choice (→ warum dann eine Wahl?)
-❌ SCHLECHT: Offene Enden ohne Ziel-Szene
-✅ GUT: 2-3 echte Wahlmöglichkeiten
-✅ GUT: findTarget für "Finde X" Aufgaben
-✅ GUT: miniGame für aktive Herausforderungen
-✅ GUT: Branches am Ende wieder zusammenführen!
+📖 Schema & Info:
+• get_story_schema() → JSON-Schema
+• get_available_sprites() → Figuren-Namen
+• get_available_scenes() → Hintergrund-Namen
+• get_available_minigames() → Mini-Spiel-Typen
 
-Nutze analyze_story(gameId) um Probleme zu finden!
-→ Tiefste Branches ZUERST erweitern (von hinten nach vorne!)
-→ Branches zusammenführen zum gemeinsamen Finale
+📋 Überblick:
+• list_scenes(gameId) → Alle Szenen-IDs
+• get_scene(gameId, sceneId) → Eine Szene lesen
 
-=== VERHALTEN ===
-❌ NICHT: "Was möchtest du? Option 1, 2, 3..."
-✅ STATTDESSEN: Bauen, dann EINE Frage!
+📝 Szenen verwalten:
+• add_scene(gameId, scene) → Neue Szene
+• update_scene(gameId, sceneId, scene) → Szene ersetzen
+• delete_scene(gameId, sceneId) → Szene löschen
 
-Kind: "Der Fuchs sammelt Sterne"
-Du: "⭐ Cool!" [get_available_minigames → implementieren] "✅ Was dann?"`
+✏️ Einzelne Teile ändern (BESTE OPTION!):
+• set_background(gameId, sceneId, background)
+• set_dialogue(gameId, sceneId, dialogue)
+• add_character(gameId, sceneId, sprite, position, size)
+• remove_character(gameId, sceneId, characterIndex)
+• add_choice(gameId, sceneId, text, nextSceneId)
+• remove_choice(gameId, sceneId, choiceIndex)
+• set_findTarget(gameId, sceneId, sprite, x, y, hint, nextSceneId)
+• set_miniGame(gameId, sceneId, miniGame)
+• add_item_action(gameId, sceneId, item, message)
+
+✅ validate_json(content) → Prüfen
+
+=== COOLE FEATURES ===
+Manchmal vorschlagen (nicht aufdrängen!):
+• 🔍 "Soll man was suchen müssen?" → findTarget
+• 🎮 "Ein kleines Spiel einbauen?" → miniGame
+• 🔑 "Erst was finden bevor's weitergeht?" → requiresItems
+
+=== WENN KIND KLICKT ===
+Wenn das Kind im Spiel auf "Option/Suchen/Spiel" klickt:
+• Es will GENAU DORT eine Interaktion
+• Frag kurz was passieren soll
+• Bau es dann ein!
+
+=== 📋 JSON-STRUKTUR ===
+
+SZENE ERSTELLEN:
+{
+  "id": "meine_szene",
+  "background": "DeepOcean",
+  "characters": [{ "sprite": "Princess", "position": "center", "size": 90 }],
+  "dialogue": ["Text hier..."],
+  "choices": [{ "text": "Weiter", "nextSceneId": "naechste_szene" }]
+}
+
+FINDTARGET (Suchspiel):
+"findTarget": {
+  "sprite": "Starfish",
+  "size": 40,
+  "position": { "x": 70, "y": 80 },
+  "hint": "Wo ist es?",
+  "foundText": "Gefunden!",
+  "nextSceneId": "naechste_szene"
+}
+
+MINIGAME:
+"miniGame": {
+  "type": "collect",
+  "playerSprite": "Princess",
+  "collectSprite": "Star",
+  "targetScore": 5,
+  "successSceneId": "gewonnen"
+}
+
+ITEMS & BEDINGUNGEN:
+"onEnterActions": [{ "type": "add_item", "item": "schluessel", "message": "🔑 Schlüssel!" }]
+"choices": [{ "text": "Tür öffnen", "nextSceneId": "raum", "requiresItems": ["schluessel"] }]
+
+=== REGELN ===
+• Sprite-Namen: get_available_sprites() aufrufen!
+• Hintergrund-Namen: get_available_scenes() aufrufen!
+• Positionen: "left" | "center" | "right"
+• IMMER validate_json() bevor du speicherst!`
 
         // Initialize files
         if (!fs.existsSync(statusFile)) {
@@ -666,6 +1016,13 @@ export function GAME_NAME() {
       </div>
     </div>
   );
+}`,
+          story: `import { JsonStoryPlayer } from '../../components/story';
+import type { StoryJson } from '../../components/story/StorySchema';
+import storyData from './story.json';
+
+export function GAME_NAME() {
+  return <JsonStoryPlayer story={storyData as StoryJson} width={800} height={500} />;
 }`
         }
 
@@ -805,6 +1162,333 @@ checkCollision(rect1, rect2)  // Kollision prüfen
           }
         }
 
+        // Extract exported function names from a file
+        function extractExports(filePath: string): string[] {
+          try {
+            const content = fs.readFileSync(filePath, 'utf-8')
+            const matches = content.match(/export function (\w+)/g) || []
+            return matches.map(m => m.replace('export function ', ''))
+          } catch { return [] }
+        }
+
+        // Get all available sprites (reused by tool and validation)
+        function getAvailableSprites(): Record<string, string[]> {
+          const spritesDir = path.join(projectDir, 'src', 'components', 'sprites')
+          return {
+            animals: extractExports(path.join(spritesDir, 'Animals.tsx')),
+            characters: extractExports(path.join(spritesDir, 'Characters.tsx')),
+            environment: extractExports(path.join(spritesDir, 'Environment.tsx')),
+            effects: extractExports(path.join(spritesDir, 'Effects.tsx')),
+          }
+        }
+
+        // Get all available scenes (reused by tool and validation)
+        function getAvailableScenes(): string[] {
+          const scenesFile = path.join(projectDir, 'src', 'components', 'story', 'SceneTemplates.tsx')
+          try {
+            const content = fs.readFileSync(scenesFile, 'utf-8')
+            const matches = content.match(/export function (\w+)\([^)]*SceneProps/g) || []
+            return matches.map(m => {
+              const match = m.match(/export function (\w+)/)
+              return match ? match[1] : ''
+            }).filter(s => s && s !== 'CharacterPosition')
+          } catch { return [] }
+        }
+
+        // Get all available components (sprites, scenes, etc.)
+        function getAvailableComponents(): Set<string> {
+          const components = new Set<string>()
+
+          // Add all sprites
+          const sprites = getAvailableSprites()
+          Object.values(sprites).flat().forEach(s => components.add(s))
+
+          // Add all scenes
+          getAvailableScenes().forEach(s => components.add(s))
+
+          // Add story system components
+          components.add('StoryPlayer')
+          components.add('createLinearStory')
+          components.add('CharacterPosition')
+
+          return components
+        }
+
+        // Validate that all JSX components used in the code exist
+        function validateComponents(content: string): string | null {
+          // Only validate game files that use our components
+          if (!content.includes('createLinearStory') && !content.includes('StoryPlayer')) {
+            return null // Not a story file, skip validation
+          }
+
+          const availableComponents = getAvailableComponents()
+
+          // Validate imports from our components
+          const importPattern = /import\s*\{([^}]+)\}\s*from\s*['"][^'"]*components[^'"]*['"]/g
+          let importMatch
+          const importedNames = new Set<string>()
+          while ((importMatch = importPattern.exec(content)) !== null) {
+            const imports = importMatch[1].split(',').map(s => s.trim().split(' ')[0].replace('type ', ''))
+            imports.forEach(name => {
+              if (name && !name.startsWith('type')) {
+                importedNames.add(name)
+              }
+            })
+          }
+
+          // Collect ALL errors instead of returning early
+          const allErrors: string[] = []
+
+          // Find all JSX component usages: <ComponentName or <ComponentName>
+          const usedComponents = new Set<string>()
+          const jsxPattern = /<([A-Z][a-zA-Z0-9]*)/g
+          let match
+          while ((match = jsxPattern.exec(content)) !== null) {
+            usedComponents.add(match[1])
+          }
+
+          // 1. Check imports against available components
+          const badImports: string[] = []
+          for (const name of importedNames) {
+            if (!availableComponents.has(name)) {
+              badImports.push(name)
+            }
+          }
+          if (badImports.length > 0) {
+            allErrors.push(`📦 UNGÜLTIGE IMPORTS:\n${badImports.map(name => `  • ${name} existiert nicht`).join('\n')}\n  💡 Nutze get_available_sprites() für verfügbare Komponenten!`)
+          }
+
+          // 2. Check for unknown JSX components
+          const missingComponents: string[] = []
+          for (const component of usedComponents) {
+            if (component === 'Fragment') continue
+            if (!availableComponents.has(component)) {
+              missingComponents.push(component)
+            }
+          }
+          if (missingComponents.length > 0) {
+            allErrors.push(`🎭 UNBEKANNTE KOMPONENTEN:\n${missingComponents.map(c => `  • <${c}> existiert nicht`).join('\n')}\n  💡 Nutze get_available_sprites() für verfügbare Komponenten!`)
+          }
+
+          // 3. Check that used components are actually imported
+          const notImported: string[] = []
+          for (const component of usedComponents) {
+            if (component === 'Fragment') continue
+            if (['StoryPlayer', 'CharacterPosition'].includes(component)) continue
+            if (component.includes('Ocean') || component.includes('Forest') || component.includes('Farm') ||
+                component.includes('Castle') || component.includes('Cave') || component.includes('Village') ||
+                component.includes('Beach') || component.includes('Sky') || component.includes('Underwater')) continue
+            if (availableComponents.has(component) && !importedNames.has(component)) {
+              notImported.push(component)
+            }
+          }
+          if (notImported.length > 0) {
+            allErrors.push(`📥 FEHLENDE IMPORTS:\n${notImported.map(c => `  • <${c}> wird benutzt aber nicht importiert`).join('\n')}\n  💡 Füge zu import { ${notImported.join(', ')} } from '../../components' hinzu!`)
+          }
+
+          // ============================================
+          // STORY STRUCTURE VALIDATION
+          // ============================================
+
+          // Only validate story structure if this is a story file
+          if (content.includes('createLinearStory')) {
+
+            // 1. Extract all scene IDs
+            const sceneIdPattern = /id:\s*['"]([^'"]+)['"]/g
+            const sceneIds: string[] = []
+            const sceneIdCounts = new Map<string, number>()
+            let idMatch
+            while ((idMatch = sceneIdPattern.exec(content)) !== null) {
+              const id = idMatch[1]
+              sceneIds.push(id)
+              sceneIdCounts.set(id, (sceneIdCounts.get(id) || 0) + 1)
+            }
+
+            // 2. Check for duplicate scene IDs
+            const duplicates = Array.from(sceneIdCounts.entries()).filter(([, count]) => count > 1)
+            if (duplicates.length > 0) {
+              allErrors.push(`🔄 DOPPELTE SZENEN-IDs:\n${duplicates.map(([id, count]) => `  • '${id}' kommt ${count}x vor`).join('\n')}`)
+            }
+
+            // 3. Check for missing 'start' scene
+            if (!sceneIds.includes('start')) {
+              allErrors.push(`🚫 KEINE START-SZENE:\n  • Es fehlt eine Szene mit id: 'start'\n  • Die erste Szene muss id: 'start' haben!`)
+            }
+
+            // 4. Extract all nextSceneId references
+            const nextScenePattern = /nextSceneId:\s*['"]([^'"]+)['"]/g
+            const referencedScenes = new Set<string>()
+            let nextMatch
+            while ((nextMatch = nextScenePattern.exec(content)) !== null) {
+              referencedScenes.add(nextMatch[1])
+            }
+
+            // 5. Check for invalid nextSceneId references
+            const sceneIdSet = new Set(sceneIds)
+            const invalidRefs = Array.from(referencedScenes).filter(ref => !sceneIdSet.has(ref))
+            if (invalidRefs.length > 0) {
+              allErrors.push(`🔗 UNGÜLTIGE SZENEN-REFERENZEN:\n${invalidRefs.map(ref => `  • nextSceneId: '${ref}' - diese Szene existiert nicht!`).join('\n')}\n  💡 Verfügbare Szenen: ${sceneIds.join(', ')}`)
+            }
+
+            // 6. Check for empty dialogue arrays
+            const emptyDialoguePattern = /dialogue:\s*\[\s*\]/g
+            if (emptyDialoguePattern.test(content)) {
+              allErrors.push(`💬 LEERE DIALOGE:\n  • Mindestens eine Szene hat dialogue: []\n  • Jede Szene braucht mindestens einen Dialog-Text!`)
+            }
+
+            // 7. Check for invalid CharacterPosition values
+            const positionPattern = /position=["']([^"']+)["']/g
+            const validPositions = new Set(['left', 'center', 'right'])
+            const invalidPositions: string[] = []
+            let posMatch
+            while ((posMatch = positionPattern.exec(content)) !== null) {
+              if (!validPositions.has(posMatch[1])) {
+                invalidPositions.push(posMatch[1])
+              }
+            }
+            if (invalidPositions.length > 0) {
+              allErrors.push(`📍 UNGÜLTIGE POSITIONEN:\n${invalidPositions.map(pos => `  • position="${pos}" ist ungültig`).join('\n')}\n  💡 Erlaubte Werte: "left", "center", "right"`)
+            }
+
+            // 8. Check for orphan scenes (unreachable)
+            if (sceneIds.length > 1) {
+              const reachable = new Set<string>(['start'])
+              // Add all scenes referenced by nextSceneId
+              referencedScenes.forEach(id => reachable.add(id))
+              // Find orphans (excluding 'start' which is the entry point)
+              const orphans = sceneIds.filter(id => id !== 'start' && !reachable.has(id))
+              if (orphans.length > 0) {
+                allErrors.push(`🏝️ UNERREICHBARE SZENEN:\n${orphans.map(id => `  • '${id}' wird von keiner anderen Szene referenziert`).join('\n')}\n  💡 Füge eine Choice mit nextSceneId: '${orphans[0]}' hinzu!`)
+              }
+            }
+
+            // 9. Check findTarget has required properties
+            const findTargetPattern = /findTarget:\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/g
+            let ftMatch
+            while ((ftMatch = findTargetPattern.exec(content)) !== null) {
+              const ftContent = ftMatch[1]
+              if (!ftContent.includes('target:')) {
+                allErrors.push(`🎯 FINDTARGET FEHLT 'target':\n  • findTarget braucht: target: <Komponente />`)
+              }
+              if (!ftContent.includes('position:')) {
+                allErrors.push(`🎯 FINDTARGET FEHLT 'position':\n  • findTarget braucht: position: { x: 0-100, y: 0-100 }`)
+              }
+              if (!ftContent.includes('nextSceneId:')) {
+                allErrors.push(`🎯 FINDTARGET FEHLT 'nextSceneId':\n  • findTarget braucht: nextSceneId: 'scene_name'`)
+              }
+            }
+
+            // 10. Check findTarget position coordinates are 0-100
+            const ftPositionPattern = /findTarget:[\s\S]*?position:\s*\{\s*x:\s*(\d+)\s*,\s*y:\s*(\d+)\s*\}/g
+            let coordMatch
+            while ((coordMatch = ftPositionPattern.exec(content)) !== null) {
+              const x = parseInt(coordMatch[1])
+              const y = parseInt(coordMatch[2])
+              if (x < 0 || x > 100 || y < 0 || y > 100) {
+                allErrors.push(`📐 UNGÜLTIGE KOORDINATEN:\n  • position: { x: ${x}, y: ${y} } - Werte müssen zwischen 0-100 sein!`)
+              }
+            }
+
+            // 11. Check choices have text and nextSceneId
+            const choicePattern = /\{\s*text:\s*['"][^'"]*['"]/g
+            const choicesWithNext = /\{\s*text:\s*['"][^'"]*['"][\s\S]*?nextSceneId:\s*['"][^'"]*['"]/g
+            const allChoices = content.match(choicePattern) || []
+            const validChoices = content.match(choicesWithNext) || []
+            if (allChoices.length > validChoices.length) {
+              allErrors.push(`🔘 CHOICE FEHLT 'nextSceneId':\n  • Jede Choice braucht: { text: '...', nextSceneId: '...' }`)
+            }
+
+            // 12. Check for dead-end scenes (no choices, no findTarget, not last scene)
+            // Extract each scene block
+            const sceneBlockPattern = /\{\s*id:\s*['"]([^'"]+)['"][\s\S]*?(?=\{\s*id:\s*['"]|]\s*\)\s*;)/g
+            let sceneBlock
+            const deadEnds: string[] = []
+            while ((sceneBlock = sceneBlockPattern.exec(content)) !== null) {
+              const sceneId = sceneBlock[1]
+              const block = sceneBlock[0]
+              const hasChoices = block.includes('choices:')
+              const hasFindTarget = block.includes('findTarget:')
+              // If no exit mechanism, it's a dead end (unless it's intentionally the last scene)
+              if (!hasChoices && !hasFindTarget) {
+                // Check if dialogue contains "Fortsetzung" or "Ende" (intentional ending)
+                if (!block.includes('Fortsetzung') && !block.includes('Ende') && !block.includes('THE END')) {
+                  deadEnds.push(sceneId)
+                }
+              }
+            }
+            if (deadEnds.length > 0) {
+              allErrors.push(`🚧 SACKGASSEN-SZENEN:\n${deadEnds.map(id => `  • '${id}' hat keine choices oder findTarget - Spieler bleibt stecken!`).join('\n')}\n  💡 Füge choices: [...] oder findTarget: {...} hinzu!`)
+            }
+
+            // 13. Check item consistency (requiresItems vs add_item)
+            const requiresPattern = /requiresItems:\s*\[([^\]]+)\]/g
+            const addItemPattern = /add_item['"]\s*,\s*item:\s*['"]([^'"]+)['"]/g
+            const requiredItems = new Set<string>()
+            const providedItems = new Set<string>()
+            let reqMatch
+            while ((reqMatch = requiresPattern.exec(content)) !== null) {
+              const items = reqMatch[1].match(/['"]([^'"]+)['"]/g) || []
+              items.forEach(item => requiredItems.add(item.replace(/['"]/g, '')))
+            }
+            let addMatch
+            while ((addMatch = addItemPattern.exec(content)) !== null) {
+              providedItems.add(addMatch[1])
+            }
+            const missingItems = Array.from(requiredItems).filter(item => !providedItems.has(item))
+            if (missingItems.length > 0) {
+              allErrors.push(`🔑 FEHLENDE ITEMS:\n${missingItems.map(item => `  • requiresItems: ['${item}'] - aber nirgends wird add_item: '${item}' gegeben!`).join('\n')}\n  💡 Füge onFindTargetActions: [{ type: 'add_item', item: '${missingItems[0]}', message: '...' }] hinzu!`)
+            }
+
+            // 14. Check for self-loop scenes (all choices lead back to same scene)
+            const sceneChoicesPattern = /\{\s*id:\s*['"]([^'"]+)['"][\s\S]*?choices:\s*\[([\s\S]*?)\]/g
+            let scMatch
+            while ((scMatch = sceneChoicesPattern.exec(content)) !== null) {
+              const sceneId = scMatch[1]
+              const choicesBlock = scMatch[2]
+              const nextIds = choicesBlock.match(/nextSceneId:\s*['"]([^'"]+)['"]/g) || []
+              const uniqueNextIds = new Set(nextIds.map(n => n.match(/['"]([^'"]+)['"]/)?.[1]))
+              if (uniqueNextIds.size === 1 && uniqueNextIds.has(sceneId)) {
+                allErrors.push(`🔄 ENDLOS-SCHLEIFE:\n  • Szene '${sceneId}' - alle Choices führen zurück zur gleichen Szene!`)
+              }
+            }
+
+            // 15. Check every scene has a background
+            const scenesWithBg = (content.match(/background:\s*</g) || []).length
+            if (scenesWithBg < sceneIds.length) {
+              allErrors.push(`🖼️ FEHLENDE HINTERGRÜNDE:\n  • ${sceneIds.length - scenesWithBg} Szene(n) haben keinen background!\n  • Jede Szene braucht: background: <DeepOcean /> oder ähnlich`)
+            }
+
+            // 16. Check for duplicate choice text in same scene
+            const sceneWithChoicesPattern = /\{\s*id:\s*['"]([^'"]+)['"][\s\S]*?choices:\s*\[([\s\S]*?)\]\s*,?\s*\}/g
+            let dupMatch
+            while ((dupMatch = sceneWithChoicesPattern.exec(content)) !== null) {
+              const sceneId = dupMatch[1]
+              const choicesBlock = dupMatch[2]
+              const texts = choicesBlock.match(/text:\s*['"]([^'"]+)['"]/g) || []
+              const textSet = new Set<string>()
+              const duplicateTexts: string[] = []
+              texts.forEach(t => {
+                const text = t.match(/['"]([^'"]+)['"]/)?.[1] || ''
+                if (textSet.has(text)) {
+                  duplicateTexts.push(text)
+                }
+                textSet.add(text)
+              })
+              if (duplicateTexts.length > 0) {
+                allErrors.push(`🔘 DOPPELTE CHOICE-TEXTE in '${sceneId}':\n${duplicateTexts.map(t => `  • "${t}" kommt mehrfach vor`).join('\n')}`)
+              }
+            }
+
+          }
+
+          // Return ALL collected errors
+          if (allErrors.length > 0) {
+            return `❌ VALIDIERUNG FEHLGESCHLAGEN - Datei wurde NICHT geschrieben!\n\n${allErrors.length} Fehler gefunden:\n\n${allErrors.join('\n\n')}`
+          }
+
+          return null
+        }
+
         // Execute a tool
         function executeTool(name: string, input: Record<string, string>): string {
           try {
@@ -826,7 +1510,12 @@ checkCollision(rect1, rect2)  // Kollision prüfen
                 if (!fs.existsSync(dir)) {
                   fs.mkdirSync(dir, { recursive: true })
                 }
-                // Validate before writing
+                // Validate components exist before writing
+                const componentError = validateComponents(content)
+                if (componentError) {
+                  return componentError
+                }
+                // Validate syntax before writing
                 const syntaxError = validateSyntax(filePath, content)
                 if (syntaxError) {
                   return `❌ SYNTAX-FEHLER - Datei wurde NICHT geschrieben:\n${syntaxError}\n\nBitte korrigiere den Code und versuche es erneut.`
@@ -849,7 +1538,12 @@ checkCollision(rect1, rect2)  // Kollision prüfen
                   return `Fehler: Der zu ersetzende Text wurde nicht gefunden. Stelle sicher dass er exakt übereinstimmt!\n\nGesucht (${oldText.length} Zeichen):\n${oldText.substring(0, 200)}${oldText.length > 200 ? '...' : ''}`
                 }
                 const newContent = content.replace(oldText, newText)
-                // Validate before writing
+                // Validate components exist before writing
+                const componentError = validateComponents(newContent)
+                if (componentError) {
+                  return componentError
+                }
+                // Validate syntax before writing
                 const syntaxError = validateSyntax(filePath, newContent)
                 if (syntaxError) {
                   return `❌ SYNTAX-FEHLER - Datei wurde NICHT geändert:\n${syntaxError}\n\nBitte korrigiere den Code und versuche es erneut.`
@@ -874,7 +1568,7 @@ checkCollision(rect1, rect2)  // Kollision prüfen
               }
               case 'create_game': {
                 const { id, name: gameName, description, type } = input
-                const template = gameTemplates[type] || gameTemplates.simple
+                const template = gameTemplates[type] || gameTemplates.story
                 const componentName = gameName.replace(/[^a-zA-Z]/g, '')
                 const gameCode = template
                   .replace(/GAME_NAME/g, componentName)
@@ -884,6 +1578,56 @@ checkCollision(rect1, rect2)  // Kollision prüfen
                 const gameDir = path.join(projectDir, 'src', 'games', id)
                 fs.mkdirSync(gameDir, { recursive: true })
                 fs.writeFileSync(path.join(gameDir, `${componentName}.tsx`), gameCode)
+
+                // For story type, also create the story.json file
+                if (type === 'story' || !type || !gameTemplates[type]) {
+                  const storyJson = {
+                    id: id,
+                    title: gameName,
+                    description: description,
+                    author: 'Kind',
+                    language: 'de',
+                    ageRating: '6+',
+                    tags: [],
+                    scenes: [
+                      {
+                        id: 'start',
+                        background: 'EnchantedForest',
+                        characters: [],
+                        dialogue: [
+                          `Willkommen zu "${gameName}"!`,
+                          'Dies ist der Anfang deiner Geschichte.',
+                          'Was möchtest du tun?'
+                        ],
+                        choices: [
+                          {
+                            text: '🌟 Weiter',
+                            nextSceneId: 'scene2'
+                          }
+                        ]
+                      },
+                      {
+                        id: 'scene2',
+                        background: 'SunnyFarm',
+                        characters: [],
+                        dialogue: [
+                          'Du bist in der nächsten Szene angekommen!',
+                          'Hier kannst du weitere Abenteuer erleben.'
+                        ],
+                        choices: [
+                          {
+                            text: '🔙 Zurück zum Start',
+                            nextSceneId: 'start'
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                  fs.writeFileSync(
+                    path.join(gameDir, 'story.json'),
+                    JSON.stringify(storyJson, null, 2)
+                  )
+                }
 
                 // Update games index
                 const indexPath = path.join(projectDir, 'src', 'games', 'index.ts')
@@ -908,7 +1652,11 @@ checkCollision(rect1, rect2)  // Kollision prüfen
 
                 fs.writeFileSync(indexPath, indexContent)
 
-                return `✅ Spiel "${gameName}" wurde erstellt!\n\n📁 src/games/${id}/${componentName}.tsx\n\nDas Spiel erscheint jetzt im Menü. Du kannst es jetzt anpassen!`
+                const extraInfo = (type === 'story' || !type || !gameTemplates[type])
+                  ? '\n📜 src/games/' + id + '/story.json\n\nDu kannst die Geschichte in der JSON-Datei bearbeiten!'
+                  : ''
+
+                return `✅ Spiel "${gameName}" wurde erstellt!\n\n📁 src/games/${id}/${componentName}.tsx${extraInfo}\n\nDas Spiel erscheint jetzt im Menü. Du kannst es jetzt anpassen!`
               }
               case 'get_components': {
                 return componentsDoc
@@ -930,26 +1678,10 @@ checkCollision(rect1, rect2)  // Kollision prüfen
                 return output.toString().substring(0, 5000)
               }
               case 'get_available_sprites': {
-                // Dynamically read exports from sprite files
                 const category = input.category?.toLowerCase()
+                const sprites = getAvailableSprites()
 
-                const extractExports = (filePath: string): string[] => {
-                  try {
-                    const content = fs.readFileSync(filePath, 'utf-8')
-                    const matches = content.match(/export function (\w+)/g) || []
-                    return matches.map(m => m.replace('export function ', ''))
-                  } catch { return [] }
-                }
-
-                const spritesDir = path.join(projectDir, 'src', 'components', 'sprites')
-                const sprites = {
-                  animals: extractExports(path.join(spritesDir, 'Animals.tsx')),
-                  characters: extractExports(path.join(spritesDir, 'Characters.tsx')),
-                  environment: extractExports(path.join(spritesDir, 'Environment.tsx')),
-                  effects: extractExports(path.join(spritesDir, 'Effects.tsx')),
-                }
-
-                let result = '🎨 VERFÜGBARE SPRITES (dynamisch gelesen)\n\nImport: import { SpriteName } from "../../components";\nUsage: <SpriteName size={50} />\n\n'
+                let result = '🎨 VERFÜGBARE SPRITES\n\nNutze diese Namen im JSON als "sprite": "Name"\n\n'
 
                 if (!category || category === 'animals') {
                   result += `🐾 TIERE (${sprites.animals.length}):\n${sprites.animals.join(', ')}\n\n`
@@ -968,174 +1700,864 @@ checkCollision(rect1, rect2)  // Kollision prüfen
                   result += `📊 GESAMT: ${total} Sprites verfügbar\n\n`
                 }
 
-                result += '⚠️ NUR diese Sprites existieren! Keine anderen verwenden!'
+                result += '⚠️ NUR diese Namen verwenden! Keine anderen erfinden!'
                 return result
               }
               case 'get_available_scenes': {
-                // Dynamically read from SceneTemplates.tsx
-                const scenesFile = path.join(projectDir, 'src', 'components', 'story', 'SceneTemplates.tsx')
-                let scenes: string[] = []
+                const scenes = getAvailableScenes()
 
-                try {
-                  const content = fs.readFileSync(scenesFile, 'utf-8')
-                  // Match exported functions that take SceneProps
-                  const matches = content.match(/export function (\w+)\([^)]*SceneProps/g) || []
-                  scenes = matches.map(m => {
-                    const match = m.match(/export function (\w+)/)
-                    return match ? match[1] : ''
-                  }).filter(s => s && s !== 'CharacterPosition')
-                } catch { /* fallback to empty */ }
-
-                let result = `🌄 VERFÜGBARE SZENEN-HINTERGRÜNDE (${scenes.length} gefunden)\n\n`
-                result += 'Import: import { SceneName } from "../../components/story";\n'
-                result += 'Usage: <SceneName width={800} height={500} />\n\n'
-                result += 'SZENEN:\n'
+                let result = `🌄 VERFÜGBARE HINTERGRÜNDE (${scenes.length} gefunden)\n\n`
+                result += 'Nutze diese Namen im JSON als "background": "Name"\n\n'
+                result += 'HINTERGRÜNDE:\n'
                 result += scenes.join(', ') + '\n\n'
-                result += '⚠️ NUR diese Szenen existieren! Keine anderen verwenden!'
+                result += '⚠️ NUR diese Namen verwenden! Keine anderen erfinden!'
                 return result
               }
               case 'get_available_minigames': {
-                // Dynamically read from MiniGameTemplates.tsx
-                const minigamesFile = path.join(projectDir, 'src', 'components', 'story', 'MiniGameTemplates.tsx')
-                const minigames: Array<{ name: string; desc: string; params: string[] }> = []
+                // JSON-based minigame documentation
+                const sprites = getAvailableSprites()
 
-                try {
-                  const content = fs.readFileSync(minigamesFile, 'utf-8')
+                let result = '🎮 MINI-SPIEL TYPEN (JSON-Format)\n\n'
+                result += 'Mini-Spiele werden direkt in der Szene als JSON definiert.\n\n'
 
-                  // Find all create*Game functions and their configs
-                  const funcMatches = content.match(/export function (create\w+Game)/g) || []
-                  const funcNames = funcMatches.map(m => m.replace('export function ', ''))
+                result += '=== TYPEN ===\n'
+                result += '• collect - Sammle Items, weiche Hindernissen aus\n'
+                result += '• dodge - Weiche fallenden Objekten aus\n'
+                result += '• catch - Fange fallende Items auf\n'
+                result += '• click - Klicke auf erscheinende Ziele\n'
+                result += '• snake - Klassisches Snake-Spiel\n'
+                result += '• race - Erreiche das Ziel\n'
+                result += '• flappy - Tippe um zu fliegen\n\n'
 
-                  // Extract config interface for each
-                  for (const funcName of funcNames) {
-                    // Get the jsdoc comment before the function
-                    const jsdocMatch = content.match(new RegExp(`/\\*\\*[\\s\\S]*?\\*/\\s*export function ${funcName}`))
-                    let desc = funcName.replace('create', '').replace('Game', '-Spiel')
+                result += '=== COLLECT (Sammel-Spiel) ===\n'
+                result += `"miniGame": {
+  "type": "collect",
+  "playerSprite": "Princess",      // Spieler-Figur
+  "collectSprite": "Star",         // Was sammeln
+  "obstacleSprite": "Rock",        // Optional: Hindernisse
+  "targetScore": 5,                // Wie viele sammeln
+  "timeLimit": 30,                 // Optional: Sekunden
+  "successSceneId": "gewonnen",
+  "failSceneId": "verloren",       // Optional
+  "difficulty": "easy"             // Optional: easy/medium/hard
+}\n\n`
 
-                    if (jsdocMatch) {
-                      const descMatch = jsdocMatch[0].match(/\* ([^*\n]+)\n/)
-                      if (descMatch) desc = descMatch[1].trim()
-                    }
+                result += '=== DODGE (Ausweich-Spiel) ===\n'
+                result += `"miniGame": {
+  "type": "dodge",
+  "playerSprite": "Princess",
+  "obstacleSprite": "Rock",
+  "surviveTime": 20,               // Sekunden überleben
+  "successSceneId": "geschafft"
+}\n\n`
 
-                    // Find config interface name
-                    const configMatch = content.match(new RegExp(`${funcName}\\(config: (\\w+Config)\\)`))
-                    let params: string[] = []
+                result += '=== CATCH (Fang-Spiel) ===\n'
+                result += `"miniGame": {
+  "type": "catch",
+  "playerSprite": "Princess",
+  "itemSprite": "Apple",
+  "badItemSprite": "Bomb",         // Optional: Nicht fangen!
+  "targetScore": 10,
+  "successSceneId": "gewonnen"
+}\n\n`
 
-                    if (configMatch) {
-                      const configName = configMatch[1]
-                      // Find interface properties
-                      const interfaceMatch = content.match(new RegExp(`interface ${configName}[\\s\\S]*?\\{([\\s\\S]*?)\\n\\}`))
-                      if (interfaceMatch) {
-                        // Extract property names
-                        const propMatches = interfaceMatch[1].match(/(\w+)(\?)?:/g) || []
-                        params = propMatches.map(p => p.replace(/\??:$/, ''))
-                      }
-                    }
+                result += '=== CLICK (Klick-Spiel) ===\n'
+                result += `"miniGame": {
+  "type": "click",
+  "targetSprite": "Star",
+  "badTargetSprite": "Rock",       // Optional: Nicht klicken!
+  "targetScore": 10,
+  "timeLimit": 15,
+  "successSceneId": "gewonnen"
+}\n\n`
 
-                    minigames.push({ name: funcName, desc, params })
-                  }
-                } catch { /* fallback to empty */ }
+                result += '=== SNAKE ===\n'
+                result += `"miniGame": {
+  "type": "snake",
+  "foodSprite": "Apple",
+  "targetLength": 10,              // Schlangenlänge zum Gewinnen
+  "successSceneId": "gewonnen"
+}\n\n`
 
-                let result = `🎮 VERFÜGBARE MINI-SPIEL TEMPLATES (${minigames.length} gefunden)\n\n`
-                result += 'Import: import { createCollectGame } from "../../components/story";\n\n'
-                result += 'BEISPIEL:\n```tsx\nconst MeinSpiel = createCollectGame({\n  playerSprite: <Fox size={50} />,\n  itemSprite: <Star size={30} />,\n  itemsToWin: 5,\n});\n\n// In der Szene:\nminiGame: { component: MeinSpiel, instructions: "Sammle 5 Sterne!" }\n```\n\n'
+                result += '=== FLAPPY ===\n'
+                result += `"miniGame": {
+  "type": "flappy",
+  "playerSprite": "Bird",
+  "obstacleSprite": "Pipe",        // Optional
+  "collectSprite": "Coin",         // Optional
+  "targetScore": 5,
+  "successSceneId": "gewonnen"
+}\n\n`
 
-                result += 'TEMPLATES:\n'
-                for (const mg of minigames) {
-                  result += `\n• ${mg.name}\n  ${mg.desc}\n  Parameter: ${mg.params.join(', ')}\n`
-                }
+                result += '=== VERFÜGBARE SPRITES FÜR SPIELE ===\n'
+                result += `Tiere: ${sprites.animals.slice(0, 8).join(', ')}...\n`
+                result += `Charaktere: ${sprites.characters.join(', ')}\n`
+                result += `Objekte: ${sprites.environment.slice(0, 8).join(', ')}...\n`
 
-                result += '\n⚠️ NUR diese Templates existieren! Keine anderen verwenden!'
                 return result
               }
-              case 'get_story_system': {
-                // Dynamically read from StoryPlayer.tsx and example game
-                const storyPlayerPath = path.join(projectDir, 'src', 'components', 'story', 'StoryPlayer.tsx')
-                const exampleGamePath = path.join(projectDir, 'src', 'games', 'liana-abenteuer', 'LianasOzeanAbenteuer.tsx')
+              case 'validate_code': {
+                const content = String(input.content || '')
+                if (!content.trim()) {
+                  return '❌ Kein Code zum Validieren angegeben!'
+                }
 
-                let result = '📖 STORY-SYSTEM DOKUMENTATION (dynamisch generiert)\n\n'
+                const error = validateComponents(content)
+                if (error) {
+                  return error
+                }
 
-                // Extract interfaces from StoryPlayer.tsx
+                // Also run syntax validation
+                const syntaxError = validateSyntax('test.tsx', content)
+                if (syntaxError) {
+                  return `❌ SYNTAX-FEHLER:\n${syntaxError}`
+                }
+
+                return '✅ Code ist valide! Du kannst ihn jetzt schreiben.'
+              }
+              case 'get_story_schema': {
+                // Return JSON schema documentation
+                const sprites = getAvailableSprites()
+                const scenes = getAvailableScenes()
+
+                let result = '📋 JSON-SCHEMA FÜR GESCHICHTEN\n\n'
+                result += 'Geschichten werden als story.json Dateien gespeichert.\n'
+                result += 'Dateistruktur: src/games/<game-id>/story.json\n\n'
+
+                result += '=== STORY (Hauptstruktur) ===\n'
+                result += `{
+  "id": "mein-spiel",           // Eindeutige ID (Kleinbuchstaben, Bindestriche)
+  "title": "Mein Abenteuer",    // Anzeige-Titel
+  "description": "Kurze Beschreibung",
+  "author": "Kind",
+  "language": "de",
+  "ageRating": "3+",
+  "tags": ["abenteuer", "ozean"],
+  "scenes": [ ... ]             // Array von Szenen
+}\n\n`
+
+                result += '=== SZENE ===\n'
+                result += `{
+  "id": "start",                // Eindeutige Szenen-ID (erste Szene MUSS "start" heißen!)
+  "background": "DeepOcean",    // Hintergrund-Name (siehe get_available_scenes)
+  "characters": [...],          // Array von Charakteren
+  "dialogue": ["Text 1", "Text 2"],  // Dialog-Texte
+  "choices": [...],             // ODER findTarget ODER miniGame ODER autoAdvance
+  "findTarget": {...},
+  "miniGame": {...},
+  "autoAdvance": { "nextSceneId": "next", "delay": 2000 }
+}\n\n`
+
+                result += '=== CHARACTER ===\n'
+                result += `{
+  "sprite": "Princess",         // Sprite-Name (siehe get_available_sprites)
+  "position": "center",         // "left" | "center" | "right"
+  "size": 90,                   // 10-300
+  "bottom": 80,                 // Optional: Abstand von unten
+  "flipX": false,               // Optional: Horizontal spiegeln
+  "animation": "idle"           // Optional: "idle" | "bounce" | "shake" | "pulse"
+}\n\n`
+
+                result += '=== CHOICE (Verzweigung) ===\n'
+                result += `{
+  "text": "🌊 Zum Strand",      // Button-Text (Emojis erlaubt!)
+  "nextSceneId": "strand",      // Ziel-Szene
+  "requiresItems": ["key"],     // Optional: Benötigte Items
+  "showWhenLocked": true,       // Optional: Zeigen wenn gesperrt
+  "lockedText": "Brauche Schlüssel"  // Optional: Text wenn gesperrt
+}\n\n`
+
+                result += '=== FINDTARGET (Suchspiel) ===\n'
+                result += `{
+  "sprite": "Starfish",         // Was gefunden werden soll
+  "size": 40,
+  "position": { "x": 70, "y": 80 },  // Position in % (0-100)
+  "hint": "Findest du den Seestern?",
+  "foundText": "🎉 Gefunden!",
+  "nextSceneId": "nach_suche"
+}\n\n`
+
+                result += '=== MINIGAME ===\n'
+                result += `Mini-Spiel-Typen: collect, dodge, catch, click, snake, race, flappy
+
+Beispiel (Sammel-Spiel):
+{
+  "type": "collect",
+  "playerSprite": "Princess",
+  "collectSprite": "Star",
+  "obstacleSprite": "Rock",     // Optional: Hindernisse
+  "targetScore": 5,
+  "timeLimit": 30,              // Optional: Sekunden
+  "successSceneId": "gewonnen",
+  "failSceneId": "verloren",    // Optional
+  "difficulty": "easy"          // Optional: easy | medium | hard
+}\n\n`
+
+                result += '=== STATE ACTIONS (Items & Flags) ===\n'
+                result += `"onEnterActions": [
+  { "type": "add_item", "item": "key", "message": "🔑 Schlüssel erhalten!" },
+  { "type": "set_flag", "flag": "door_opened" },
+  { "type": "complete_task", "task": "find_key" },
+  { "type": "add_score", "score": 10 }
+]\n\n`
+
+                result += '=== VERFÜGBARE SPRITES ===\n'
+                result += `Tiere: ${sprites.animals.slice(0, 10).join(', ')}...\n`
+                result += `Charaktere: ${sprites.characters.join(', ')}\n`
+                result += `Umgebung: ${sprites.environment.slice(0, 10).join(', ')}...\n\n`
+
+                result += '=== VERFÜGBARE HINTERGRÜNDE ===\n'
+                result += scenes.join(', ') + '\n\n'
+
+                result += '=== REGELN ===\n'
+                result += '• Erste Szene MUSS id: "start" haben!\n'
+                result += '• Jede nextSceneId muss auf existierende Szene zeigen!\n'
+                result += '• Jede Szene braucht Ausgang: choices, findTarget, miniGame oder autoAdvance\n'
+                result += '• Items mit requiresItems müssen vorher mit add_item gegeben werden!\n'
+
+                return result
+              }
+              case 'validate_json': {
+                const content = String(input.content || '')
+                if (!content.trim()) {
+                  return '❌ Kein JSON zum Validieren angegeben!'
+                }
+
+                // Try to parse JSON
+                let storyJson
                 try {
-                  const storyPlayerCode = fs.readFileSync(storyPlayerPath, 'utf-8')
-
-                  // Extract SimpleScene interface
-                  const simpleSceneMatch = storyPlayerCode.match(/interface SimpleScene \{([\s\S]*?)\n\}/)
-                  if (simpleSceneMatch) {
-                    result += '=== SZENEN-EIGENSCHAFTEN (SimpleScene) ===\n'
-                    const props = simpleSceneMatch[1].match(/(\w+)(\?)?:\s*([^;]+)/g) || []
-                    for (const prop of props) {
-                      const [name, type] = prop.split(':').map(s => s.trim())
-                      const isOptional = name.endsWith('?')
-                      const cleanName = name.replace('?', '')
-                      result += `• ${cleanName}${isOptional ? ' (optional)' : ''}: ${type}\n`
-                    }
-                    result += '\n'
-                  }
-
-                  // Extract FindTargetConfig interface
-                  const findTargetMatch = storyPlayerCode.match(/export interface FindTargetConfig \{([\s\S]*?)\n\}/)
-                  if (findTargetMatch) {
-                    result += '=== SUCH-INTERAKTION (FindTargetConfig) ===\n'
-                    result += 'Spieler muss etwas in der Szene finden und anklicken!\n\n'
-                    const findTargetProps = findTargetMatch[1].match(/(\w+)(\?)?:\s*([^;]+)/g) || []
-                    for (const prop of findTargetProps) {
-                      const [name, type] = prop.split(':').map(s => s.trim())
-                      const cleanName = name.replace('?', '')
-                      result += `• ${cleanName}: ${type}\n`
-                    }
-                    result += '\nposition: { x: 0-100%, y: 0-100% } vom linken/oberen Rand\n\n'
-                  }
-
-                  // Extract MiniGameConfig interface
-                  const miniGameMatch = storyPlayerCode.match(/export interface MiniGameConfig \{([\s\S]*?)\n\}/)
-                  if (miniGameMatch) {
-                    result += '=== MINI-SPIEL (MiniGameConfig) ===\n'
-                    const props = miniGameMatch[1].match(/(\w+)(\?)?:\s*([^;]+)/g) || []
-                    for (const prop of props) {
-                      const [name, type] = prop.split(':').map(s => s.trim())
-                      const cleanName = name.replace('?', '')
-                      result += `• ${cleanName}: ${type}\n`
-                    }
-                    result += '\n'
-                  }
-
-                  // Extract StoryChoice interface
-                  const choiceMatch = storyPlayerCode.match(/export interface StoryChoice \{([\s\S]*?)\n\}/)
-                  if (choiceMatch) {
-                    result += '=== VERZWEIGUNGEN (StoryChoice) ===\n'
-                    const props = choiceMatch[1].match(/(\w+)(\?)?:\s*([^;]+)/g) || []
-                    for (const prop of props) {
-                      const [name, type] = prop.split(':').map(s => s.trim())
-                      const cleanName = name.replace('?', '')
-                      result += `• ${cleanName}: ${type}\n`
-                    }
-                    result += '\n'
-                  }
+                  storyJson = JSON.parse(content)
                 } catch (e) {
-                  result += `⚠️ Konnte StoryPlayer.tsx nicht lesen: ${e}\n\n`
+                  return `❌ UNGÜLTIGES JSON:\n${e}\n\nTipp: Prüfe Kommas, Anführungszeichen und Klammern!`
                 }
 
-                // Read example game as working code reference
-                result += '=== BEISPIEL-CODE (aus echtem Spiel) ===\n\n'
+                const errors: string[] = []
+                const sprites = getAvailableSprites()
+                const allSprites = new Set([...sprites.animals, ...sprites.characters, ...sprites.environment, ...sprites.effects])
+                const scenes = new Set(getAvailableScenes())
+
+                // Check story structure
+                if (!storyJson.id) errors.push('• Story braucht "id"')
+                if (!storyJson.title) errors.push('• Story braucht "title"')
+                if (!storyJson.scenes || !Array.isArray(storyJson.scenes)) {
+                  errors.push('• Story braucht "scenes" Array')
+                  return `❌ ${errors.length} FEHLER:\n\n${errors.join('\n')}`
+                }
+
+                const sceneIds = new Set<string>()
+                const referencedIds = new Set<string>()
+
+                // Validate each scene
+                for (const scene of storyJson.scenes) {
+                  if (!scene.id) {
+                    errors.push(`• Szene ohne "id" gefunden`)
+                    continue
+                  }
+                  if (sceneIds.has(scene.id)) {
+                    errors.push(`• Doppelte Szenen-ID: "${scene.id}"`)
+                  }
+                  sceneIds.add(scene.id)
+
+                  if (!scene.background) {
+                    errors.push(`• Szene "${scene.id}": braucht "background"`)
+                  } else if (!scenes.has(scene.background)) {
+                    errors.push(`• Szene "${scene.id}": Hintergrund "${scene.background}" existiert nicht`)
+                  }
+
+                  if (!scene.dialogue || scene.dialogue.length === 0) {
+                    errors.push(`• Szene "${scene.id}": braucht mindestens einen Dialog`)
+                  }
+
+                  // Check characters
+                  if (scene.characters) {
+                    for (const char of scene.characters) {
+                      if (!allSprites.has(char.sprite)) {
+                        errors.push(`• Szene "${scene.id}": Sprite "${char.sprite}" existiert nicht`)
+                      }
+                      if (!['left', 'center', 'right'].includes(char.position)) {
+                        errors.push(`• Szene "${scene.id}": Position "${char.position}" ungültig (nur left/center/right)`)
+                      }
+                    }
+                  }
+
+                  // Collect referenced scene IDs
+                  if (scene.choices) {
+                    for (const choice of scene.choices) {
+                      if (choice.nextSceneId) referencedIds.add(choice.nextSceneId)
+                    }
+                  }
+                  if (scene.findTarget?.nextSceneId) referencedIds.add(scene.findTarget.nextSceneId)
+                  if (scene.miniGame?.successSceneId) referencedIds.add(scene.miniGame.successSceneId)
+                  if (scene.miniGame?.failSceneId) referencedIds.add(scene.miniGame.failSceneId)
+                  if (scene.autoAdvance?.nextSceneId) referencedIds.add(scene.autoAdvance.nextSceneId)
+
+                  // Check for dead ends
+                  const hasExit = scene.choices?.length > 0 || scene.findTarget || scene.miniGame || scene.autoAdvance
+                  const isEnding = scene.dialogue?.some((d: string) =>
+                    typeof d === 'string' && (d.includes('Ende') || d.includes('THE END'))
+                  )
+                  if (!hasExit && !isEnding) {
+                    errors.push(`• Szene "${scene.id}": Hat keinen Ausgang (choices/findTarget/miniGame/autoAdvance fehlt)`)
+                  }
+                }
+
+                // Check for 'start' scene
+                if (!sceneIds.has('start')) {
+                  errors.push('• Keine Szene mit id: "start" gefunden!')
+                }
+
+                // Check for invalid references
+                for (const ref of referencedIds) {
+                  if (!sceneIds.has(ref)) {
+                    errors.push(`• nextSceneId "${ref}" zeigt auf nicht existierende Szene`)
+                  }
+                }
+
+                if (errors.length > 0) {
+                  return `❌ ${errors.length} FEHLER:\n\n${errors.join('\n')}\n\n💡 Behebe die Fehler und validiere erneut!`
+                }
+
+                return `✅ JSON ist valide! ${sceneIds.size} Szenen gefunden.\n\nDu kannst es jetzt speichern.`
+              }
+              case 'list_scenes': {
+                const gameId = input.gameId
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) {
+                  return `❌ Geschichte "${gameId}" nicht gefunden. Datei: ${storyPath}`
+                }
+
                 try {
-                  const exampleCode = fs.readFileSync(exampleGamePath, 'utf-8')
-                  result += '```tsx\n' + exampleCode + '\n```\n\n'
-                } catch {
-                  result += '⚠️ Beispiel-Datei nicht gefunden\n\n'
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  let result = `📋 SZENEN IN "${storyJson.title}" (${storyJson.scenes.length} Szenen)\n\n`
+
+                  for (const scene of storyJson.scenes) {
+                    const hasChoices = scene.choices?.length > 0
+                    const hasFindTarget = !!scene.findTarget
+                    const hasMiniGame = !!scene.miniGame
+                    const hasAuto = !!scene.autoAdvance
+
+                    let type = '📖'
+                    if (hasChoices) type = `🔀 (${scene.choices.length} choices)`
+                    else if (hasFindTarget) type = '🔍 findTarget'
+                    else if (hasMiniGame) type = `🎮 ${scene.miniGame.type}`
+                    else if (hasAuto) type = '➡️ auto'
+
+                    const chars = scene.characters?.map((c: {sprite: string}) => c.sprite).join(', ') || '-'
+                    result += `• ${scene.id}: ${type}\n  BG: ${scene.background} | Chars: ${chars}\n`
+                  }
+
+                  return result
+                } catch (e) {
+                  return `❌ Fehler beim Lesen: ${e}`
+                }
+              }
+              case 'get_scene': {
+                const gameId = input.gameId
+                const sceneId = input.sceneId
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) {
+                  return `❌ Geschichte "${gameId}" nicht gefunden.`
                 }
 
-                result += '=== WICHTIGE REGELN ===\n'
-                result += '• CharacterPosition: position="left"|"center"|"right", bottom=Pixel\n'
-                result += '• choices.nextSceneId MUSS auf existierende Szene-ID zeigen!\n'
-                result += '• Szenen mit nur 1 choice vermeiden → lieber 2-3 Optionen\n'
-                result += '• findTarget für "Finde X" Aufgaben statt choices\n'
-                result += '• miniGame für aktive Spielelemente\n\n'
-                result += '=== ANDERE TOOLS AUFRUFEN ===\n'
-                result += '• get_available_sprites() → welche Figuren?\n'
-                result += '• get_available_scenes() → welche Hintergründe?\n'
-                result += '• get_available_minigames() → welche Spiel-Templates?\n'
-                result += '• get_patterns() → Best Practices'
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const scene = storyJson.scenes.find((s: {id: string}) => s.id === sceneId)
+
+                  if (!scene) {
+                    const ids = storyJson.scenes.map((s: {id: string}) => s.id).join(', ')
+                    return `❌ Szene "${sceneId}" nicht gefunden.\n\nVerfügbare Szenen: ${ids}`
+                  }
+
+                  return `📄 SZENE "${sceneId}":\n\n\`\`\`json\n${JSON.stringify(scene, null, 2)}\n\`\`\``
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'add_scene': {
+                const gameId = input.gameId
+                const sceneStr = input.scene
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) {
+                  return `❌ Geschichte "${gameId}" nicht gefunden.`
+                }
+
+                // Parse new scene
+                let newScene
+                try {
+                  newScene = JSON.parse(sceneStr)
+                } catch (e) {
+                  return `❌ Ungültiges JSON für Szene:\n${e}`
+                }
+
+                if (!newScene.id) {
+                  return `❌ Szene braucht eine "id"!`
+                }
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+
+                  // Check if scene already exists
+                  if (storyJson.scenes.some((s: {id: string}) => s.id === newScene.id)) {
+                    return `❌ Szene "${newScene.id}" existiert bereits! Nutze update_scene zum Aktualisieren.`
+                  }
+
+                  // Validate scene
+                  const sprites = getAvailableSprites()
+                  const allSprites = new Set([...sprites.animals, ...sprites.characters, ...sprites.environment, ...sprites.effects])
+                  const backgrounds = new Set(getAvailableScenes())
+                  const errors: string[] = []
+
+                  if (!newScene.background) {
+                    errors.push('• Szene braucht "background"')
+                  } else if (!backgrounds.has(newScene.background)) {
+                    errors.push(`• Hintergrund "${newScene.background}" existiert nicht`)
+                  }
+
+                  if (!newScene.dialogue || newScene.dialogue.length === 0) {
+                    errors.push('• Szene braucht mindestens einen Dialog')
+                  }
+
+                  if (newScene.characters) {
+                    for (const char of newScene.characters) {
+                      if (!allSprites.has(char.sprite)) {
+                        errors.push(`• Sprite "${char.sprite}" existiert nicht`)
+                      }
+                    }
+                  }
+
+                  if (errors.length > 0) {
+                    return `❌ Szene ungültig:\n\n${errors.join('\n')}`
+                  }
+
+                  // Add scene
+                  storyJson.scenes.push(newScene)
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ Szene "${newScene.id}" hinzugefügt! (${storyJson.scenes.length} Szenen total)`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'update_scene': {
+                const gameId = input.gameId
+                const sceneId = input.sceneId
+                const sceneStr = input.scene
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) {
+                  return `❌ Geschichte "${gameId}" nicht gefunden.`
+                }
+
+                // Parse updated scene
+                let updatedScene
+                try {
+                  updatedScene = JSON.parse(sceneStr)
+                } catch (e) {
+                  return `❌ Ungültiges JSON:\n${e}`
+                }
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const sceneIndex = storyJson.scenes.findIndex((s: {id: string}) => s.id === sceneId)
+
+                  if (sceneIndex === -1) {
+                    return `❌ Szene "${sceneId}" nicht gefunden.`
+                  }
+
+                  // Validate
+                  const sprites = getAvailableSprites()
+                  const allSprites = new Set([...sprites.animals, ...sprites.characters, ...sprites.environment, ...sprites.effects])
+                  const backgrounds = new Set(getAvailableScenes())
+                  const errors: string[] = []
+
+                  if (updatedScene.background && !backgrounds.has(updatedScene.background)) {
+                    errors.push(`• Hintergrund "${updatedScene.background}" existiert nicht`)
+                  }
+
+                  if (updatedScene.characters) {
+                    for (const char of updatedScene.characters) {
+                      if (!allSprites.has(char.sprite)) {
+                        errors.push(`• Sprite "${char.sprite}" existiert nicht`)
+                      }
+                    }
+                  }
+
+                  if (errors.length > 0) {
+                    return `❌ Szene ungültig:\n\n${errors.join('\n')}`
+                  }
+
+                  // Preserve ID
+                  updatedScene.id = sceneId
+                  storyJson.scenes[sceneIndex] = updatedScene
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ Szene "${sceneId}" aktualisiert!`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'delete_scene': {
+                const gameId = input.gameId
+                const sceneId = input.sceneId
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) {
+                  return `❌ Geschichte "${gameId}" nicht gefunden.`
+                }
+
+                if (sceneId === 'start') {
+                  return `❌ Die "start" Szene kann nicht gelöscht werden!`
+                }
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const sceneIndex = storyJson.scenes.findIndex((s: {id: string}) => s.id === sceneId)
+
+                  if (sceneIndex === -1) {
+                    return `❌ Szene "${sceneId}" nicht gefunden.`
+                  }
+
+                  // Check for references
+                  const references: string[] = []
+                  for (const scene of storyJson.scenes) {
+                    if (scene.id === sceneId) continue
+                    if (scene.choices?.some((c: {nextSceneId: string}) => c.nextSceneId === sceneId)) {
+                      references.push(`${scene.id} (choice)`)
+                    }
+                    if (scene.findTarget?.nextSceneId === sceneId) {
+                      references.push(`${scene.id} (findTarget)`)
+                    }
+                    if (scene.miniGame?.successSceneId === sceneId || scene.miniGame?.failSceneId === sceneId) {
+                      references.push(`${scene.id} (miniGame)`)
+                    }
+                    if (scene.autoAdvance?.nextSceneId === sceneId) {
+                      references.push(`${scene.id} (autoAdvance)`)
+                    }
+                  }
+
+                  if (references.length > 0) {
+                    return `⚠️ Szene "${sceneId}" wird noch referenziert von:\n${references.map(r => `• ${r}`).join('\n')}\n\nAktualisiere diese Szenen zuerst!`
+                  }
+
+                  // Delete scene
+                  storyJson.scenes.splice(sceneIndex, 1)
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ Szene "${sceneId}" gelöscht! (${storyJson.scenes.length} Szenen übrig)`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'add_choice': {
+                const { gameId, sceneId, text, nextSceneId, requiresItems } = input
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) return `❌ Geschichte "${gameId}" nicht gefunden.`
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const scene = storyJson.scenes.find((s: {id: string}) => s.id === sceneId)
+                  if (!scene) return `❌ Szene "${sceneId}" nicht gefunden.`
+
+                  if (!scene.choices) scene.choices = []
+
+                  const choice: Record<string, unknown> = { text, nextSceneId }
+                  if (requiresItems) {
+                    choice.requiresItems = requiresItems.split(',').map((s: string) => s.trim())
+                  }
+
+                  scene.choices.push(choice)
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ Choice "${text}" → "${nextSceneId}" hinzugefügt! (${scene.choices.length} choices total)`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'remove_choice': {
+                const { gameId, sceneId, choiceIndex } = input
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+                const idx = parseInt(choiceIndex, 10)
+
+                if (!fs.existsSync(storyPath)) return `❌ Geschichte "${gameId}" nicht gefunden.`
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const scene = storyJson.scenes.find((s: {id: string}) => s.id === sceneId)
+                  if (!scene) return `❌ Szene "${sceneId}" nicht gefunden.`
+                  if (!scene.choices || idx >= scene.choices.length) return `❌ Choice ${idx} existiert nicht.`
+
+                  const removed = scene.choices.splice(idx, 1)[0]
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ Choice "${removed.text}" entfernt! (${scene.choices.length} übrig)`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'set_dialogue': {
+                const { gameId, sceneId, dialogue } = input
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) return `❌ Geschichte "${gameId}" nicht gefunden.`
+
+                let dialogueArray
+                try {
+                  dialogueArray = JSON.parse(dialogue)
+                } catch {
+                  return `❌ Ungültiges JSON für dialogue. Beispiel: ["Text 1", "Text 2"]`
+                }
+
+                if (!Array.isArray(dialogueArray)) return `❌ dialogue muss ein Array sein.`
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const scene = storyJson.scenes.find((s: {id: string}) => s.id === sceneId)
+                  if (!scene) return `❌ Szene "${sceneId}" nicht gefunden.`
+
+                  scene.dialogue = dialogueArray
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ Dialogue aktualisiert! (${dialogueArray.length} Texte)`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'add_character': {
+                const { gameId, sceneId, sprite, position, size } = input
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) return `❌ Geschichte "${gameId}" nicht gefunden.`
+
+                // Validate sprite
+                const sprites = getAvailableSprites()
+                const allSprites = new Set([...sprites.animals, ...sprites.characters, ...sprites.environment, ...sprites.effects])
+                if (!allSprites.has(sprite)) {
+                  return `❌ Sprite "${sprite}" existiert nicht. Nutze get_available_sprites()!`
+                }
+
+                if (!['left', 'center', 'right'].includes(position)) {
+                  return `❌ Position muss "left", "center" oder "right" sein.`
+                }
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const scene = storyJson.scenes.find((s: {id: string}) => s.id === sceneId)
+                  if (!scene) return `❌ Szene "${sceneId}" nicht gefunden.`
+
+                  if (!scene.characters) scene.characters = []
+
+                  scene.characters.push({
+                    sprite,
+                    position,
+                    size: size ? parseInt(size, 10) : 80
+                  })
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ ${sprite} (${position}) hinzugefügt! (${scene.characters.length} Charaktere)`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'remove_character': {
+                const { gameId, sceneId, characterIndex } = input
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+                const idx = parseInt(characterIndex, 10)
+
+                if (!fs.existsSync(storyPath)) return `❌ Geschichte "${gameId}" nicht gefunden.`
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const scene = storyJson.scenes.find((s: {id: string}) => s.id === sceneId)
+                  if (!scene) return `❌ Szene "${sceneId}" nicht gefunden.`
+                  if (!scene.characters || idx >= scene.characters.length) return `❌ Charakter ${idx} existiert nicht.`
+
+                  const removed = scene.characters.splice(idx, 1)[0]
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ ${removed.sprite} entfernt! (${scene.characters.length} übrig)`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'set_findTarget': {
+                const { gameId, sceneId, sprite, x, y, hint, foundText, nextSceneId } = input
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) return `❌ Geschichte "${gameId}" nicht gefunden.`
+
+                // Validate sprite
+                const sprites = getAvailableSprites()
+                const allSprites = new Set([...sprites.animals, ...sprites.characters, ...sprites.environment, ...sprites.effects])
+                if (!allSprites.has(sprite)) {
+                  return `❌ Sprite "${sprite}" existiert nicht.`
+                }
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const scene = storyJson.scenes.find((s: {id: string}) => s.id === sceneId)
+                  if (!scene) return `❌ Szene "${sceneId}" nicht gefunden.`
+
+                  scene.findTarget = {
+                    sprite,
+                    size: 40,
+                    position: { x: parseInt(x, 10), y: parseInt(y, 10) },
+                    hint,
+                    foundText: foundText || '🎉 Gefunden!',
+                    nextSceneId
+                  }
+
+                  // Remove choices if findTarget is set (can only have one interaction type)
+                  delete scene.choices
+                  delete scene.miniGame
+
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ FindTarget gesetzt! Suche ${sprite} bei (${x}%, ${y}%) → ${nextSceneId}`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'set_miniGame': {
+                const { gameId, sceneId, miniGame } = input
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) return `❌ Geschichte "${gameId}" nicht gefunden.`
+
+                let miniGameObj
+                try {
+                  miniGameObj = JSON.parse(miniGame)
+                } catch {
+                  return `❌ Ungültiges JSON für miniGame.`
+                }
+
+                if (!miniGameObj.type) return `❌ miniGame braucht "type" (collect/dodge/catch/click/snake/race/flappy)`
+                if (!miniGameObj.successSceneId) return `❌ miniGame braucht "successSceneId"`
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const scene = storyJson.scenes.find((s: {id: string}) => s.id === sceneId)
+                  if (!scene) return `❌ Szene "${sceneId}" nicht gefunden.`
+
+                  scene.miniGame = miniGameObj
+
+                  // Remove other interaction types
+                  delete scene.choices
+                  delete scene.findTarget
+
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ MiniGame (${miniGameObj.type}) gesetzt! → ${miniGameObj.successSceneId}`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'add_item_action': {
+                const { gameId, sceneId, item, message, trigger } = input
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+                const actionKey = trigger === 'onFindTarget' ? 'onFindTargetActions' : 'onEnterActions'
+
+                if (!fs.existsSync(storyPath)) return `❌ Geschichte "${gameId}" nicht gefunden.`
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const scene = storyJson.scenes.find((s: {id: string}) => s.id === sceneId)
+                  if (!scene) return `❌ Szene "${sceneId}" nicht gefunden.`
+
+                  if (!scene[actionKey]) scene[actionKey] = []
+
+                  scene[actionKey].push({
+                    type: 'add_item',
+                    item,
+                    message
+                  })
+
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ Item "${item}" wird bei ${actionKey} gegeben!`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'set_background': {
+                const { gameId, sceneId, background } = input
+                const storyPath = path.join(projectDir, 'src', 'games', gameId, 'story.json')
+
+                if (!fs.existsSync(storyPath)) return `❌ Geschichte "${gameId}" nicht gefunden.`
+
+                // Validate background
+                const backgrounds = new Set(getAvailableScenes())
+                if (!backgrounds.has(background)) {
+                  return `❌ Hintergrund "${background}" existiert nicht. Nutze get_available_scenes()!`
+                }
+
+                try {
+                  const storyJson = JSON.parse(fs.readFileSync(storyPath, 'utf-8'))
+                  const scene = storyJson.scenes.find((s: {id: string}) => s.id === sceneId)
+                  if (!scene) return `❌ Szene "${sceneId}" nicht gefunden.`
+
+                  scene.background = background
+                  fs.writeFileSync(storyPath, JSON.stringify(storyJson, null, 2))
+
+                  return `✅ Hintergrund auf "${background}" geändert!`
+                } catch (e) {
+                  return `❌ Fehler: ${e}`
+                }
+              }
+              case 'get_story_system': {
+                // JSON-based story system documentation
+                const exampleJsonPath = path.join(projectDir, 'src', 'games', 'liana-abenteuer', 'story.json')
+
+                let result = '📖 JSON STORY-SYSTEM\n\n'
+                result += 'Geschichten werden als JSON-Dateien erstellt - kein Code nötig!\n\n'
+
+                result += '=== DATEISTRUKTUR ===\n'
+                result += 'src/games/<game-id>/\n'
+                result += '  ├── story.json         ← Die Geschichte (JSON)\n'
+                result += '  └── GameName.tsx       ← Lädt die JSON (Template)\n\n'
+
+                result += '=== BEISPIEL story.json ===\n'
+                try {
+                  const exampleJson = fs.readFileSync(exampleJsonPath, 'utf-8')
+                  const parsed = JSON.parse(exampleJson)
+                  // Show first 2 scenes as example
+                  const example = {
+                    ...parsed,
+                    scenes: parsed.scenes.slice(0, 2)
+                  }
+                  result += '```json\n' + JSON.stringify(example, null, 2) + '\n```\n\n'
+                } catch {
+                  result += '(Beispiel-Datei nicht gefunden)\n\n'
+                }
+
+                result += '=== TSX WRAPPER (Template) ===\n'
+                result += `\`\`\`tsx
+import { JsonStoryPlayer } from '../../components/story';
+import storyData from './story.json';
+import type { StoryJson } from '../../components/story';
+
+export function MeinSpiel() {
+  return <JsonStoryPlayer story={storyData as StoryJson} />;
+}
+\`\`\`\n\n`
+
+                result += '=== WORKFLOW ===\n'
+                result += '1. get_story_schema() aufrufen → Schema verstehen\n'
+                result += '2. get_available_sprites() → Figuren-Namen\n'
+                result += '3. get_available_scenes() → Hintergrund-Namen\n'
+                result += '4. JSON schreiben\n'
+                result += '5. validate_json() → Prüfen!\n'
+                result += '6. write_file() → Speichern\n\n'
+
+                result += '=== TOOLS ===\n'
+                result += '• get_story_schema() → Komplettes JSON-Schema\n'
+                result += '• get_available_sprites() → Alle Sprite-Namen\n'
+                result += '• get_available_scenes() → Alle Hintergrund-Namen\n'
+                result += '• get_available_minigames() → Mini-Spiel-Typen\n'
+                result += '• validate_json(content) → JSON validieren\n'
 
                 return result
               }
@@ -1444,6 +2866,92 @@ Jede Szene hat Interaktion, alle Wege führen zum Ende!`
 
                 return report
               }
+              case 'get_state_system': {
+                let result = '🎮 SPIELSTAND-SYSTEM (Items, Hindernisse, Aufgaben)\n\n'
+                result += '=== WAS KANN MAN DAMIT MACHEN? ===\n\n'
+                result += '🔑 GEGENSTÄNDE SAMMELN:\n'
+                result += '   - Nach Mini-Spiel: Schlüssel bekommen\n'
+                result += '   - Nach findTarget: Item finden\n'
+                result += '   - Bei Szenen-Betreten: Automatisch erhalten\n\n'
+                result += '🔒 GESPERRTE OPTIONEN:\n'
+                result += '   - Option zeigen aber ausgegraut\n'
+                result += '   - "Benötigt: Goldener Schlüssel" anzeigen\n'
+                result += '   - Wird freigeschaltet wenn Item da\n\n'
+                result += '✅ AUFGABEN/QUESTS:\n'
+                result += '   - Aufgaben die erledigt werden müssen\n'
+                result += '   - Fortschritt tracken\n\n'
+
+                result += '=== CODE-BEISPIELE ===\n\n'
+                result += '// 1. ITEM NACH MINI-SPIEL GEBEN:\n'
+                result += `{
+  id: 'minigame_szene',
+  background: <EnchantedForest width={800} height={500} />,
+  miniGame: { ... },
+  onMiniGameWinActions: [
+    { type: 'add_item', item: 'golden_key', message: '🔑 Du hast einen goldenen Schlüssel gefunden!' }
+  ],
+}\n\n`
+
+                result += '// 2. ITEM NACH FINDTARGET GEBEN:\n'
+                result += `{
+  id: 'suche_szene',
+  findTarget: { target: <Key />, position: { x: 50, y: 30 }, ... },
+  onFindTargetActions: [
+    { type: 'add_item', item: 'magic_gem', message: '💎 Ein magischer Edelstein!' }
+  ],
+}\n\n`
+
+                result += '// 3. GESPERRTE OPTION (braucht Item):\n'
+                result += `choices: [
+  { text: '🚪 Durch die normale Tür', nextSceneId: 'normal_door' },
+  {
+    text: '🔐 Geheime Tür öffnen',
+    nextSceneId: 'secret_room',
+    requiresItems: ['golden_key'],
+    lockedText: '🔒 Geheime Tür (verschlossen)',
+    showWhenLocked: true,
+  },
+]\n\n`
+
+                result += '// 4. AUFGABE ERLEDIGEN:\n'
+                result += `{
+  id: 'quest_complete',
+  onEnterActions: [
+    { type: 'complete_task', task: 'helped_wizard' }
+  ],
+}\n\n`
+
+                result += '// 5. OPTION NUR WENN AUFGABE ERLEDIGT:\n'
+                result += `choices: [
+  {
+    text: '🎁 Belohnung abholen',
+    nextSceneId: 'reward',
+    requiresTasks: ['helped_wizard'],
+    showWhenLocked: true,
+    lockedText: '🎁 Belohnung (hilf erst dem Zauberer)',
+  },
+]\n\n`
+
+                result += '=== VERFÜGBARE AKTIONEN ===\n\n'
+                result += '• { type: "add_item", item: "name", message?: "Text" }\n'
+                result += '• { type: "remove_item", item: "name" }\n'
+                result += '• { type: "set_flag", flag: "name", value: true/false/number/string }\n'
+                result += '• { type: "complete_task", task: "name" }\n\n'
+
+                result += '=== VERFÜGBARE BEDINGUNGEN ===\n\n'
+                result += '• requiresItems: ["item1", "item2"] - braucht alle Items\n'
+                result += '• requiresFlags: ["flag1"] - braucht gesetzte Flags\n'
+                result += '• requiresTasks: ["task1"] - braucht erledigte Aufgaben\n'
+                result += '• condition: (ctx) => ctx.hasItem("x") && ctx.getFlag("y") > 5\n\n'
+
+                result += '=== WANN NUTZEN? ===\n\n'
+                result += '✅ Kind will: "Man braucht einen Schlüssel für die Tür"\n'
+                result += '✅ Kind will: "Erst muss man das Rätsel lösen"\n'
+                result += '✅ Kind will: "Der Weg ist blockiert bis..."\n'
+                result += '✅ Kind will: "Man muss zuerst X finden um Y zu machen"\n'
+
+                return result
+              }
               default:
                 return `Unbekanntes Tool: ${name}`
             }
@@ -1535,7 +3043,8 @@ Du hast den Code bereits - nutze edit_file mit EXAKTEM Text zum Ändern!]`
                 // Use env vars for AWS config
                 const awsRegion = env.AWS_REGION || process.env.AWS_REGION || 'eu-central-1'
                 const awsProfile = env.AWS_PROFILE || process.env.AWS_PROFILE || 'default'
-                const awsConfigFile = env.AWS_CONFIG_FILE || process.env.AWS_CONFIG_FILE || `${os.homedir()}/.aws/config`
+                const rawConfigFile = env.AWS_CONFIG_FILE || process.env.AWS_CONFIG_FILE || `${os.homedir()}/.aws/config`
+                const awsConfigFile = rawConfigFile.replace(/^~/, os.homedir())
 
                 process.env.AWS_CONFIG_FILE = awsConfigFile
 
@@ -1915,7 +3424,8 @@ Du hast den Code bereits - nutze edit_file mit EXAKTEM Text zum Ändern!]`
 
                 const awsRegion = env.AWS_REGION || process.env.AWS_REGION || 'eu-central-1'
                 const awsProfile = env.AWS_PROFILE || process.env.AWS_PROFILE || 'default'
-                const awsConfigFile = env.AWS_CONFIG_FILE || process.env.AWS_CONFIG_FILE || `${os.homedir()}/.aws/config`
+                const rawTestConfigFile = env.AWS_CONFIG_FILE || process.env.AWS_CONFIG_FILE || `${os.homedir()}/.aws/config`
+                const awsConfigFile = rawTestConfigFile.replace(/^~/, os.homedir())
 
                 process.env.AWS_CONFIG_FILE = awsConfigFile
 

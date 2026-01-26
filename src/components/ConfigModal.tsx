@@ -8,7 +8,7 @@ export interface AIConfig {
 }
 
 const DEFAULT_MODELS: Record<string, string> = {
-  'bedrock-sso': 'anthropic.claude-sonnet-4-5-20250929-v1:0',
+  'bedrock-sso': 'anthropic.claude-3-5-sonnet-20240620-v1:0',
   'anthropic': 'claude-sonnet-4-5-20250929',
   'openai': 'gpt-5.2',
   'google': 'gemini-2.5-flash',
@@ -20,10 +20,9 @@ const PROVIDER_INFO: Record<string, { label: string; icon: string; models: strin
     label: 'AWS Bedrock',
     icon: '☁️',
     models: [
-      'anthropic.claude-sonnet-4-5-20250929-v1:0',
-      'anthropic.claude-opus-4-5-20251101-v1:0',
-      'anthropic.claude-haiku-4-5-20251001-v1:0',
-      'anthropic.claude-sonnet-4-20250514-v1:0',
+      'anthropic.claude-3-5-sonnet-20240620-v1:0',  // Best available on-demand
+      'anthropic.claude-3-haiku-20240307-v1:0',     // Fastest, cheapest
+      'anthropic.claude-3-sonnet-20240229-v1:0',    // Older but stable
     ],
   },
   'anthropic': {
@@ -420,7 +419,15 @@ export function loadAIConfig(): AIConfig {
   try {
     const stored = localStorage.getItem('ai-config');
     if (stored) {
-      return JSON.parse(stored);
+      const config = JSON.parse(stored) as AIConfig;
+      // Validate that the saved model is still available
+      const availableModels = PROVIDER_INFO[config.provider]?.models || [];
+      if (config.modelId && availableModels.length > 0 && !availableModels.includes(config.modelId)) {
+        // Model no longer available, reset to default
+        config.modelId = DEFAULT_MODELS[config.provider];
+        saveAIConfig(config);
+      }
+      return config;
     }
   } catch {
     // Ignore

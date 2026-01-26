@@ -33,19 +33,57 @@ export {
   type MiniGameConfig,
   type MiniGameProps,
   type FindTargetConfig,
+  // Game State / Spielstand
+  type GameState,
+  type StoryContext,
+  type StateAction,
+  // Interactive Story Building / Interaktives Story-Bauen
+  type StoryBuildContext,
 } from './StoryPlayer';
 
-// Story Validation
+// Story Validation (JSON-based)
 export {
-  validateStory,
-  printValidationSummary,
-  assertValidStory,
-  useStoryValidation,
+  validateStoryJson,
+  formatValidationResult,
   type ValidationResult,
   type ValidationError,
-  type ValidationWarning,
-  type StoryGraph,
 } from './StoryValidator';
+
+// JSON Schema Types
+export type {
+  StoryJson,
+  SceneJson,
+  CharacterJson,
+  ChoiceJson,
+  FindTargetJson,
+  StateActionJson,
+  StorySchemaInfo,
+  // Mini-game types
+  MiniGameType,
+  MiniGameJson,
+  MiniGameBaseJson,
+  CollectGameJson,
+  DodgeGameJson,
+  CatchGameJson,
+  ClickGameJson,
+  SnakeGameJson,
+  RaceGameJson,
+  FlappyGameJson,
+} from './StorySchema';
+
+// JSON Story Player
+export { JsonStoryPlayer, useJsonStory } from './JsonStoryPlayer';
+
+// Component Registry
+export {
+  getSprite,
+  getBackground,
+  getAvailableSprites,
+  getAvailableBackgrounds,
+  isValidSprite,
+  isValidBackground,
+  getSchemaInfo,
+} from './ComponentRegistry';
 
 // Transitions
 export {

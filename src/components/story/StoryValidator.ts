@@ -1,411 +1,276 @@
 /**
- * GESCHICHTEN-VALIDIERUNG / STORY VALIDATION
- * ==========================================
- * Überprüft dass alle Szenen verbunden sind und die Geschichte funktioniert!
- * Verifies that all scenes are connected and the story works!
+ * Story JSON Validator
+ * ====================
+ * Validates story JSON before saving.
+ * Returns all errors at once so the agent can fix everything.
  */
 
-import type { Story, StoryScene } from './StoryPlayer';
+import { isValidSprite, isValidBackground } from './ComponentRegistry';
+import type { StoryJson } from './StorySchema';
 
 export interface ValidationError {
-  type: 'missing_scene' | 'unreachable_scene' | 'dead_end' | 'missing_start' | 'circular_only' | 'missing_dialogue';
+  type: string;
   message: string;
-  sceneId?: string;
-  referencedFrom?: string;
-}
-
-export interface ValidationWarning {
-  type: 'no_transition' | 'long_dialogue' | 'too_many_choices' | 'duplicate_choice';
-  message: string;
-  sceneId?: string;
+  path?: string;
 }
 
 export interface ValidationResult {
-  isValid: boolean;
+  valid: boolean;
   errors: ValidationError[];
-  warnings: ValidationWarning[];
-  stats: {
-    totalScenes: number;
-    reachableScenes: number;
-    totalChoices: number;
-    maxDepth: number;
-    branchingFactor: number;
-  };
-  graph: StoryGraph;
 }
 
-export interface StoryGraph {
-  nodes: Map<string, GraphNode>;
-  edges: Array<{ from: string; to: string; label?: string }>;
-}
-
-interface GraphNode {
-  id: string;
-  depth: number;
-  inDegree: number;
-  outDegree: number;
-  isStart: boolean;
-  isEnd: boolean;
-}
-
-/**
- * Validiert eine Geschichte und gibt detaillierte Ergebnisse zurück
- * Validates a story and returns detailed results
- */
-export function validateStory(story: Story): ValidationResult {
+export function validateStoryJson(story: StoryJson): ValidationResult {
   const errors: ValidationError[] = [];
-  const warnings: ValidationWarning[] = [];
-  const sceneMap = new Map<string, StoryScene>();
 
-  // Build scene map
-  for (const scene of story.scenes) {
-    sceneMap.set(scene.id, scene);
+  // Check basic structure
+  if (!story.id || typeof story.id !== 'string') {
+    errors.push({ type: 'MISSING_ID', message: 'Story muss eine id haben' });
   }
 
-  // Check start scene exists
-  if (!sceneMap.has(story.startSceneId)) {
-    errors.push({
-      type: 'missing_start',
-      message: `Start-Szene "${story.startSceneId}" existiert nicht!`,
-      sceneId: story.startSceneId,
-    });
+  if (!story.title || typeof story.title !== 'string') {
+    errors.push({ type: 'MISSING_TITLE', message: 'Story muss einen title haben' });
   }
 
-  // Build graph and check references
-  const graph = buildStoryGraph(story, sceneMap, errors, warnings);
+  if (!story.scenes || !Array.isArray(story.scenes) || story.scenes.length === 0) {
+    errors.push({ type: 'NO_SCENES', message: 'Story muss mindestens eine Szene haben' });
+    return { valid: false, errors };
+  }
 
-  // Find reachable scenes from start
-  const reachable = findReachableScenes(story.startSceneId, sceneMap);
+  // Collect all scene IDs
+  const sceneIds = new Set<string>();
+  const sceneIdCounts = new Map<string, number>();
 
-  // Check for unreachable scenes
   for (const scene of story.scenes) {
-    if (!reachable.has(scene.id)) {
+    if (scene.id) {
+      sceneIds.add(scene.id);
+      sceneIdCounts.set(scene.id, (sceneIdCounts.get(scene.id) || 0) + 1);
+    }
+  }
+
+  // Check for 'start' scene
+  if (!sceneIds.has('start')) {
+    errors.push({ type: 'NO_START', message: "Keine Szene mit id 'start' gefunden" });
+  }
+
+  // Check for duplicate IDs
+  for (const [id, count] of sceneIdCounts) {
+    if (count > 1) {
       errors.push({
-        type: 'unreachable_scene',
-        message: `Szene "${scene.id}" ist nicht erreichbar vom Start!`,
-        sceneId: scene.id,
+        type: 'DUPLICATE_ID',
+        message: `Szenen-ID '${id}' kommt ${count}x vor`,
       });
     }
   }
 
-  // Check for dead ends (scenes with no choices that aren't the last scene)
-  for (const scene of story.scenes) {
-    const hasChoices = scene.choices && scene.choices.length > 0;
-    const isLastScene = story.scenes.indexOf(scene) === story.scenes.length - 1;
-    const node = graph.nodes.get(scene.id);
+  // Collect all referenced scene IDs
+  const referencedIds = new Set<string>();
 
-    if (!hasChoices && !isLastScene && node && node.outDegree === 0) {
-      // Check if it's referenced as a next scene in sequence
-      const sceneIndex = story.scenes.findIndex(s => s.id === scene.id);
-      const hasNextInSequence = sceneIndex < story.scenes.length - 1;
+  // Validate each scene
+  story.scenes.forEach((scene, sceneIndex) => {
+    const scenePath = `scenes[${sceneIndex}]`;
 
-      if (!hasNextInSequence) {
-        errors.push({
-          type: 'dead_end',
-          message: `Szene "${scene.id}" ist eine Sackgasse ohne Entscheidungen!`,
-          sceneId: scene.id,
-        });
-      }
+    if (!scene.id) {
+      errors.push({ type: 'SCENE_NO_ID', message: 'Szene braucht eine id', path: scenePath });
     }
-  }
 
-  // Check for scenes without dialogue (warning)
-  for (const scene of story.scenes) {
-    if (!scene.dialogue || scene.dialogue.length === 0) {
-      warnings.push({
-        type: 'long_dialogue',
-        message: `Szene "${scene.id}" hat keinen Dialog`,
-        sceneId: scene.id,
+    if (!scene.background) {
+      errors.push({
+        type: 'SCENE_NO_BACKGROUND',
+        message: `Szene '${scene.id}' braucht einen background`,
+        path: `${scenePath}.background`,
+      });
+    } else if (!isValidBackground(scene.background)) {
+      errors.push({
+        type: 'INVALID_BACKGROUND',
+        message: `Unbekannter background '${scene.background}'`,
+        path: `${scenePath}.background`,
       });
     }
-  }
 
-  // Check for missing transitions (warning)
-  for (const scene of story.scenes) {
-    if (!scene.transition || scene.transition === 'none') {
-      const isFirst = scene.id === story.startSceneId;
-      if (!isFirst) {
-        warnings.push({
-          type: 'no_transition',
-          message: `Szene "${scene.id}" hat keinen Übergang definiert`,
-          sceneId: scene.id,
-        });
-      }
+    if (!scene.dialogue || !Array.isArray(scene.dialogue) || scene.dialogue.length === 0) {
+      errors.push({
+        type: 'SCENE_NO_DIALOGUE',
+        message: `Szene '${scene.id}' braucht mindestens einen dialogue`,
+        path: `${scenePath}.dialogue`,
+      });
     }
-  }
 
-  // Calculate stats
-  const maxDepth = calculateMaxDepth(story.startSceneId, sceneMap, new Set());
-  const totalChoices = story.scenes.reduce((sum, s) => sum + (s.choices?.length || 0), 0);
-  const branchingFactor = story.scenes.length > 0 ? totalChoices / story.scenes.length : 0;
+    // Validate characters
+    if (scene.characters) {
+      scene.characters.forEach((char, charIndex) => {
+        const charPath = `${scenePath}.characters[${charIndex}]`;
 
-  return {
-    isValid: errors.length === 0,
-    errors,
-    warnings,
-    stats: {
-      totalScenes: story.scenes.length,
-      reachableScenes: reachable.size,
-      totalChoices,
-      maxDepth,
-      branchingFactor: Math.round(branchingFactor * 100) / 100,
-    },
-    graph,
-  };
-}
+        if (!char.sprite) {
+          errors.push({ type: 'CHAR_NO_SPRITE', message: 'Character braucht einen sprite', path: charPath });
+        } else if (!isValidSprite(char.sprite)) {
+          errors.push({
+            type: 'INVALID_SPRITE',
+            message: `Unbekannter sprite '${char.sprite}'`,
+            path: `${charPath}.sprite`,
+          });
+        }
 
-/**
- * Baut einen Graphen der Geschichte / Builds a graph of the story
- */
-function buildStoryGraph(
-  story: Story,
-  sceneMap: Map<string, StoryScene>,
-  errors: ValidationError[],
-  warnings: ValidationWarning[]
-): StoryGraph {
-  const nodes = new Map<string, GraphNode>();
-  const edges: Array<{ from: string; to: string; label?: string }> = [];
+        if (!char.position || !['left', 'center', 'right'].includes(char.position)) {
+          errors.push({
+            type: 'INVALID_POSITION',
+            message: `Ungültige position '${char.position}' - nur left/center/right`,
+            path: `${charPath}.position`,
+          });
+        }
 
-  // Create nodes
-  for (const scene of story.scenes) {
-    nodes.set(scene.id, {
-      id: scene.id,
-      depth: 0,
-      inDegree: 0,
-      outDegree: 0,
-      isStart: scene.id === story.startSceneId,
-      isEnd: false,
-    });
-  }
+        if (typeof char.size !== 'number' || char.size < 10 || char.size > 300) {
+          errors.push({
+            type: 'INVALID_SIZE',
+            message: `Ungültige size ${char.size} - muss 10-300 sein`,
+            path: `${charPath}.size`,
+          });
+        }
+      });
+    }
 
-  // Create edges from choices
-  for (const scene of story.scenes) {
+    // Validate choices
     if (scene.choices) {
       const choiceTexts = new Set<string>();
 
-      for (const choice of scene.choices) {
-        // Check for duplicate choice text
-        if (choiceTexts.has(choice.text)) {
-          warnings.push({
-            type: 'duplicate_choice',
-            message: `Szene "${scene.id}" hat doppelte Entscheidung: "${choice.text}"`,
-            sceneId: scene.id,
+      scene.choices.forEach((choice, choiceIndex) => {
+        const choicePath = `${scenePath}.choices[${choiceIndex}]`;
+
+        if (!choice.text) {
+          errors.push({ type: 'CHOICE_NO_TEXT', message: 'Choice braucht text', path: choicePath });
+        } else if (choiceTexts.has(choice.text)) {
+          errors.push({
+            type: 'DUPLICATE_CHOICE',
+            message: `Doppelter Button-Text '${choice.text}'`,
+            path: `${choicePath}.text`,
           });
         }
         choiceTexts.add(choice.text);
 
-        // Check target exists
-        if (!sceneMap.has(choice.nextSceneId)) {
-          errors.push({
-            type: 'missing_scene',
-            message: `Szene "${choice.nextSceneId}" existiert nicht (referenziert von "${scene.id}")`,
-            sceneId: choice.nextSceneId,
-            referencedFrom: scene.id,
-          });
+        if (!choice.nextSceneId) {
+          errors.push({ type: 'CHOICE_NO_NEXT', message: 'Choice braucht nextSceneId', path: choicePath });
         } else {
-          edges.push({
-            from: scene.id,
-            to: choice.nextSceneId,
-            label: choice.text,
-          });
-
-          // Update degrees
-          const fromNode = nodes.get(scene.id);
-          const toNode = nodes.get(choice.nextSceneId);
-          if (fromNode) fromNode.outDegree++;
-          if (toNode) toNode.inDegree++;
+          referencedIds.add(choice.nextSceneId);
         }
-      }
+      });
 
-      // Check for too many choices
-      if (scene.choices.length > 4) {
-        warnings.push({
-          type: 'too_many_choices',
-          message: `Szene "${scene.id}" hat ${scene.choices.length} Entscheidungen (max 4 empfohlen)`,
-          sceneId: scene.id,
+      // Self-loop check
+      const allGoToSelf = scene.choices.every(c => c.nextSceneId === scene.id);
+      if (allGoToSelf && scene.choices.length > 0) {
+        errors.push({
+          type: 'SELF_LOOP',
+          message: `Alle Choices in '${scene.id}' führen zur gleichen Szene`,
+          path: `${scenePath}.choices`,
         });
       }
     }
-  }
 
-  // Mark end nodes (no outgoing edges)
-  for (const [, node] of nodes) {
-    if (node.outDegree === 0) {
-      node.isEnd = true;
+    // Validate findTarget
+    if (scene.findTarget) {
+      const ftPath = `${scenePath}.findTarget`;
+
+      if (!scene.findTarget.sprite) {
+        errors.push({ type: 'FT_NO_SPRITE', message: 'findTarget braucht sprite', path: ftPath });
+      } else if (!isValidSprite(scene.findTarget.sprite)) {
+        errors.push({
+          type: 'INVALID_SPRITE',
+          message: `Unbekannter sprite '${scene.findTarget.sprite}'`,
+          path: `${ftPath}.sprite`,
+        });
+      }
+
+      if (!scene.findTarget.position) {
+        errors.push({ type: 'FT_NO_POSITION', message: 'findTarget braucht position', path: ftPath });
+      } else {
+        const { x, y } = scene.findTarget.position;
+        if (typeof x !== 'number' || x < 0 || x > 100) {
+          errors.push({ type: 'FT_INVALID_X', message: `position.x muss 0-100 sein (ist ${x})`, path: `${ftPath}.position.x` });
+        }
+        if (typeof y !== 'number' || y < 0 || y > 100) {
+          errors.push({ type: 'FT_INVALID_Y', message: `position.y muss 0-100 sein (ist ${y})`, path: `${ftPath}.position.y` });
+        }
+      }
+
+      if (!scene.findTarget.nextSceneId) {
+        errors.push({ type: 'FT_NO_NEXT', message: 'findTarget braucht nextSceneId', path: ftPath });
+      } else {
+        referencedIds.add(scene.findTarget.nextSceneId);
+      }
+    }
+
+    // Dead-end check
+    const hasChoices = scene.choices && scene.choices.length > 0;
+    const hasFindTarget = !!scene.findTarget;
+    const hasMiniGame = !!scene.miniGame;
+    const hasAutoAdvance = !!scene.autoAdvance;
+    const isEnding = scene.dialogue?.some(d => {
+      const text = typeof d === 'string' ? d : d.text;
+      return text.includes('Ende') || text.includes('Fortsetzung') || text.includes('THE END');
+    });
+
+    if (!hasChoices && !hasFindTarget && !hasMiniGame && !hasAutoAdvance && !isEnding) {
+      errors.push({
+        type: 'DEAD_END',
+        message: `Szene '${scene.id}' hat keinen Ausgang`,
+        path: scenePath,
+      });
+    }
+  });
+
+  // Invalid references
+  for (const refId of referencedIds) {
+    if (!sceneIds.has(refId)) {
+      errors.push({ type: 'INVALID_REF', message: `nextSceneId '${refId}' existiert nicht` });
     }
   }
 
-  // Calculate depths
-  calculateDepths(story.startSceneId, nodes, edges, 0, new Set());
+  // Orphan scenes
+  for (const scene of story.scenes) {
+    if (scene.id !== 'start' && !referencedIds.has(scene.id)) {
+      errors.push({ type: 'ORPHAN', message: `Szene '${scene.id}' wird nirgends referenziert` });
+    }
+  }
 
-  return { nodes, edges };
+  // Item consistency
+  const requiredItems = new Set<string>();
+  const providedItems = new Set<string>();
+
+  for (const scene of story.scenes) {
+    if (scene.choices) {
+      for (const choice of scene.choices) {
+        if (choice.requiresItems) {
+          choice.requiresItems.forEach(item => requiredItems.add(item));
+        }
+      }
+    }
+
+    const allActions = [...(scene.onEnterActions || []), ...(scene.onFindTargetActions || [])];
+    for (const action of allActions) {
+      if (action.type === 'add_item' && action.item) {
+        providedItems.add(action.item);
+      }
+    }
+  }
+
+  for (const item of requiredItems) {
+    if (!providedItems.has(item)) {
+      errors.push({ type: 'MISSING_ITEM', message: `requiresItems: ['${item}'] aber kein add_item dafür` });
+    }
+  }
+
+  return { valid: errors.length === 0, errors };
 }
 
-/**
- * Findet alle erreichbaren Szenen / Finds all reachable scenes
- */
-function findReachableScenes(
-  startId: string,
-  sceneMap: Map<string, StoryScene>,
-  visited: Set<string> = new Set()
-): Set<string> {
-  if (visited.has(startId)) return visited;
-
-  const scene = sceneMap.get(startId);
-  if (!scene) return visited;
-
-  visited.add(startId);
-
-  // Follow choices
-  if (scene.choices) {
-    for (const choice of scene.choices) {
-      findReachableScenes(choice.nextSceneId, sceneMap, visited);
-    }
+// Format for agent
+export function formatValidationResult(result: ValidationResult): string {
+  if (result.valid) {
+    return '✅ Story JSON ist valide!';
   }
 
-  // Follow sequential (next scene in array if no choices)
-  if (!scene.choices || scene.choices.length === 0) {
-    const scenes = Array.from(sceneMap.values());
-    const currentIndex = scenes.findIndex(s => s.id === startId);
-    if (currentIndex < scenes.length - 1) {
-      findReachableScenes(scenes[currentIndex + 1].id, sceneMap, visited);
-    }
+  let output = `❌ ${result.errors.length} Fehler:\n\n`;
+  for (const error of result.errors) {
+    output += `• ${error.message}`;
+    if (error.path) output += ` (${error.path})`;
+    output += '\n';
   }
-
-  return visited;
-}
-
-/**
- * Berechnet die maximale Tiefe / Calculates maximum depth
- */
-function calculateMaxDepth(
-  sceneId: string,
-  sceneMap: Map<string, StoryScene>,
-  visited: Set<string>,
-  currentDepth: number = 0
-): number {
-  if (visited.has(sceneId)) return currentDepth;
-
-  const scene = sceneMap.get(sceneId);
-  if (!scene) return currentDepth;
-
-  visited.add(sceneId);
-  let maxDepth = currentDepth;
-
-  if (scene.choices) {
-    for (const choice of scene.choices) {
-      const depth = calculateMaxDepth(choice.nextSceneId, sceneMap, new Set(visited), currentDepth + 1);
-      maxDepth = Math.max(maxDepth, depth);
-    }
-  }
-
-  return maxDepth;
-}
-
-/**
- * Berechnet Tiefen für alle Knoten / Calculates depths for all nodes
- */
-function calculateDepths(
-  sceneId: string,
-  nodes: Map<string, GraphNode>,
-  edges: Array<{ from: string; to: string }>,
-  depth: number,
-  visited: Set<string>
-): void {
-  if (visited.has(sceneId)) return;
-  visited.add(sceneId);
-
-  const node = nodes.get(sceneId);
-  if (node) {
-    node.depth = Math.max(node.depth, depth);
-  }
-
-  const outgoing = edges.filter(e => e.from === sceneId);
-  for (const edge of outgoing) {
-    calculateDepths(edge.to, nodes, edges, depth + 1, visited);
-  }
-}
-
-/**
- * Gibt eine lesbare Zusammenfassung der Validierung aus
- * Prints a readable summary of the validation
- */
-export function printValidationSummary(result: ValidationResult): string {
-  const lines: string[] = [];
-
-  lines.push('═══════════════════════════════════════');
-  lines.push(result.isValid ? '✅ GESCHICHTE IST GÜLTIG' : '❌ GESCHICHTE HAT FEHLER');
-  lines.push('═══════════════════════════════════════');
-
-  lines.push('');
-  lines.push('📊 STATISTIKEN:');
-  lines.push(`   Szenen: ${result.stats.reachableScenes}/${result.stats.totalScenes} erreichbar`);
-  lines.push(`   Entscheidungen: ${result.stats.totalChoices}`);
-  lines.push(`   Maximale Tiefe: ${result.stats.maxDepth}`);
-  lines.push(`   Verzweigungsfaktor: ${result.stats.branchingFactor}`);
-
-  if (result.errors.length > 0) {
-    lines.push('');
-    lines.push('❌ FEHLER:');
-    for (const error of result.errors) {
-      lines.push(`   • ${error.message}`);
-    }
-  }
-
-  if (result.warnings.length > 0) {
-    lines.push('');
-    lines.push('⚠️ WARNUNGEN:');
-    for (const warning of result.warnings) {
-      lines.push(`   • ${warning.message}`);
-    }
-  }
-
-  lines.push('');
-  lines.push('🗺️ SZENEN-GRAPH:');
-  for (const [id, node] of result.graph.nodes) {
-    const markers = [
-      node.isStart ? '▶ START' : '',
-      node.isEnd ? '⏹ ENDE' : '',
-    ].filter(Boolean).join(' ');
-    lines.push(`   ${id} (Tiefe: ${node.depth}) ${markers}`);
-
-    const outgoing = result.graph.edges.filter(e => e.from === id);
-    for (const edge of outgoing) {
-      lines.push(`      → ${edge.to} "${edge.label || ''}"`);
-    }
-  }
-
-  return lines.join('\n');
-}
-
-/**
- * Validiert und wirft einen Fehler wenn ungültig
- * Validates and throws if invalid
- */
-export function assertValidStory(story: Story): void {
-  const result = validateStory(story);
-  if (!result.isValid) {
-    const errorMessages = result.errors.map(e => e.message).join('\n');
-    throw new Error(`Geschichte ist ungültig:\n${errorMessages}`);
-  }
-}
-
-/**
- * React Hook für Entwicklungs-Validierung
- * React hook for development validation
- */
-export function useStoryValidation(story: Story, logToConsole: boolean = true): ValidationResult {
-  const result = validateStory(story);
-
-  if (logToConsole && typeof console !== 'undefined') {
-    if (!result.isValid) {
-      console.error('Story Validation Failed:', result.errors);
-    }
-    if (result.warnings.length > 0) {
-      console.warn('Story Warnings:', result.warnings);
-    }
-    console.log(printValidationSummary(result));
-  }
-
-  return result;
+  return output;
 }

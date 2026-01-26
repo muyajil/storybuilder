@@ -153,6 +153,71 @@ storybuilder/
 2. **Find Target Scenes**: Click-to-find hidden objects
 3. **Mini-Game Scenes**: Interactive games within the story
 
+### Game State System
+
+The story system includes a powerful game state mechanism for creating obstacles and progression:
+
+**Features:**
+- **Inventory Display**: Collected items appear in a backpack bar at the bottom
+- **Interactive Item Use**: Players must click an item to select it, then use it on locked choices
+- **Items are Consumed**: When used, items are removed from inventory
+- **Locked Choices**: Options that require specific items show what's needed
+- **Tasks/Quests**: Track completed objectives
+- **Flags**: Store custom variables for complex conditions
+
+**How Item Use Works:**
+1. Player collects an item (from findTarget, miniGame win, or scene entry)
+2. Item appears in the inventory bar (🎒) at bottom-left
+3. When reaching a locked choice, player clicks the item in inventory to select it
+4. The locked choice turns green, player clicks it to use the item and proceed
+5. Item is consumed (removed from inventory)
+
+**Example - Item collection and locked doors:**
+
+```tsx
+const story = createLinearStory('Key Hunt', [
+  {
+    id: 'find_key',
+    background: <EnchantedForest width={800} height={500} />,
+    findTarget: {
+      target: <Key size={40} />,
+      position: { x: 70, y: 25 },
+      nextSceneId: 'at_door',
+    },
+    // Give item when target is found
+    onFindTargetActions: [
+      { type: 'add_item', item: 'golden_key', message: '🔑 Found a key!' }
+    ],
+  },
+  {
+    id: 'at_door',
+    dialogue: ['You see a locked door...'],
+    choices: [
+      {
+        text: '🔐 Open the door',
+        nextSceneId: 'inside',
+        requiresItems: ['golden_key'],  // Requires the key!
+        showWhenLocked: true,
+        lockedText: '🔒 Door (locked)',
+      },
+      { text: 'Search more', nextSceneId: 'find_key' },
+    ],
+  },
+]);
+```
+
+**State Actions:**
+- `{ type: 'add_item', item: 'name', message?: 'text' }` - Add an item
+- `{ type: 'remove_item', item: 'name' }` - Remove an item
+- `{ type: 'set_flag', flag: 'name', value: any }` - Set a variable
+- `{ type: 'complete_task', task: 'name' }` - Mark task complete
+
+**Conditions:**
+- `requiresItems: ['item1', 'item2']` - Needs all listed items
+- `requiresFlags: ['flag1']` - Needs flags to be set
+- `requiresTasks: ['task1']` - Needs tasks to be completed
+- `condition: (ctx) => ctx.hasItem('x')` - Custom condition function
+
 ### Creating Stories
 
 Stories are created through conversation with the AI. The AI uses these tools:
@@ -163,6 +228,7 @@ Stories are created through conversation with the AI. The AI uses these tools:
 | `get_available_sprites` | See available characters/objects |
 | `get_available_scenes` | See available backgrounds |
 | `get_available_minigames` | See available mini-games |
+| `get_state_system` | Learn about items, locks, and obstacles |
 | `get_patterns` | Best practices for story design |
 | `analyze_story` | Analyze story structure and get recommendations |
 
@@ -256,6 +322,7 @@ The AI assistant has access to these tools for building stories:
 | `get_available_sprites` | List available sprite components |
 | `get_available_scenes` | List available scene backgrounds |
 | `get_available_minigames` | List available mini-game templates |
+| `get_state_system` | Get item/obstacle system documentation |
 | `get_patterns` | Get best practices for stories |
 | `analyze_story` | Analyze story structure |
 

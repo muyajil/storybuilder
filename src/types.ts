@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { StoryJson } from './components/story/StorySchema';
 
 /**
  * Game metadata - information about each game
@@ -14,6 +15,8 @@ export interface GameInfo {
   author: string;
   /** The React component that renders the game */
   component: ComponentType;
+  /** Optional: Story data in JSON format for PDF export */
+  storyJson?: StoryJson;
 }
 
 /**

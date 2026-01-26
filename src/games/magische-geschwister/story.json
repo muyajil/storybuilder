@@ -1,0 +1,650 @@
+{
+  "id": "magische-geschwister",
+  "title": "Die magischen Geschwister",
+  "description": "Eine spannende Geschichte über drei magische Geschwister: eine Zauberin, ein Blitz-Ninja und ein Regenbogen-Ninja.",
+  "author": "Kind",
+  "language": "de",
+  "ageRating": "6+",
+  "tags": [
+    "magie",
+    "ninja",
+    "geschwister"
+  ],
+  "scenes": [
+    {
+      "id": "start",
+      "background": "CityStreet",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Prinzessin Liana steht auf der Straße.",
+        "Sie ist bereit für ein magisches Abenteuer!",
+        "Wohin soll sie gehen?"
+      ],
+      "choices": [
+        {
+          "text": "🏠 Nach Hause",
+          "nextSceneId": "zauberin_intro"
+        },
+        {
+          "text": "🌳 In den Wald",
+          "nextSceneId": "wald_abenteuer"
+        },
+        {
+          "text": "🏫 Zur Zauberschule",
+          "nextSceneId": "zauberschule"
+        },
+        {
+          "text": "👬 Direkt zu den Brüdern",
+          "nextSceneId": "zu_bruedern_gehen"
+        }
+      ]
+    },
+    {
+      "id": "zauberin_intro",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Prinzessin Liana betritt ihre magische Bibliothek.",
+        "Plötzlich erscheinen überall glitzernde Funken!",
+        "Kannst du Liana helfen, 10 magische Funken in 20 Sekunden zu fangen?"
+      ],
+      "miniGame": {
+        "type": "click",
+        "targetSprite": "Star",
+        "targetCount": 10,
+        "timeLimit": 20,
+        "successSceneId": "trank_brauen",
+        "failSceneId": "zauberin_intro"
+      }
+    },
+    {
+      "id": "trank_brauen",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Prinzessin Liana steht vor ihrem brodelnden Kessel.",
+        "Sie möchte einen Zaubertrank brauen.",
+        "Zuerst muss sie einen Zauberspruch sagen!",
+        "Welchen Zauberspruch soll sie benutzen?"
+      ],
+      "choices": [
+        {
+          "text": "🌟 Abrakadabra, Trank sei stark!",
+          "nextSceneId": "trank_zutat"
+        },
+        {
+          "text": "🔮 Simsalabim, Kessel brim!",
+          "nextSceneId": "trank_zutat"
+        },
+        {
+          "text": "🌈 Hokus Pokus, Zaubertrank Fokus!",
+          "nextSceneId": "trank_zutat"
+        }
+      ]
+    },
+    {
+      "id": "trank_mond",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Prinzessin Liana streut glitzernden Mondstaub in ihren Kessel.",
+        "Der Trank beginnt zu leuchten und zu blubbern!",
+        "Was passiert wohl, wenn jemand diesen Trank trinkt?"
+      ],
+      "choices": [
+        {
+          "text": "🐰 In ein Kaninchen verwandeln",
+          "nextSceneId": "verwandlung_kaninchen"
+        },
+        {
+          "text": "🦅 Fliegen können",
+          "nextSceneId": "verwandlung_fliegen"
+        },
+        {
+          "text": "🌟 Unsichtbar werden",
+          "nextSceneId": "verwandlung_unsichtbar"
+        }
+      ]
+    },
+    {
+      "id": "verwandlung_unsichtbar",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Wow! Prinzessin Liana probiert den Unsichtbarkeitstrank aus.",
+        "Sie beginnt zu verschwinden!",
+        "Was soll als nächstes passieren?"
+      ],
+      "choices": [
+        {
+          "text": "🙈 Unsichtbar Abenteuer erleben",
+          "nextSceneId": "unsichtbar_abenteuer"
+        },
+        {
+          "text": "🔮 Zaubern üben",
+          "nextSceneId": "zaubern_ueben"
+        }
+      ]
+    },
+    {
+      "id": "trank_zutat",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Der Zauberspruch wirkt! Der Kessel glüht magisch.",
+        "Jetzt braucht Prinzessin Liana eine Zutat für ihren Trank.",
+        "Welche Zutat soll sie benutzen?"
+      ],
+      "choices": [
+        {
+          "text": "🌙 Mondstaub",
+          "nextSceneId": "trank_mond"
+        },
+        {
+          "text": "🐸 Froschzunge",
+          "nextSceneId": "trank_frosch"
+        },
+        {
+          "text": "🦋 Schmetterlingsflügel",
+          "nextSceneId": "trank_schmetterling"
+        }
+      ]
+    },
+    {
+      "id": "zukunft_sehen",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "center",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Prinzessin Liana blickt in die Kristallkugel.",
+        "Sie sieht ihre Brüder! Sie üben für einen Kampf.",
+        "Was möchte Liana als Nächstes tun?"
+      ],
+      "choices": [
+        {
+          "text": "👀 Weiter beobachten",
+          "nextSceneId": "brueder_beobachten"
+        },
+        {
+          "text": "🏃‍♀️ Zu ihren Brüdern gehen",
+          "nextSceneId": "zu_bruedern_gehen"
+        }
+      ]
+    },
+    {
+      "id": "zu_bruedern_gehen",
+      "background": "SunnyFarm",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "center",
+          "size": 90
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "right",
+          "size": 90
+        }
+      ],
+      "dialogue": [
+        "Liana findet ihre Brüder, den Blitz-Ninja und den Regenbogen-Ninja, beim Üben.",
+        "\"Hallo Brüder! Ich habe einen magischen Trank gebraut.\"",
+        "\"Möchtet ihr ihn probieren? Er könnte euch beim Kampf helfen!\""
+      ],
+      "choices": [
+        {
+          "text": "🧪 Trank den Brüdern geben",
+          "nextSceneId": "brueder_trinken_trank"
+        },
+        {
+          "text": "🤔 Nochmal überlegen",
+          "nextSceneId": "trank_behalten"
+        }
+      ]
+    },
+    {
+      "id": "brueder_trinken_trank",
+      "background": "SunnyFarm",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "center",
+          "size": 90
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "right",
+          "size": 90
+        }
+      ],
+      "dialogue": [
+        "Liana gibt dem Blitz-Ninja und dem Regenbogen-Ninja den Zaubertrank.",
+        "Die Brüder trinken den Trank vorsichtig.",
+        "Plötzlich beginnen sie zu leuchten!",
+        "Was passiert als Nächstes?"
+      ],
+      "choices": [
+        {
+          "text": "🌟 Sie bekommen Superkräfte",
+          "nextSceneId": "brueder_superkraefte"
+        },
+        {
+          "text": "🐰 Sie verwandeln sich in Kaninchen",
+          "nextSceneId": "brueder_kaninchen"
+        }
+      ]
+    },
+    {
+      "id": "brueder_superkraefte",
+      "background": "SunnyFarm",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "center",
+          "size": 90
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "right",
+          "size": 90
+        }
+      ],
+      "dialogue": [
+        "Wow! Der Zaubertrank wirkt!",
+        "Der Blitz-Ninja wird super stark und hebt einen riesigen Felsen hoch.",
+        "Der Regenbogen-Ninja beginnt zu schweben und fliegt durch die Luft!",
+        "Liana staunt über die neuen Superkräfte ihrer Brüder.",
+        "Was sollen sie mit ihren neuen Kräften machen?"
+      ],
+      "choices": [
+        {
+          "text": "🦸‍♂️ Ein Abenteuer erleben",
+          "nextSceneId": "superkraft_abenteuer"
+        },
+        {
+          "text": "🏋️‍♂️ Ihre Kräfte trainieren",
+          "nextSceneId": "superkraft_training"
+        }
+      ]
+    },
+    {
+      "id": "superkraft_abenteuer",
+      "background": "CityStreet",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "center",
+          "size": 90
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "right",
+          "size": 90
+        }
+      ],
+      "dialogue": [
+        "Die drei Geschwister fliegen über die Stadt.",
+        "Plötzlich bemerken sie, dass etwas nicht stimmt!",
+        "Sie sehen ihren alten Bekannten, der die Stadt verwüsten will.",
+        "Was sollen die Geschwister tun?"
+      ],
+      "choices": [
+        {
+          "text": "🦸‍♀️ Den Bösewicht konfrontieren",
+          "nextSceneId": "konfrontation"
+        },
+        {
+          "text": "🕵️‍♂️ Erst einen Plan schmieden",
+          "nextSceneId": "plan_schmieden"
+        }
+      ]
+    },
+    {
+      "id": "plan_schmieden",
+      "background": "MagicLibrary",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "center",
+          "size": 90
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "right",
+          "size": 90
+        }
+      ],
+      "dialogue": [
+        "Die Geschwister ziehen sich in Lianas magische Bibliothek zurück.",
+        "Sie überlegen, wie sie ihre Kräfte am besten einsetzen können.",
+        "Liana sagt: \"Wir müssen einen klugen Plan machen!\"",
+        "Was soll ihr Plan sein?"
+      ],
+      "choices": [
+        {
+          "text": "🌈 Eine magische Falle stellen",
+          "nextSceneId": "magische_falle"
+        },
+        {
+          "text": "⚡ Den Bösewicht überraschen",
+          "nextSceneId": "ueberraschungsangriff"
+        }
+      ]
+    },
+    {
+      "id": "magische_falle",
+      "background": "CityStreet",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 90
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "center",
+          "size": 90
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "right",
+          "size": 90
+        }
+      ],
+      "dialogue": [
+        "Die Geschwister bereiten eine magische Falle vor.",
+        "Liana zaubert einen unsichtbaren Kreis auf den Boden.",
+        "Der Blitz-Ninja lädt ihn mit Elektrizität auf.",
+        "Der Regenbogen-Ninja macht ihn besonders glitzernd.",
+        "Liana hat eine brillante Idee!",
+        "Sie erschafft eine optische Täuschung von einem Haufen Geld.",
+        "Das Geld scheint direkt in der Mitte der Falle zu liegen.",
+        "Jetzt müssen sie warten, bis der Bösewicht anbeißt!"
+      ],
+      "choices": [
+        {
+          "text": "🕵️‍♀️ Sich verstecken und beobachten",
+          "nextSceneId": "verstecken_beobachten"
+        },
+        {
+          "text": "🔊 Den Bösewicht rufen",
+          "nextSceneId": "boesewicht_rufen"
+        }
+      ]
+    },
+    {
+      "id": "verstecken_beobachten",
+      "background": "CityStreet",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "right",
+          "size": 80
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "center",
+          "size": 80
+        }
+      ],
+      "dialogue": [
+        "Die Geschwister verstecken sich hinter einer Mauer und beobachten ihre Falle.",
+        "Der Blitz-Ninja beginnt, seine Kräfte aufzuladen. Kleine Blitze zucken um ihn herum.",
+        "Liana hält ihr unsichtbares Netz bereit. Es glitzert leicht im Sonnenlicht.",
+        "Der Regenbogen-Ninja hält Ausschau nach dem Bösewicht.",
+        "Die Spannung steigt. Wann wird der Bösewicht auftauchen?"
+      ],
+      "choices": [
+        {
+          "text": "⏳ Weiter warten",
+          "nextSceneId": "boesewicht_erscheint"
+        },
+        {
+          "text": "🔊 Ein Geräusch machen",
+          "nextSceneId": "geraeusch_machen"
+        }
+      ]
+    },
+    {
+      "id": "boesewicht_erscheint",
+      "background": "CityStreet",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "right",
+          "size": 80
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "center",
+          "size": 80
+        },
+        {
+          "sprite": "Pirate",
+          "position": "center",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Plötzlich taucht eine Gestalt am Ende der Straße auf.",
+        "Es ist ein fieser Pirat! 🏴‍☠️",
+        "Er sieht das glitzernde 'Geld' und kommt näher.",
+        "Die Geschwister halten den Atem an.",
+        "Wird der Pirat in ihre Falle tappen?"
+      ],
+      "choices": [
+        {
+          "text": "⚡ Blitz-Ninja greift an",
+          "nextSceneId": "blitz_angriff"
+        },
+        {
+          "text": "🕸️ Liana wirft das Netz",
+          "nextSceneId": "netz_werfen"
+        }
+      ]
+    },
+    {
+      "id": "netz_werfen",
+      "background": "CityStreet",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "right",
+          "size": 80
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "center",
+          "size": 80
+        },
+        {
+          "sprite": "Pirate",
+          "position": "center",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Liana wirft blitzschnell ihr unsichtbares Netz!",
+        "Der Pirat sieht es nicht kommen...",
+        "ZACK! 💥 Das Netz landet direkt über dem Piraten!",
+        "Er zappelt und versucht sich zu befreien, aber das Netz hält ihn fest.",
+        "Die Geschwister haben es geschafft! Der Pirat ist gefangen!"
+      ],
+      "choices": [
+        {
+          "text": "👮 Die Polizei rufen",
+          "nextSceneId": "polizei_rufen"
+        },
+        {
+          "text": "🗣️ Mit dem Piraten reden",
+          "nextSceneId": "pirat_befragen"
+        }
+      ]
+    },
+    {
+      "id": "polizei_rufen",
+      "background": "CityStreet",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "right",
+          "size": 80
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "center",
+          "size": 80
+        },
+        {
+          "sprite": "Pirate",
+          "position": "center",
+          "size": 100
+        },
+        {
+          "sprite": "Police",
+          "position": "right",
+          "size": 90
+        }
+      ],
+      "dialogue": [
+        "Die Geschwister rufen die Polizei. 📞",
+        "Kurze Zeit später hören sie Sirenen. 🚨",
+        "Ein Polizeiauto fährt vor und zwei Polizisten steigen aus.",
+        "Sie sehen den gefangenen Piraten im Netz und sind beeindruckt von den Geschwistern.",
+        "Die Polizisten nehmen den Piraten fest und bringen ihn zum Polizeiauto.",
+        "\"Er wird jetzt ins Gefängnis kommen\", sagt ein Polizist. \"Gute Arbeit, Kinder!\""
+      ],
+      "choices": [
+        {
+          "text": "🎉 Die Stadt feiern",
+          "nextSceneId": "stadt_feiert"
+        },
+        {
+          "text": "🏠 Nach Hause gehen",
+          "nextSceneId": "nach_hause"
+        }
+      ]
+    },
+    {
+      "id": "nach_hause",
+      "background": "CityStreet",
+      "characters": [
+        {
+          "sprite": "Princess",
+          "position": "left",
+          "size": 80
+        },
+        {
+          "sprite": "LightningNinja",
+          "position": "right",
+          "size": 80
+        },
+        {
+          "sprite": "RainbowNinja",
+          "position": "center",
+          "size": 80
+        }
+      ],
+      "dialogue": [
+        "Die magischen Geschwister kehren müde, aber glücklich nach Hause zurück.",
+        "\"Was für ein Abenteuer!\", sagt Liana und gähnt.",
+        "\"Ich bin so müde\", murmelt der Blitz-Ninja und reibt sich die Augen.",
+        "Der Regenbogen-Ninja nickt: \"Lasst uns schlafen gehen.\"",
+        "Sie gehen ins Haus und kuscheln sich in ihre Betten.",
+        "Bald schlafen alle drei tief und fest, erschöpft von ihrem aufregenden Tag. 😴"
+      ],
+      "choices": [
+        {
+          "text": "🌅 Am nächsten Morgen",
+          "nextSceneId": "naechster_morgen"
+        }
+      ]
+    }
+  ]
+}

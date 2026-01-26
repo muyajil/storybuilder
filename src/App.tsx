@@ -1,7 +1,9 @@
 import { useState, useRef } from 'react';
 import { games, getGameById } from './games';
-import { GameButton, SidePanel } from './components';
+import { GameButton, SidePanel, StoryBuildProvider } from './components';
+import { PdfExportButton } from './components/pdf';
 import type { SidePanelHandle } from './components/SidePanel';
+import type { StoryBuildContext } from './components/story';
 import './App.css';
 
 /**
@@ -38,20 +40,30 @@ function App() {
     }
   };
 
+  // Handle build requests from StoryPlayer
+  const handleStoryBuildRequest = (context: StoryBuildContext) => {
+    sidePanelRef.current?.sendMessage(context.message);
+  };
+
   return (
     <div className="app-layout">
       {/* Main content area - centered in space left of chat */}
       <div className="main-content">
         {selectedGame ? (
-          <div className="game-container">
-            <div className="game-header">
-              <GameButton onClick={() => setSelectedGameId(null)} color="secondary" size="small">
-                Zurück zum Menü
-              </GameButton>
-              <span className="game-title">{selectedGame.name}</span>
+          <StoryBuildProvider onBuildRequest={handleStoryBuildRequest}>
+            <div className="game-container">
+              <div className="game-header">
+                <GameButton onClick={() => setSelectedGameId(null)} color="secondary" size="small">
+                  Zurück zum Menü
+                </GameButton>
+                <span className="game-title">{selectedGame.name}</span>
+                {selectedGame.storyJson && (
+                  <PdfExportButton story={selectedGame.storyJson} />
+                )}
+              </div>
+              <selectedGame.component />
             </div>
-            <selectedGame.component />
-          </div>
+          </StoryBuildProvider>
         ) : (
           <div className="menu-container">
             <h1 className="menu-title">Storybuilder</h1>

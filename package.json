@@ -14,11 +14,14 @@
     "@aws-sdk/credential-provider-env": "^3.972.1",
     "@aws-sdk/credential-provider-ini": "^3.972.1",
     "@aws-sdk/credential-provider-sso": "^3.972.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/html2canvas": "^0.5.35",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
