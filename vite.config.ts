@@ -1162,12 +1162,16 @@ checkCollision(rect1, rect2)  // Kollision prüfen
           }
         }
 
-        // Extract exported function names from a file
+        // Extract exported names from a file (supports both function exports and re-exports)
         function extractExports(filePath: string): string[] {
           try {
             const content = fs.readFileSync(filePath, 'utf-8')
-            const matches = content.match(/export function (\w+)/g) || []
-            return matches.map(m => m.replace('export function ', ''))
+            // Match "export function Name" or "export { Name }" patterns
+            const functionMatches = content.match(/export function (\w+)/g) || []
+            const reexportMatches = content.match(/export \{ (\w+) \}/g) || []
+            const functionNames = functionMatches.map(m => m.replace('export function ', ''))
+            const reexportNames = reexportMatches.map(m => m.replace(/export \{ (\w+) \}/, '$1'))
+            return [...functionNames, ...reexportNames]
           } catch { return [] }
         }
 
@@ -1175,10 +1179,10 @@ checkCollision(rect1, rect2)  // Kollision prüfen
         function getAvailableSprites(): Record<string, string[]> {
           const spritesDir = path.join(projectDir, 'src', 'components', 'sprites')
           return {
-            animals: extractExports(path.join(spritesDir, 'Animals.tsx')),
-            characters: extractExports(path.join(spritesDir, 'Characters.tsx')),
-            environment: extractExports(path.join(spritesDir, 'Environment.tsx')),
-            effects: extractExports(path.join(spritesDir, 'Effects.tsx')),
+            animals: extractExports(path.join(spritesDir, 'animals', 'index.ts')),
+            characters: extractExports(path.join(spritesDir, 'characters', 'index.ts')),
+            environment: extractExports(path.join(spritesDir, 'environment', 'index.ts')),
+            effects: extractExports(path.join(spritesDir, 'effects', 'index.ts')),
           }
         }
 

@@ -1,0 +1,1077 @@
+{
+  "id": "toto-mond",
+  "title": "Toto und der Mann im Mond",
+  "description": "Ein magisches Abenteuer zum Mond! Hilf Toto, die verlorenen Mondsteine zu finden und dem Mann im Mond sein Leuchten zurückzugeben.",
+  "author": "Spiele-Spielplatz",
+  "language": "de",
+  "ageRating": "5+",
+  "tags": ["mond", "abenteuer", "freundschaft", "magie"],
+  "scenes": [
+    {
+      "id": "intro",
+      "background": "SunnyFarm",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 80 }
+      ],
+      "dialogue": [
+        "Es ist eine stille Nacht auf dem Bauernhof...",
+        "Der kleine Toto kann nicht schlafen. Er schaut aus dem Fenster zum Himmel.",
+        "Aber etwas stimmt nicht - der Mond leuchtet kaum noch!",
+        "\"Warum bist du so traurig, lieber Mond?\" flüstert Toto."
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "🦉 Ein seltsames Geräusch hören", "nextSceneId": "meet_luna" }
+      ]
+    },
+
+    {
+      "id": "meet_luna",
+      "background": "SunnyFarm",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 80 },
+        { "sprite": "Owl", "position": "right", "size": 70 }
+      ],
+      "dialogue": [
+        "\"Schuhu! Schuhu!\"",
+        "Eine weise Eule landet auf dem Fensterbrett.",
+        "\"Ich bin Luna, die Mondeule. Ich spüre, dass du dem Mond helfen willst.\"",
+        "\"Der Mann im Mond hat seine drei magischen Mondsteine verloren!\"",
+        "\"Ohne sie kann der Mond nicht mehr leuchten. Willst du ihm helfen?\""
+      ],
+      "transition": "magic",
+      "choices": [
+        { "text": "✨ Ja! Wie komme ich zum Mond?", "nextSceneId": "how_to_travel" },
+        { "text": "😰 Das klingt gefährlich...", "nextSceneId": "luna_encourages" }
+      ]
+    },
+
+    {
+      "id": "luna_encourages",
+      "background": "SunnyFarm",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 80 },
+        { "sprite": "Owl", "position": "right", "size": 70 }
+      ],
+      "dialogue": [
+        "Luna legt sanft ihren Flügel auf Totos Schulter.",
+        "\"Ich verstehe deine Angst, kleiner Freund.\"",
+        "\"Aber manchmal müssen wir mutig sein, um anderen zu helfen.\"",
+        "\"Ich werde die ganze Zeit bei dir sein. Wir schaffen das zusammen!\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "💪 Du hast recht! Lass uns gehen!", "nextSceneId": "how_to_travel" }
+      ]
+    },
+
+    {
+      "id": "how_to_travel",
+      "background": "EnchantedForest",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 80 },
+        { "sprite": "Owl", "position": "right", "size": 70 }
+      ],
+      "dialogue": [
+        "Luna führt Toto zu einer geheimen Lichtung im Wald.",
+        "\"Es gibt drei Wege zum Mond. Jeder hat seine eigene Magie.\"",
+        "\"Welchen Weg wählst du?\""
+      ],
+      "transition": "magic",
+      "choices": [
+        { "text": "🚀 Die alte Mondrakete reparieren", "nextSceneId": "rocket_path" },
+        { "text": "🌱 Die magische Mondbohne pflanzen", "nextSceneId": "beanstalk_path" },
+        { "text": "⭐ Auf einen Stern wünschen", "nextSceneId": "wish_path" }
+      ]
+    },
+
+    {
+      "id": "rocket_path",
+      "background": "SunnyFarm",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "center", "size": 60 },
+        { "sprite": "Rocket", "position": "right", "size": 120 }
+      ],
+      "dialogue": [
+        "Hinter der Scheune steht eine alte, verstaubte Rakete!",
+        "\"Die hat mein Urgroßvater gebaut\", staunt Toto.",
+        "\"Sie braucht nur etwas Sternenstaub als Treibstoff\", sagt Luna.",
+        "Sammle Sternenstaub, um die Rakete zu starten!"
+      ],
+      "transition": "slide-right",
+      "miniGame": {
+        "type": "collect",
+        "playerSprite": "Boy",
+        "collectSprite": "Star",
+        "targetScore": 8,
+        "timeLimit": 30,
+        "instructions": "Sammle 8 Sterne für die Rakete! Benutze ← → Pfeiltasten.",
+        "successSceneId": "departure",
+        "failSceneId": "rocket_path_retry"
+      }
+    },
+
+    {
+      "id": "rocket_path_retry",
+      "background": "SunnyFarm",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "right", "size": 60 }
+      ],
+      "dialogue": [
+        "\"Das war knapp! Versuchen wir es noch einmal.\"",
+        "\"Die Sterne bewegen sich schnell, aber du schaffst das!\""
+      ],
+      "choices": [
+        { "text": "⭐ Nochmal versuchen!", "nextSceneId": "rocket_path" }
+      ]
+    },
+
+    {
+      "id": "beanstalk_path",
+      "background": "EnchantedForest",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "right", "size": 60 }
+      ],
+      "dialogue": [
+        "Luna gibt Toto eine glitzernde Bohne.",
+        "\"Pflanze sie und gieße sie mit Mondlicht!\"",
+        "Toto pflanzt die Bohne in den weichen Boden...",
+        "WUUUSCH! Eine riesige Ranke schießt in den Himmel!",
+        "Klettere schnell nach oben und weiche den Blättern aus!"
+      ],
+      "transition": "zoom",
+      "miniGame": {
+        "type": "dodge",
+        "playerSprite": "Boy",
+        "obstacleSprite": "Fern",
+        "surviveTime": 12,
+        "instructions": "Weiche den fallenden Blättern aus! 12 Sekunden! Benutze Pfeiltasten.",
+        "successSceneId": "departure",
+        "failSceneId": "beanstalk_path_retry"
+      }
+    },
+
+    {
+      "id": "beanstalk_path_retry",
+      "background": "EnchantedForest",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 70 }
+      ],
+      "dialogue": [
+        "\"Autsch! Die Blätter sind rutschig!\"",
+        "\"Keine Sorge, versuch es nochmal!\""
+      ],
+      "choices": [
+        { "text": "🌱 Nochmal klettern!", "nextSceneId": "beanstalk_path" }
+      ]
+    },
+
+    {
+      "id": "wish_path",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 80 }
+      ],
+      "dialogue": [
+        "Toto schließt die Augen und wünscht sich ganz fest...",
+        "\"Ich wünsche mir, zum Mond zu fliegen!\"",
+        "Plötzlich beginnt er zu schweben!",
+        "Die Sterne um ihn herum tanzen und leuchten.",
+        "Fange die tanzenden Sterne, um höher zu steigen!"
+      ],
+      "transition": "magic",
+      "miniGame": {
+        "type": "click",
+        "targetSprite": "Star",
+        "targetScore": 8,
+        "timeLimit": 30,
+        "targetDuration": 2500,
+        "instructions": "Klicke auf 8 tanzende Sterne!",
+        "successSceneId": "departure",
+        "failSceneId": "wish_path_retry"
+      }
+    },
+
+    {
+      "id": "wish_path_retry",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 70 }
+      ],
+      "dialogue": [
+        "\"Die Sterne sind so schnell!\"",
+        "\"Konzentriere dich und versuche es nochmal!\""
+      ],
+      "choices": [
+        { "text": "⭐ Nochmal wünschen!", "nextSceneId": "wish_path" }
+      ]
+    },
+
+    {
+      "id": "departure",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "right", "size": 60 }
+      ],
+      "dialogue": [
+        "Es hat funktioniert! Toto schwebt im Weltraum!",
+        "Unter ihm liegt die Erde - so klein und wunderschön.",
+        "\"Schau, Luna! Wir fliegen wirklich!\"",
+        "\"Der Mond ist nicht mehr weit. Aber pass auf - dort vorne ist etwas...\""
+      ],
+      "transition": "zoom",
+      "onEnterActions": [
+        { "type": "add_item", "item": "sternenstaub", "message": "Du hast Sternenstaub gesammelt!" }
+      ],
+      "choices": [
+        { "text": "👀 Was ist das?", "nextSceneId": "stella_encounter" }
+      ]
+    },
+
+    {
+      "id": "stella_encounter",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Star", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "Ein riesiger, funkelnder Stern blockiert den Weg!",
+        "\"HALT! Wer wagt es, durch MEIN Sternenmeer zu fliegen?\"",
+        "\"Ich bin Stella, die Sternenkönigin!\"",
+        "\"Niemand besucht den langweiligen alten Mond! Alle sollen MICH bewundern!\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "🤝 Freundlich sein", "nextSceneId": "stella_friendly" },
+        { "text": "😤 Sich durchkämpfen", "nextSceneId": "stella_challenge" },
+        { "text": "🤔 Nach dem Grund fragen", "nextSceneId": "stella_understand" }
+      ]
+    },
+
+    {
+      "id": "stella_friendly",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Star", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "\"Hallo Stella! Du bist wirklich wunderschön!\"",
+        "Stella strahlt noch heller. \"Das... das findet nie jemand!\"",
+        "\"Alle schauen nur zum Mond. Keiner sieht die Sterne.\"",
+        "\"Weißt du was? Wenn der Mond wieder leuchtet, sehen alle auch die Sterne besser!\"",
+        "Stella überlegt... \"Das stimmt! Hier, nimm meine magische Feder. Sie wird dir helfen!\""
+      ],
+      "transition": "magic",
+      "onEnterActions": [
+        { "type": "add_item", "item": "sternenfeder", "message": "Du hast Stellas Feder erhalten!" }
+      ],
+      "choices": [
+        { "text": "✨ Danke, Stella!", "nextSceneId": "space_journey" }
+      ]
+    },
+
+    {
+      "id": "stella_understand",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Star", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "\"Warum bist du so traurig, Stella?\"",
+        "Der große Stern wird plötzlich ganz klein.",
+        "\"Früher war ich der hellste Stern am Himmel...\"",
+        "\"Aber jetzt schauen alle nur noch auf ihre Handys!\"",
+        "\"Ich wollte, dass jemand mich wieder bemerkt.\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "🤗 Stella trösten", "nextSceneId": "stella_comfort" },
+        { "text": "💡 Eine Idee haben", "nextSceneId": "stella_idea" }
+      ]
+    },
+
+    {
+      "id": "stella_comfort",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Star", "position": "right", "size": 80 }
+      ],
+      "dialogue": [
+        "Toto fliegt zu Stella und umarmt sie (so gut man einen Stern umarmen kann).",
+        "\"Du bist nicht allein, Stella. Ich sehe dich!\"",
+        "Stella beginnt warm zu leuchten.",
+        "\"Danke, kleiner Freund. Hier, nimm meinen Sternensplitter. Er zeigt dir den Weg!\""
+      ],
+      "transition": "magic",
+      "onEnterActions": [
+        { "type": "add_item", "item": "sternenfeder", "message": "Du hast Stellas Splitter erhalten!" }
+      ],
+      "choices": [
+        { "text": "🌙 Weiter zum Mond!", "nextSceneId": "space_journey" }
+      ]
+    },
+
+    {
+      "id": "stella_idea",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Star", "position": "right", "size": 90 }
+      ],
+      "dialogue": [
+        "\"Ich habe eine Idee! Wenn der Mond wieder leuchtet...\"",
+        "\"...dann sehen die Menschen auch die Sterne wieder besser!\"",
+        "\"Mondlicht und Sternenlicht zusammen - das ist die schönste Nacht!\"",
+        "Stella strahlt begeistert! \"Du bist schlau! Ich helfe dir!\""
+      ],
+      "transition": "magic",
+      "onEnterActions": [
+        { "type": "add_item", "item": "sternenfeder", "message": "Stella schenkt dir ihre Hilfe!" }
+      ],
+      "choices": [
+        { "text": "🚀 Zusammen zum Mond!", "nextSceneId": "space_journey" }
+      ]
+    },
+
+    {
+      "id": "stella_challenge",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Star", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "\"Ich muss zum Mond! Der Mann im Mond braucht Hilfe!\"",
+        "Stella lacht laut. \"Ha! Du glaubst, du kannst einfach vorbei?\"",
+        "\"Dann musst du durch meinen Sternensturm fliegen!\"",
+        "\"Weiche meinen Sternen aus, wenn du kannst!\""
+      ],
+      "transition": "fade",
+      "miniGame": {
+        "type": "dodge",
+        "playerSprite": "Boy",
+        "obstacleSprite": "Star",
+        "surviveTime": 15,
+        "instructions": "Weiche Stellas Sternen aus! 15 Sekunden!",
+        "successSceneId": "stella_defeated",
+        "failSceneId": "stella_challenge_retry"
+      }
+    },
+
+    {
+      "id": "stella_challenge_retry",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Star", "position": "center", "size": 100 }
+      ],
+      "dialogue": [
+        "\"Haha! Zu langsam!\"",
+        "Luna flüstert: \"Vielleicht sollten wir freundlicher sein?\""
+      ],
+      "choices": [
+        { "text": "💪 Nochmal versuchen!", "nextSceneId": "stella_challenge" },
+        { "text": "🤝 Doch freundlich sein", "nextSceneId": "stella_friendly" }
+      ]
+    },
+
+    {
+      "id": "stella_defeated",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Star", "position": "right", "size": 70 }
+      ],
+      "dialogue": [
+        "Toto hat es geschafft! Stella ist erschöpft.",
+        "\"Du... du bist stärker als ich dachte.\"",
+        "\"Geh zum Mond. Aber vergiss nicht...\"",
+        "\"...auch Sterne haben Gefühle.\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "🌙 Weiter zum Mond", "nextSceneId": "space_journey" }
+      ]
+    },
+
+    {
+      "id": "space_journey",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "right", "size": 60 }
+      ],
+      "dialogue": [
+        "Toto und Luna fliegen weiter durch das Weltall.",
+        "\"Schau, Luna! Dort sind Asteroiden!\"",
+        "\"Wir müssen vorsichtig sein\", warnt Luna.",
+        "\"Flieg durch die Lücken wie ein Vogel!\""
+      ],
+      "transition": "slide-left",
+      "miniGame": {
+        "type": "flappy",
+        "playerSprite": "Boy",
+        "targetScore": 5,
+        "instructions": "Fliege durch 5 Asteroidenlücken! Klicke oder drücke Leertaste zum Springen.",
+        "successSceneId": "approaching_moon",
+        "failSceneId": "space_journey_retry"
+      }
+    },
+
+    {
+      "id": "space_journey_retry",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "right", "size": 60 }
+      ],
+      "dialogue": [
+        "\"Autsch! Diese Asteroiden sind hart!\"",
+        "\"Drücke Leertaste oder klicke, um zu fliegen!\""
+      ],
+      "choices": [
+        { "text": "🚀 Nochmal versuchen!", "nextSceneId": "space_journey" }
+      ]
+    },
+
+    {
+      "id": "approaching_moon",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 80 }
+      ],
+      "dialogue": [
+        "Der Mond wird größer und größer!",
+        "Aber er sieht so traurig aus... grau und dunkel.",
+        "\"Wir sind fast da, Luna!\"",
+        "\"Halt dich fest - wir landen!\""
+      ],
+      "transition": "zoom",
+      "choices": [
+        { "text": "🌙 Auf dem Mond landen", "nextSceneId": "moon_landing" }
+      ]
+    },
+
+    {
+      "id": "moon_landing",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Wizard", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "Toto landet sanft auf dem staubigen Mondboden.",
+        "Vor ihm sitzt eine traurige Gestalt auf einem Felsen.",
+        "\"Oh! Besucher? Ich habe seit hundert Jahren keinen Besucher gehabt!\"",
+        "\"Ich bin der Mann im Mond. Und ich bin so schrecklich traurig...\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "🤗 Was ist passiert?", "nextSceneId": "moon_man_story" }
+      ]
+    },
+
+    {
+      "id": "moon_man_story",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Wizard", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "Der Mann im Mond seufzt tief.",
+        "\"Ich hatte drei wunderschöne Mondsteine.\"",
+        "\"Sie gaben mir mein Leuchten, meine Magie!\"",
+        "\"Aber eines Nachts kam ein großer Sturm...\"",
+        "\"Die Steine wurden über den ganzen Mond verstreut!\"",
+        "\"Ohne sie kann ich nicht mehr leuchten. Die Menschen vergessen mich...\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "💪 Ich helfe dir, sie zu finden!", "nextSceneId": "search_begins" },
+        { "text": "🗺️ Wo sind die Steine hin?", "nextSceneId": "moonstone_locations" }
+      ]
+    },
+
+    {
+      "id": "moonstone_locations",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Wizard", "position": "center", "size": 100 }
+      ],
+      "dialogue": [
+        "\"Einer liegt irgendwo in den Mondkratern versteckt.\"",
+        "\"Der zweite ist tief in den Mondhöhlen.\"",
+        "\"Und der dritte... auf der dunklen Seite des Mondes.\"",
+        "\"Dort war ich noch nie. Es ist zu gefährlich!\""
+      ],
+      "choices": [
+        { "text": "🔍 Dann fangen wir an!", "nextSceneId": "search_begins" }
+      ]
+    },
+
+    {
+      "id": "search_begins",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "center", "size": 60 },
+        { "sprite": "Wizard", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "\"Wirklich? Du willst mir helfen?\" Der Mann im Mond strahlt.",
+        "\"Niemand hat mir je geholfen!\"",
+        "Luna fliegt auf. \"Ich kann von oben suchen!\"",
+        "\"Lass uns in den Mondkratern anfangen!\""
+      ],
+      "transition": "magic",
+      "choices": [
+        { "text": "🕳️ Zu den Kratern", "nextSceneId": "moon_craters" }
+      ]
+    },
+
+    {
+      "id": "moon_craters",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 70 }
+      ],
+      "dialogue": [
+        "Die Mondkrater sind riesig und voller Schatten.",
+        "\"Der Mondstein muss hier irgendwo sein!\"",
+        "\"Er leuchtet bestimmt schwach. Klicke auf ihn, wenn du ihn siehst!\""
+      ],
+      "transition": "slide-left",
+      "miniGame": {
+        "type": "click",
+        "targetSprite": "Gem",
+        "targetScore": 1,
+        "targetDuration": 8000,
+        "instructions": "Finde den versteckten Mondstein! Klicke schnell!",
+        "successSceneId": "first_moonstone_found",
+        "failSceneId": "moon_craters_retry"
+      }
+    },
+
+    {
+      "id": "moon_craters_retry",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 70 }
+      ],
+      "dialogue": [
+        "\"Er muss hier sein! Schau genauer hin!\"",
+        "Luna ruft von oben: \"Ich glaube, ich sehe ein Glitzern!\""
+      ],
+      "choices": [
+        { "text": "🔍 Weiter suchen!", "nextSceneId": "moon_craters" }
+      ]
+    },
+
+    {
+      "id": "first_moonstone_found",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Wizard", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "\"Ich habe ihn! Den ersten Mondstein!\"",
+        "Der Stein leuchtet sanft silbern in Totos Hand.",
+        "Der Mann im Mond beginnt ein kleines bisschen zu strahlen!",
+        "\"Wunderbar! Nur noch zwei!\""
+      ],
+      "transition": "magic",
+      "onEnterActions": [
+        { "type": "add_item", "item": "mondstein1", "message": "Erster Mondstein gefunden!" }
+      ],
+      "choices": [
+        { "text": "🕳️ Zu den Höhlen", "nextSceneId": "moon_caves_entrance" }
+      ]
+    },
+
+    {
+      "id": "moon_caves_entrance",
+      "background": "DarkForest",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "right", "size": 60 }
+      ],
+      "dialogue": [
+        "Der Eingang zur Mondhöhle ist dunkel und unheimlich.",
+        "\"Hier drin ist es wie ein Labyrinth\", warnt Luna.",
+        "\"Ich kann im Dunkeln sehen, aber du musst vorsichtig sein!\"",
+        "\"Sammle Mondstaub, um den Weg zu beleuchten!\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "🐍 In die Höhle gehen", "nextSceneId": "moon_caves_snake" }
+      ]
+    },
+
+    {
+      "id": "moon_caves_snake",
+      "background": "DarkForest",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 70 }
+      ],
+      "dialogue": [
+        "Die Höhle windet sich wie eine Schlange!",
+        "Überall liegt glitzernder Mondstaub.",
+        "Sammle den Staub, um den Weg zu finden!"
+      ],
+      "transition": "fade",
+      "miniGame": {
+        "type": "snake",
+        "foodSprite": "Gem",
+        "targetLength": 6,
+        "instructions": "Sammle 6 Mondstaub-Partikel! Nicht gegen die Wände! Benutze Pfeiltasten.",
+        "successSceneId": "second_moonstone_found",
+        "failSceneId": "moon_caves_retry"
+      }
+    },
+
+    {
+      "id": "moon_caves_retry",
+      "background": "DarkForest",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 70 }
+      ],
+      "dialogue": [
+        "\"Autsch! Die Wände sind eng!\"",
+        "\"Benutze die Pfeiltasten vorsichtig!\""
+      ],
+      "choices": [
+        { "text": "🐍 Nochmal versuchen!", "nextSceneId": "moon_caves_snake" }
+      ]
+    },
+
+    {
+      "id": "second_moonstone_found",
+      "background": "DarkForest",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "right", "size": 60 }
+      ],
+      "dialogue": [
+        "Am Ende der Höhle liegt der zweite Mondstein!",
+        "Er leuchtet blau wie das Meer.",
+        "\"Zwei von drei! Wir schaffen das!\"",
+        "Luna sieht besorgt aus. \"Der letzte ist auf der dunklen Seite...\""
+      ],
+      "transition": "magic",
+      "onEnterActions": [
+        { "type": "add_item", "item": "mondstein2", "message": "Zweiter Mondstein gefunden!" },
+        { "type": "add_item", "item": "mondstaub", "message": "Du hast auch Mondstaub gesammelt!" }
+      ],
+      "choices": [
+        { "text": "🌑 Zur dunklen Seite", "nextSceneId": "dark_side_entrance" }
+      ]
+    },
+
+    {
+      "id": "dark_side_entrance",
+      "background": "DarkForest",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "right", "size": 60 }
+      ],
+      "dialogue": [
+        "Die Grenze zur dunklen Seite des Mondes...",
+        "Hier gibt es kein Licht. Alles ist schwarz.",
+        "\"Ich... ich habe ein bisschen Angst\", flüstert Toto.",
+        "\"Mut bedeutet nicht, keine Angst zu haben\", sagt Luna.",
+        "\"Es bedeutet, trotzdem weiterzugehen.\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "💪 Mutig sein und weitergehen", "nextSceneId": "dark_side_journey" },
+        { "text": "🔦 Mondstaub benutzen", "nextSceneId": "dark_side_with_dust", "requiresItems": ["mondstaub"] }
+      ]
+    },
+
+    {
+      "id": "dark_side_journey",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 70 }
+      ],
+      "dialogue": [
+        "Toto tapst vorsichtig durch die Dunkelheit.",
+        "Plötzlich - ein Geräusch!",
+        "Zwei leuchtende Augen starren ihn an...",
+        "Ein SCHATTENWESEN!"
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "😱 Was ist das?!", "nextSceneId": "shadow_creature" }
+      ]
+    },
+
+    {
+      "id": "dark_side_with_dust",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 70 }
+      ],
+      "dialogue": [
+        "Der Mondstaub leuchtet sanft und erhellt den Weg!",
+        "Toto kann die Umgebung sehen.",
+        "Dort! Ein Schattenwesen - aber es sieht nicht gefährlich aus.",
+        "Es wirkt... traurig?"
+      ],
+      "transition": "magic",
+      "choices": [
+        { "text": "👀 Näher herangehen", "nextSceneId": "shadow_creature_friendly" }
+      ]
+    },
+
+    {
+      "id": "shadow_creature",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Ghost", "position": "right", "size": 90 }
+      ],
+      "dialogue": [
+        "Das Schattenwesen kommt näher!",
+        "\"Wer... wer bist du?\" Totos Stimme zittert.",
+        "\"Ich bin Nox, der Hüter der Dunkelheit.\"",
+        "\"Niemand kommt hierher. Niemand will die Dunkelheit besuchen.\"",
+        "\"Warum bist du hier, kleines Licht?\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "🌙 Ich suche einen Mondstein", "nextSceneId": "nox_moonstone" },
+        { "text": "🤝 Ich möchte dein Freund sein", "nextSceneId": "nox_friendship" }
+      ]
+    },
+
+    {
+      "id": "shadow_creature_friendly",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Ghost", "position": "right", "size": 90 }
+      ],
+      "dialogue": [
+        "Das Schattenwesen sieht überrascht aus.",
+        "\"Du... du hast keine Angst vor mir?\"",
+        "\"Ich bin Nox. Alle haben Angst vor der Dunkelheit.\"",
+        "\"Aber du hast Licht mitgebracht... und Freundlichkeit.\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "🤗 Jeder braucht einen Freund", "nextSceneId": "nox_friendship" }
+      ]
+    },
+
+    {
+      "id": "nox_moonstone",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Ghost", "position": "right", "size": 90 }
+      ],
+      "dialogue": [
+        "\"Der letzte Mondstein? Ja, er ist hier.\"",
+        "\"Ich bewache ihn. Er ist das einzige Licht, das ich habe.\"",
+        "\"Wenn ich ihn weggebe, bin ich ganz allein im Dunkeln...\""
+      ],
+      "choices": [
+        { "text": "💡 Ich habe eine Idee!", "nextSceneId": "nox_deal" },
+        { "text": "🤝 Du musst nicht allein sein", "nextSceneId": "nox_friendship" }
+      ]
+    },
+
+    {
+      "id": "nox_friendship",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Ghost", "position": "right", "size": 90 }
+      ],
+      "dialogue": [
+        "\"Ein... Freund?\" Nox' Augen werden groß.",
+        "\"Ich hatte noch nie einen Freund.\"",
+        "Toto lächelt. \"Jetzt hast du einen!\"",
+        "\"Und wenn der Mond wieder leuchtet, besuche ich dich!\"",
+        "Nox beginnt sanft zu leuchten. \"Dann... dann gebe ich dir den Mondstein.\""
+      ],
+      "transition": "magic",
+      "onEnterActions": [
+        { "type": "add_item", "item": "schattenfunke", "message": "Nox schenkt dir einen Schattenfunken!" }
+      ],
+      "choices": [
+        { "text": "✨ Den Mondstein holen", "nextSceneId": "final_moonstone_easy" }
+      ]
+    },
+
+    {
+      "id": "nox_deal",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Ghost", "position": "right", "size": 90 }
+      ],
+      "dialogue": [
+        "\"Was wäre, wenn die Dunkelheit auch schön sein kann?\"",
+        "\"Ohne Dunkelheit sieht man keine Sterne!\"",
+        "\"Wenn der Mond leuchtet, macht er auch die Nacht schöner!\"",
+        "Nox denkt nach... \"Du hast recht. Nimm den Stein.\""
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "✨ Danke, Nox!", "nextSceneId": "final_moonstone_challenge" }
+      ]
+    },
+
+    {
+      "id": "final_moonstone_easy",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Ghost", "position": "right", "size": 80 }
+      ],
+      "dialogue": [
+        "Nox führt Toto zu einer kleinen Höhle.",
+        "Dort liegt der letzte Mondstein - er leuchtet golden!",
+        "\"Hier ist er, mein Freund.\"",
+        "\"Bring das Licht zurück zum Mond!\""
+      ],
+      "transition": "magic",
+      "onEnterActions": [
+        { "type": "add_item", "item": "mondstein3", "message": "Dritter Mondstein gefunden!" }
+      ],
+      "choices": [
+        { "text": "🌙 Zurück zum Mann im Mond!", "nextSceneId": "return_to_moon_man" }
+      ]
+    },
+
+    {
+      "id": "final_moonstone_challenge",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 70 }
+      ],
+      "dialogue": [
+        "Der Mondstein liegt auf der anderen Seite einer Schlucht!",
+        "Du musst über die Mondkrater rasen, um ihn zu erreichen!",
+        "\"Schnell, bevor die Dunkelheit dich einholt!\""
+      ],
+      "transition": "fade",
+      "miniGame": {
+        "type": "race",
+        "playerSprite": "Boy",
+        "obstacleSprite": "Rock",
+        "instructions": "Renne zum Mondstein! Weiche den Felsen aus mit ← →!",
+        "successSceneId": "final_moonstone_got",
+        "failSceneId": "final_moonstone_retry"
+      }
+    },
+
+    {
+      "id": "final_moonstone_retry",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 70 }
+      ],
+      "dialogue": [
+        "\"Fast! Versuche es nochmal!\"",
+        "\"Links und rechts mit den Pfeiltasten!\""
+      ],
+      "choices": [
+        { "text": "🏃 Nochmal rennen!", "nextSceneId": "final_moonstone_challenge" }
+      ]
+    },
+
+    {
+      "id": "final_moonstone_got",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 80 }
+      ],
+      "dialogue": [
+        "GESCHAFFT! Der letzte Mondstein!",
+        "Er leuchtet golden in Totos Händen.",
+        "\"Ich habe alle drei! Zeit, zum Mann im Mond zurückzukehren!\""
+      ],
+      "transition": "magic",
+      "onEnterActions": [
+        { "type": "add_item", "item": "mondstein3", "message": "Dritter Mondstein gefunden!" }
+      ],
+      "choices": [
+        { "text": "🌙 Zurück zum Mann im Mond!", "nextSceneId": "return_to_moon_man" }
+      ]
+    },
+
+    {
+      "id": "return_to_moon_man",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "center", "size": 50 },
+        { "sprite": "Wizard", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "Toto kehrt mit allen drei Mondsteinen zurück!",
+        "Der Mann im Mond springt vor Freude auf.",
+        "\"Du hast sie! Du hast sie wirklich gefunden!\"",
+        "\"Lass sie mich zusammenfügen...\""
+      ],
+      "transition": "zoom",
+      "choices": [
+        { "text": "✨ Die Steine überreichen", "nextSceneId": "moon_restoration" }
+      ]
+    },
+
+    {
+      "id": "moon_restoration",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Wizard", "position": "center", "size": 120 }
+      ],
+      "dialogue": [
+        "Der Mann im Mond hält die drei Steine hoch.",
+        "Sie beginnen zu schweben und zu verschmelzen...",
+        "Ein blendendes Licht erfüllt den Mond!",
+        "DER MOND LEUCHTET WIEDER!",
+        "Auf der Erde schauen die Menschen nach oben und staunen."
+      ],
+      "transition": "magic",
+      "choices": [
+        { "text": "🎉 Wir haben es geschafft!", "nextSceneId": "celebration" }
+      ]
+    },
+
+    {
+      "id": "celebration",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Owl", "position": "center", "size": 50 },
+        { "sprite": "Wizard", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "\"DANKE, kleiner Toto! Du hast das Unmögliche geschafft!\"",
+        "\"Du hast Mut bewiesen, Freunde gefunden und nie aufgegeben!\"",
+        "Der Mann im Mond umarmt Toto fest.",
+        "\"Ich möchte dir etwas schenken. Was wünschst du dir?\""
+      ],
+      "transition": "magic",
+      "choices": [
+        { "text": "🌙 Für immer hier bleiben", "nextSceneId": "ending_guardian" },
+        { "text": "🏠 Nach Hause gehen", "nextSceneId": "ending_home" },
+        { "text": "🤝 Dass du mich besuchst", "nextSceneId": "ending_visit" },
+        { "text": "⭐ Geheimes Geschenk", "nextSceneId": "ending_secret", "requiresItems": ["sternenfeder", "schattenfunke"], "showWhenLocked": true, "lockedText": "Du brauchst Stellas Feder UND Nox' Schattenfunken!" }
+      ]
+    },
+
+    {
+      "id": "ending_guardian",
+      "background": "WinterWonderland",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 80 },
+        { "sprite": "Wizard", "position": "right", "size": 100 }
+      ],
+      "dialogue": [
+        "\"Du möchtest hier bleiben? Bei mir?\"",
+        "Der Mann im Mond strahlt vor Glück.",
+        "\"Dann ernenne ich dich zum MONDWÄCHTER!\"",
+        "Von nun an hilft Toto, den Mond zum Leuchten zu bringen.",
+        "Jede Nacht winkt er seiner Familie auf der Erde zu.",
+        "Und wenn du genau hinschaust, siehst du ihn vielleicht!"
+      ],
+      "transition": "magic",
+      "choices": [
+        { "text": "🌟 ENDE - Der Mondwächter", "nextSceneId": "credits" }
+      ]
+    },
+
+    {
+      "id": "ending_home",
+      "background": "SunnyFarm",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 80 },
+        { "sprite": "Owl", "position": "right", "size": 60 }
+      ],
+      "dialogue": [
+        "Toto fliegt sanft zurück zur Erde.",
+        "Er landet in seinem Bett - als wäre nichts passiert.",
+        "Aber Luna ist noch da! \"Das war kein Traum, kleiner Held.\"",
+        "Von nun an schaut Toto jede Nacht zum Mond.",
+        "Und der Mond zwinkert ihm zu.",
+        "Manchmal, wenn er ganz fest wünscht, besucht er seinen Freund wieder."
+      ],
+      "transition": "fade",
+      "choices": [
+        { "text": "🌟 ENDE - Freunde für immer", "nextSceneId": "credits" }
+      ]
+    },
+
+    {
+      "id": "ending_visit",
+      "background": "SunnyFarm",
+      "characters": [
+        { "sprite": "Boy", "position": "left", "size": 70 },
+        { "sprite": "Wizard", "position": "right", "size": 90 }
+      ],
+      "dialogue": [
+        "\"Du möchtest, dass ICH zur Erde komme?\"",
+        "Der Mann im Mond lacht. \"Das habe ich noch nie gemacht!\"",
+        "Aber für seinen besten Freund tut er es!",
+        "Von nun an besucht der Mann im Mond Toto jeden Vollmond.",
+        "Sie essen zusammen Mondkuchen und erzählen Geschichten.",
+        "Und die ganze Welt wundert sich, warum der Vollmond so hell lacht."
+      ],
+      "transition": "magic",
+      "choices": [
+        { "text": "🌟 ENDE - Besuch vom Mond", "nextSceneId": "credits" }
+      ]
+    },
+
+    {
+      "id": "ending_secret",
+      "background": "OuterSpace",
+      "characters": [
+        { "sprite": "Boy", "position": "center", "size": 90 },
+        { "sprite": "Star", "position": "left", "size": 70 },
+        { "sprite": "Ghost", "position": "right", "size": 70 }
+      ],
+      "dialogue": [
+        "Die Sternenfeder und der Schattenfunken beginnen zu leuchten!",
+        "Stella und Nox erscheinen!",
+        "\"Du hast uns alle zu Freunden gemacht\", sagt Stella.",
+        "\"Licht und Dunkelheit, Sterne und Mond\", fügt Nox hinzu.",
+        "Zusammen erschaffen sie etwas Magisches...",
+        "Ein neuer Stern am Himmel - TOTOS STERN!",
+        "Von nun an leuchtet er jede Nacht neben dem Mond."
+      ],
+      "transition": "magic",
+      "choices": [
+        { "text": "🌟 GEHEIMES ENDE - Totos Stern", "nextSceneId": "credits" }
+      ]
+    },
+
+    {
+      "id": "credits",
+      "background": "OuterSpace",
+      "characters": [],
+      "dialogue": [
+        "✨ TOTO UND DER MANN IM MOND ✨",
+        "Eine Geschichte über Mut, Freundschaft und die Magie der Nacht.",
+        "Danke fürs Spielen!",
+        "Schau heute Nacht zum Himmel - vielleicht winkt dir jemand zu! 🌙"
+      ],
+      "transition": "fade"
+    }
+  ]
+}

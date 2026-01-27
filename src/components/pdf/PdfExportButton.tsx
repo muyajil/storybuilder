@@ -8,8 +8,8 @@ import { useState, useRef, useCallback } from 'react';
 import type { StoryJson } from '../story/StorySchema';
 import { SceneCapture } from './SceneCapture';
 import type { SceneCaptureHandle } from './SceneCapture';
-import { generatePdf, downloadPdf } from './pdfGenerator';
-import type { PdfProgress } from './pdfGenerator';
+import { generatePdf, downloadPdf, QUALITY_PRESETS } from './pdfGenerator';
+import type { PdfProgress, QualityPreset } from './pdfGenerator';
 
 interface PdfExportButtonProps {
   story: StoryJson;
@@ -21,6 +21,7 @@ export function PdfExportButton({ story, llmApiEndpoint, llmApiKey }: PdfExportB
   const [isExporting, setIsExporting] = useState(false);
   const [progress, setProgress] = useState<PdfProgress | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [selectedQuality, setSelectedQuality] = useState<QualityPreset>('balanced');
   const sceneCaptureRef = useRef<SceneCaptureHandle>(null);
 
   const handleExport = useCallback(async () => {
@@ -39,7 +40,8 @@ export function PdfExportButton({ story, llmApiEndpoint, llmApiKey }: PdfExportB
         sceneCaptureRef.current,
         setProgress,
         llmApiEndpoint,
-        llmApiKey
+        llmApiKey,
+        QUALITY_PRESETS[selectedQuality]
       );
 
       // Generate filename from story title
@@ -60,7 +62,7 @@ export function PdfExportButton({ story, llmApiEndpoint, llmApiKey }: PdfExportB
       setIsExporting(false);
       setProgress(null);
     }
-  }, [story, llmApiEndpoint, llmApiKey]);
+  }, [story, llmApiEndpoint, llmApiKey, selectedQuality]);
 
   const progressPercent = progress
     ? Math.round((progress.current / progress.total) * 100)
@@ -71,41 +73,65 @@ export function PdfExportButton({ story, llmApiEndpoint, llmApiKey }: PdfExportB
       {/* Hidden scene capture component */}
       <SceneCapture ref={sceneCaptureRef} />
 
-      {/* Export button */}
-      <button
-        onClick={handleExport}
-        disabled={isExporting}
-        style={{
-          padding: '8px 16px',
-          fontSize: 14,
-          backgroundColor: isExporting ? '#666' : '#4f46e5',
-          color: 'white',
-          border: 'none',
-          borderRadius: 8,
-          cursor: isExporting ? 'not-allowed' : 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          transition: 'all 0.2s',
-          fontWeight: 500,
-        }}
-        onMouseEnter={(e) => {
-          if (!isExporting) {
-            e.currentTarget.style.backgroundColor = '#6366f1';
-            e.currentTarget.style.transform = 'scale(1.02)';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!isExporting) {
-            e.currentTarget.style.backgroundColor = '#4f46e5';
-            e.currentTarget.style.transform = 'scale(1)';
-          }
-        }}
-        title="Geschichte als PDF-Buch exportieren"
-      >
-        <span style={{ fontSize: 16 }}>📖</span>
-        <span>{isExporting ? 'Exportiere...' : 'PDF Buch'}</span>
-      </button>
+      {/* Quality selector and export button container */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {/* Quality selector */}
+        <select
+          value={selectedQuality}
+          onChange={(e) => setSelectedQuality(e.target.value as QualityPreset)}
+          disabled={isExporting}
+          style={{
+            padding: '8px 12px',
+            fontSize: 14,
+            backgroundColor: '#2d2d5a',
+            color: 'white',
+            border: '1px solid #4f46e5',
+            borderRadius: 8,
+            cursor: 'pointer',
+            marginRight: 8,
+          }}
+        >
+          <option value="print">Hoch (Druck)</option>
+          <option value="balanced">Normal</option>
+          <option value="fast">Schnell (Vorschau)</option>
+        </select>
+
+        {/* Export button */}
+        <button
+          onClick={handleExport}
+          disabled={isExporting}
+          style={{
+            padding: '8px 16px',
+            fontSize: 14,
+            backgroundColor: isExporting ? '#666' : '#4f46e5',
+            color: 'white',
+            border: 'none',
+            borderRadius: 8,
+            cursor: isExporting ? 'not-allowed' : 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            transition: 'all 0.2s',
+            fontWeight: 500,
+          }}
+          onMouseEnter={(e) => {
+            if (!isExporting) {
+              e.currentTarget.style.backgroundColor = '#6366f1';
+              e.currentTarget.style.transform = 'scale(1.02)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isExporting) {
+              e.currentTarget.style.backgroundColor = '#4f46e5';
+              e.currentTarget.style.transform = 'scale(1)';
+            }
+          }}
+          title="Geschichte als PDF-Buch exportieren"
+        >
+          <span style={{ fontSize: 16 }}>📖</span>
+          <span>{isExporting ? 'Exportiere...' : 'PDF Buch'}</span>
+        </button>
+      </div>
 
       {/* Progress Modal */}
       {isExporting && (

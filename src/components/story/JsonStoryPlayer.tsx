@@ -226,6 +226,7 @@ function transformMiniGame(miniGame: MiniGameJson): MiniGameConfig | undefined {
           playerSprite,
           obstacleTopSprite: obstacleTop,
           obstacleBottomSprite: obstacleBottom,
+          pointsToWin: miniGame.targetScore || 5,
         }),
         instructions: miniGame.instructions || `Erreiche ${miniGame.targetScore || 5} Punkte!`,
       };

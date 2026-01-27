@@ -1,11 +1,20 @@
 /**
- * SPRITE-BIBLIOTHEK / SPRITE LIBRARY
- * ===================================
- * Fertige SVG-Sprites für Spiele!
- * Ready-made SVG sprites for games!
+ * Sprite Components
+ * =================
+ * All sprite components organized by category.
  */
 
-export * from './Animals';
-export * from './Characters';
-export * from './Environment';
-export * from './Effects';
+// Types
+export * from './types';
+
+// Animals
+export * from './animals';
+
+// Characters
+export * from './characters';
+
+// Effects
+export * from './effects';
+
+// Environment
+export * from './environment';

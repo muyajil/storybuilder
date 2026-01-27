@@ -8,10 +8,10 @@
 import type { ComponentType } from 'react';
 
 // Import all sprites
-import * as Animals from '../sprites/Animals';
-import * as Characters from '../sprites/Characters';
-import * as Environment from '../sprites/Environment';
-import * as Effects from '../sprites/Effects';
+import * as Animals from '../sprites/animals';
+import * as Characters from '../sprites/characters';
+import * as Environment from '../sprites/environment';
+import * as Effects from '../sprites/effects';
 
 // Import all backgrounds (from SceneTemplates)
 import * as SceneTemplates from './SceneTemplates';

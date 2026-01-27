@@ -21,7 +21,7 @@ import {
   Cloud,
   Snowfall,
   Fence,
-} from '../sprites/Environment';
+} from '../sprites/environment';
 
 /**
  * SZENEN-VORLAGEN / SCENE TEMPLATES

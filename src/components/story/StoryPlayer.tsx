@@ -195,7 +195,7 @@ export interface StoryBuildContext {
   /** Fehlende Szenen-ID (wenn Knopf zu nicht-existierender Szene führt) / Missing scene ID */
   missingSceneId?: string;
   /** Art der Anfrage / Type of request */
-  requestType: 'add_choice' | 'add_scene' | 'continue_here' | 'add_challenge' | 'add_minigame';
+  requestType: 'add_scene';
   /** Zusätzlicher Kontext / Additional context */
   message: string;
 }
@@ -758,27 +758,11 @@ export function StoryPlayer({
               setWrongItemFeedback(`Wähle erst: ${requiredItems.map(i => formatItemName(i)).join(', ')}`);
               setTimeout(() => setWrongItemFeedback(null), 2000);
             }}
-            onAddChoice={onStoryBuildRequest ? () => {
+            onAddElement={onStoryBuildRequest ? () => {
               onStoryBuildRequest({
                 currentSceneId: currentSceneId!,
-                requestType: 'add_choice',
-                message: `Hey! Das Kind möchte bei "${currentSceneId}" eine neue Auswahl hinzufügen. Was soll passieren?`,
-              });
-              setShowChoices(false);
-            } : undefined}
-            onAddChallenge={onStoryBuildRequest ? () => {
-              onStoryBuildRequest({
-                currentSceneId: currentSceneId!,
-                requestType: 'add_challenge',
-                message: `Cool! Das Kind will ein Suchspiel bei "${currentSceneId}" einbauen! Was soll versteckt werden?`,
-              });
-              setShowChoices(false);
-            } : undefined}
-            onAddMiniGame={onStoryBuildRequest ? () => {
-              onStoryBuildRequest({
-                currentSceneId: currentSceneId!,
-                requestType: 'add_minigame',
-                message: `Super! Das Kind will ein Mini-Spiel bei "${currentSceneId}"! Welche Art: Sammeln, Ausweichen, Fangen, Klicken, Snake, Rennen oder Flappy?`,
+                requestType: 'add_scene',
+                message: `Das Kind ist bei "${currentSceneId}" und will die Geschichte erweitern! Frag das Kind was es hinzufügen möchte: Neue Szene, Such-Spiel, oder Mini-Spiel?`,
               });
               setShowChoices(false);
             } : undefined}
@@ -825,78 +809,42 @@ export function StoryPlayer({
             >
               ➡️ Hier weiter
             </button>
-            {/* Build options when callback provided */}
+            {/* Build option when callback provided */}
             {onStoryBuildRequest && (
-              <div style={{ display: 'flex', gap: 12 }}>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onStoryBuildRequest({
-                      currentSceneId: currentSceneId!,
-                      requestType: 'continue_here',
-                      message: `Das Kind ist bei "${currentSceneId}" und will die Geschichte hier weiterbauen! Wie soll's weitergehen?`,
-                    });
-                    setShowContinueButton(false);
-                  }}
-                  style={{
-                    padding: '10px 20px',
-                    fontSize: 14,
-                    backgroundColor: '#9C27B0',
-                    color: 'white',
-                    border: '2px solid #E1BEE7',
-                    borderRadius: 8,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    transition: 'all 0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#AB47BC';
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#9C27B0';
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
-                >
-                  ✨ Hier ausbauen
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onStoryBuildRequest({
-                      currentSceneId: currentSceneId!,
-                      requestType: 'add_choice',
-                      message: `Das Kind möchte Entscheidungen bei "${currentSceneId}" einbauen! Was für Optionen soll es geben?`,
-                    });
-                    setShowContinueButton(false);
-                  }}
-                  style={{
-                    padding: '10px 20px',
-                    fontSize: 14,
-                    backgroundColor: '#2196F3',
-                    color: 'white',
-                    border: '2px solid #BBDEFB',
-                    borderRadius: 8,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    transition: 'all 0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#42A5F5';
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#2196F3';
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
-                >
-                  ➕ Entscheidungen
-                </button>
-              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onStoryBuildRequest({
+                    currentSceneId: currentSceneId!,
+                    requestType: 'add_scene',
+                    message: `Das Kind ist bei "${currentSceneId}" und will die Geschichte erweitern! Frag das Kind was es hinzufügen möchte: Neue Szene, Such-Spiel, oder Mini-Spiel?`,
+                  });
+                  setShowContinueButton(false);
+                }}
+                style={{
+                  padding: '10px 24px',
+                  fontSize: 14,
+                  backgroundColor: '#9C27B0',
+                  color: 'white',
+                  border: '2px solid #E1BEE7',
+                  borderRadius: 8,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#AB47BC';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#9C27B0';
+                  e.currentTarget.style.transform = 'scale(1)';
+                }}
+              >
+                ➕ Neue Szene
+              </button>
             )}
           </div>
         )}
@@ -1403,12 +1351,8 @@ interface ChoicesPanelProps {
   storyContext: StoryContext;
   selectedItem: string | null;
   onNeedItem: (requiredItems: string[]) => void;
-  /** Callback um neue Auswahl hinzuzufügen / Callback to add new choice */
-  onAddChoice?: () => void;
-  /** Callback um Herausforderung hinzuzufügen / Callback to add challenge */
-  onAddChallenge?: () => void;
-  /** Callback um Mini-Spiel hinzuzufügen / Callback to add mini-game */
-  onAddMiniGame?: () => void;
+  /** Callback um neue Elemente hinzuzufügen / Callback to add new elements */
+  onAddElement?: () => void;
 }
 
 /** Prüft ob eine Wahl verfügbar ist (ohne Items - die werden separat geprüft) */
@@ -1451,7 +1395,7 @@ function isCorrectItemSelected(choice: StoryChoice, selectedItem: string | null)
   return choice.requiresItems.includes(selectedItem);
 }
 
-function ChoicesPanel({ choices, onChoice, storyContext, selectedItem, onNeedItem, onAddChoice, onAddChallenge, onAddMiniGame }: ChoicesPanelProps) {
+function ChoicesPanel({ choices, onChoice, storyContext, selectedItem, onNeedItem, onAddElement }: ChoicesPanelProps) {
   // Process choices
   const processedChoices = choices.map(choice => {
     const baseAvailable = isChoiceAvailableWithoutItems(choice, storyContext);
@@ -1569,77 +1513,35 @@ function ChoicesPanel({ choices, onChoice, storyContext, selectedItem, onNeedIte
         );
       })}
 
-      {/* Builder buttons - subtle, non-intrusive */}
-      {(onAddChoice || onAddChallenge || onAddMiniGame) && (
-        <div style={{
-          display: 'flex',
-          gap: 6,
-          marginTop: 8,
-          justifyContent: 'center',
-          opacity: 0.5,
-          transition: 'opacity 0.2s',
-        }}
-        onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
-        onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.5'; }}
+      {/* Add new scene button */}
+      {onAddElement && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onAddElement(); }}
+          style={{
+            marginTop: 12,
+            padding: '10px 24px',
+            fontSize: 14,
+            backgroundColor: 'rgba(156, 39, 176, 0.8)',
+            color: 'white',
+            border: '2px solid rgba(255, 255, 255, 0.3)',
+            borderRadius: 8,
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(156, 39, 176, 1)';
+            e.currentTarget.style.transform = 'scale(1.05)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(156, 39, 176, 0.8)';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
         >
-          {onAddChoice && (
-            <button
-              onClick={(e) => { e.stopPropagation(); onAddChoice(); }}
-              style={{
-                padding: '4px 8px',
-                fontSize: 11,
-                backgroundColor: 'rgba(156, 39, 176, 0.7)',
-                color: 'white',
-                border: 'none',
-                borderRadius: 4,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(156, 39, 176, 1)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(156, 39, 176, 0.7)'; }}
-            >
-              ➕ Option
-            </button>
-          )}
-          {onAddChallenge && (
-            <button
-              onClick={(e) => { e.stopPropagation(); onAddChallenge(); }}
-              style={{
-                padding: '4px 8px',
-                fontSize: 11,
-                backgroundColor: 'rgba(255, 87, 34, 0.7)',
-                color: 'white',
-                border: 'none',
-                borderRadius: 4,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 87, 34, 1)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 87, 34, 0.7)'; }}
-            >
-              🔍 Suchen
-            </button>
-          )}
-          {onAddMiniGame && (
-            <button
-              onClick={(e) => { e.stopPropagation(); onAddMiniGame(); }}
-              style={{
-                padding: '4px 8px',
-                fontSize: 11,
-                backgroundColor: 'rgba(33, 150, 243, 0.7)',
-                color: 'white',
-                border: 'none',
-                borderRadius: 4,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(33, 150, 243, 1)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(33, 150, 243, 0.7)'; }}
-            >
-              🎮 Spiel
-            </button>
-          )}
-        </div>
+          ➕ Neue Szene
+        </button>
       )}
     </div>
   );
@@ -1648,81 +1550,549 @@ function ChoicesPanel({ choices, onChoice, storyContext, selectedItem, onNeedIte
 /** Gibt ein Emoji für ein Item zurück */
 function getItemEmoji(item: string): string {
   const emojiMap: Record<string, string> = {
-    // Keys & Locks
-    'golden_key': '🔑', 'key': '🔑', 'lock': '🔒', 'unlock': '🔓',
-    // Gems & Treasures
-    'gem': '💎', 'diamond': '💎', 'ruby': '❤️', 'emerald': '💚', 'sapphire': '💙',
-    'treasure': '💰', 'gold': '🪙', 'coin': '🪙', 'money': '💵', 'chest': '📦',
-    'crystal': '🔮', 'pearl': '🫧', 'ring': '💍', 'crown': '👑', 'tiara': '👸',
-    // Weapons & Tools
-    'sword': '⚔️', 'dagger': '🗡️', 'knife': '🔪', 'axe': '🪓', 'hammer': '🔨',
-    'shield': '🛡️', 'bow': '🏹', 'arrow': '➡️', 'spear': '🔱', 'trident': '🔱',
-    'wand': '🪄', 'staff': '🪄', 'rod': '🪄',
-    // Potions & Magic
-    'potion': '🧪', 'elixir': '🧪', 'bottle': '🍾', 'flask': '⚗️',
-    'magic': '✨', 'spell': '📜', 'scroll': '📜', 'orb': '🔮',
-    // Maps & Navigation
-    'map': '🗺️', 'compass': '🧭', 'telescope': '🔭',
-    // Light & Fire
-    'lantern': '🏮', 'lamp': '🪔', 'torch': '🔦', 'candle': '🕯️',
-    'fire': '🔥', 'flame': '🔥', 'match': '🔥',
-    // Tools
-    'rope': '🪢', 'chain': '⛓️', 'hook': '🪝', 'anchor': '⚓',
-    'wrench': '🔧', 'screwdriver': '🪛', 'gear': '⚙️', 'nut': '🔩',
-    'shovel': '🪴', 'pick': '⛏️', 'saw': '🪚',
-    // Books & Knowledge
-    'book': '📖', 'journal': '📔', 'notebook': '📓', 'letter': '✉️',
-    'note': '📝', 'paper': '📄', 'parchment': '📜',
-    // Food & Drinks
-    'apple': '🍎', 'bread': '🍞', 'cake': '🎂', 'cookie': '🍪',
-    'cheese': '🧀', 'meat': '🍖', 'fish': '🐟', 'mushroom': '🍄',
-    'berry': '🫐', 'grape': '🍇', 'banana': '🍌', 'orange': '🍊',
-    'water': '💧', 'milk': '🥛', 'honey': '🍯', 'soup': '🍲',
-    // Nature
-    'flower': '🌸', 'rose': '🌹', 'leaf': '🍃', 'herb': '🌿',
-    'seed': '🌱', 'acorn': '🌰', 'feather': '🪶', 'shell': '🐚',
-    'stone': '🪨', 'rock': '🪨', 'sand': '🏖️', 'dirt': '🟤',
-    'wood': '🪵', 'stick': '🪵', 'branch': '🌳', 'log': '🪵',
-    // Animals & Parts
-    'bone': '🦴', 'skull': '💀', 'tooth': '🦷', 'claw': '🦎',
-    'scale': '🐉', 'wing': '🪽', 'egg': '🥚', 'nest': '🪺',
-    'horn': '📯', 'tail': '🦊', 'fur': '🐻', 'wool': '🐑',
-    // Clothing & Accessories
-    'hat': '🎩', 'cap': '🧢', 'helmet': '⛑️', 'boot': '👢',
-    'shoe': '👟', 'glove': '🧤', 'cloak': '🧥', 'robe': '👘',
-    'belt': '🎗️', 'bag': '👜', 'backpack': '🎒', 'sack': '💰',
-    'glasses': '👓', 'mask': '🎭', 'scarf': '🧣',
-    // Music & Art
-    'flute': '🎵', 'drum': '🥁', 'bell': '🔔', 'harp': '🎵',
-    'paint': '🎨', 'brush': '🖌️', 'canvas': '🖼️', 'statue': '🗿',
-    // Building
-    'brick': '🧱', 'plank': '🪵', 'nail': '🔩', 'wire': '🔌',
-    'glass': '🪟', 'door': '🚪', 'window': '🪟', 'ladder': '🪜',
-    // Time & Weather
-    'clock': '⏰', 'hourglass': '⏳', 'sundial': '☀️',
-    'snowflake': '❄️', 'raindrop': '💧', 'lightning': '⚡', 'wind': '💨',
-    // Space & Stars
-    'star': '⭐', 'moon': '🌙', 'sun': '☀️', 'planet': '🪐', 'meteor': '☄️',
-    // Hearts & Love
-    'heart': '❤️', 'love': '💕', 'charm': '💝',
-    // Special
-    'ticket': '🎫', 'token': '🎰', 'badge': '📛', 'medal': '🏅',
-    'trophy': '🏆', 'flag': '🚩', 'banner': '🏴',
-    'puzzle': '🧩', 'dice': '🎲', 'card': '🃏', 'joker': '🃏',
-    'balloon': '🎈', 'gift': '🎁', 'present': '🎁',
-    'camera': '📷', 'photo': '🖼️', 'mirror': '🪞',
-    'umbrella': '☂️', 'fan': '🪭', 'broom': '🧹', 'bucket': '🪣',
-    'magnet': '🧲', 'battery': '🔋', 'bulb': '💡',
+    // === SKY & SPACE / HIMMEL & WELTRAUM ===
+    'star': '⭐', 'stern': '⭐', 'sterne': '⭐', 'sternen': '⭐',
+    'starlight': '🌟', 'sternenlicht': '🌟', 'stardust': '✨', 'sternenstaub': '✨',
+    'starfeather': '🪶', 'sternenfeder': '🪶',
+    'shootingstar': '🌠', 'sternschnuppe': '🌠', 'fallingstar': '🌠',
+    'constellation': '✨', 'sternbild': '✨',
+    'moon': '🌙', 'mond': '🌙', 'moonlight': '🌙', 'mondlicht': '🌙',
+    'moonstone': '💎', 'mondstein': '💎', 'moonstone1': '💎', 'mondstein1': '💎',
+    'moonstone2': '💎', 'mondstein2': '💎', 'moonstone3': '💎', 'mondstein3': '💎',
+    'moondust': '🌟', 'mondstaub': '🌟', 'moonbeam': '🌙', 'mondstrahl': '🌙',
+    'fullmoon': '🌕', 'vollmond': '🌕', 'halfmoon': '🌓', 'halbmond': '🌓',
+    'newmoon': '🌑', 'neumond': '🌑', 'crescent': '🌙', 'mondsichel': '🌙',
+    'sun': '☀️', 'sonne': '☀️', 'sunlight': '☀️', 'sonnenlicht': '☀️',
+    'sunray': '🌞', 'sonnenstrahl': '🌞', 'sunshine': '🌞', 'sonnenschein': '🌞',
+    'sunrise': '🌅', 'sonnenaufgang': '🌅', 'sunset': '🌇', 'sonnenuntergang': '🌇',
+    'cloud': '☁️', 'wolke': '☁️', 'clouds': '☁️', 'wolken': '☁️',
+    'rainbow': '🌈', 'regenbogen': '🌈', 'aurora': '🌌', 'nordlicht': '🌌',
+    'lightning': '⚡', 'blitz': '⚡', 'thunder': '⚡', 'donner': '⚡',
+    'bolt': '⚡', 'thunderbolt': '⚡', 'blitzschlag': '⚡',
+    'planet': '🪐', 'planets': '🪐', 'planeten': '🪐',
+    'comet': '☄️', 'komet': '☄️', 'asteroid': '☄️',
+    'rocket': '🚀', 'rakete': '🚀', 'spaceship': '🚀', 'raumschiff': '🚀',
+    'ufo': '🛸', 'alien': '👽', 'satellite': '🛰️', 'satellit': '🛰️',
+    'galaxy': '🌌', 'galaxie': '🌌', 'milkyway': '🌌', 'milchstrasse': '🌌',
+    'shadow': '👤', 'schatten': '👤', 'shadowspark': '🔮', 'schattenfunke': '🔮',
+    'darkness': '🌑', 'dunkelheit': '🌑', 'dark': '🌑', 'dunkel': '🌑',
+    'night': '🌙', 'nacht': '🌙', 'nightsky': '🌌', 'nachthimmel': '🌌',
+    'sky': '🌤️', 'himmel': '🌤️', 'horizon': '🌅', 'horizont': '🌅',
+
+    // === NATURE / NATUR ===
+    'tree': '🌳', 'baum': '🌳', 'trees': '🌲', 'baeume': '🌲',
+    'oak': '🌳', 'eiche': '🌳', 'pine': '🌲', 'kiefer': '🌲', 'fir': '🌲', 'tanne': '🌲',
+    'palm': '🌴', 'palme': '🌴', 'bamboo': '🎋', 'bambus': '🎋',
+    'leaf': '🍃', 'blatt': '🍃', 'leaves': '🍂', 'blaetter': '🍂',
+    'mapleleaf': '🍁', 'ahornblatt': '🍁', 'fallenleaf': '🍂', 'herbstblatt': '🍂',
+    'flower': '🌸', 'blume': '🌸', 'flowers': '💐', 'blumen': '💐',
+    'rose': '🌹', 'roses': '🌹', 'rosen': '🌹',
+    'sunflower': '🌻', 'sonnenblume': '🌻', 'tulip': '🌷', 'tulpe': '🌷',
+    'cherryblossom': '🌸', 'kirschbluete': '🌸', 'blossom': '🌸', 'bluete': '🌸',
+    'lotus': '🪷', 'hibiscus': '🌺', 'hibiskus': '🌺',
+    'daisy': '🌼', 'gaensebluemchen': '🌼', 'bouquet': '💐', 'strauss': '💐',
+    'grass': '🌿', 'gras': '🌿', 'herb': '🌿', 'kraut': '🌿', 'herbs': '🌿', 'kraeuter': '🌿',
+    'clover': '🍀', 'klee': '🍀', 'fourleaf': '🍀', 'kleeblatt': '🍀', 'shamrock': '☘️',
+    'mushroom': '🍄', 'pilz': '🍄', 'mushrooms': '🍄', 'pilze': '🍄',
+    'cactus': '🌵', 'kaktus': '🌵', 'vine': '🌿', 'ranke': '🌿', 'ivy': '🌿', 'efeu': '🌿',
+    'seed': '🌱', 'samen': '🌱', 'seeds': '🌱', 'saatgut': '🌱',
+    'seedling': '🌱', 'saemling': '🌱', 'sprout': '🌱', 'spross': '🌱',
+    'acorn': '🌰', 'eichel': '🌰', 'nut': '🌰', 'nuss': '🌰', 'nuts': '🥜', 'nuesse': '🥜',
+    'chestnut': '🌰', 'kastanie': '🌰', 'peanut': '🥜', 'erdnuss': '🥜',
+    'wood': '🪵', 'holz': '🪵', 'log': '🪵', 'baumstamm': '🪵',
+    'stick': '🪵', 'stock': '🪵', 'branch': '🌳', 'ast': '🌳', 'twig': '🌿', 'zweig': '🌿',
+    'root': '🌱', 'wurzel': '🌱', 'roots': '🌱', 'wurzeln': '🌱',
+    'bark': '🪵', 'rinde': '🪵', 'moss': '🌿', 'moos': '🌿', 'lichen': '🌿', 'flechte': '🌿',
+    'stone': '🪨', 'stein': '🪨', 'rock': '🪨', 'fels': '🪨', 'rocks': '🪨', 'felsen': '🪨',
+    'boulder': '🪨', 'felsbrocken': '🪨', 'pebble': '⚪', 'kiesel': '⚪',
+    'sand': '🏖️', 'dirt': '🟤', 'erde': '🟤', 'soil': '🟤', 'boden': '🟤',
+    'clay': '🟤', 'lehm': '🟤', 'mud': '🟤', 'schlamm': '🟤',
+    'mountain': '⛰️', 'berg': '⛰️', 'mountains': '🏔️', 'berge': '🏔️',
+    'volcano': '🌋', 'vulkan': '🌋', 'hill': '🏔️', 'huegel': '🏔️',
+    'valley': '🏞️', 'tal': '🏞️', 'canyon': '🏜️', 'schlucht': '🏜️',
+    'river': '🌊', 'fluss': '🌊', 'stream': '💧', 'bach': '💧',
+    'lake': '🏞️', 'see': '🏞️', 'pond': '🏞️', 'teich': '🏞️',
+    'ocean': '🌊', 'ozean': '🌊', 'sea': '🌊', 'meer': '🌊',
+    'wave': '🌊', 'welle': '🌊', 'waves': '🌊', 'wellen': '🌊',
+    'waterfall': '🌊', 'wasserfall': '🌊', 'spring': '💧', 'quelle': '💧',
+    'forest': '🌲', 'wald': '🌲', 'woods': '🌳', 'gehoelz': '🌳',
+    'jungle': '🌴', 'dschungel': '🌴', 'rainforest': '🌴', 'regenwald': '🌴',
+    'meadow': '🌿', 'wiese': '🌿', 'field': '🌾', 'feld': '🌾',
+    'garden': '🌷', 'garten': '🌷', 'park': '🌳',
+    'desert': '🏜️', 'wueste': '🏜️', 'oasis': '🏝️', 'oase': '🏝️',
+    'island': '🏝️', 'insel': '🏝️', 'beach': '🏖️', 'strand': '🏖️',
+    'cave': '🕳️', 'hoehle': '🕳️', 'grotto': '🕳️', 'grotte': '🕳️',
+    'feather': '🪶', 'feder': '🪶', 'feathers': '🪶', 'federn': '🪶',
+    'fur': '🐻', 'fell': '🐻', 'pelt': '🐻', 'pelz': '🐻',
+    'wool': '🐑', 'wolle': '🐑', 'leather': '🦎', 'leder': '🦎',
+    'shell': '🐚', 'muschel': '🐚', 'shells': '🐚', 'muscheln': '🐚',
+    'pearl': '🫧', 'perle': '🫧', 'pearls': '🫧', 'perlen': '🫧',
+    'coral': '🪸', 'koralle': '🪸', 'seaweed': '🌿', 'alge': '🌿',
+
+    // === ANIMALS / TIERE ===
+    'animal': '🐾', 'tier': '🐾', 'animals': '🐾', 'tiere': '🐾',
+    'paw': '🐾', 'pfote': '🐾', 'paws': '🐾', 'pfoten': '🐾',
+    'dog': '🐕', 'hund': '🐕', 'puppy': '🐶', 'welpe': '🐶',
+    'cat': '🐈', 'katze': '🐈', 'kitten': '🐱', 'kaetzchen': '🐱',
+    'mouse': '🐭', 'maus': '🐭', 'mice': '🐭', 'maeuse': '🐭',
+    'rat': '🐀', 'ratte': '🐀', 'hamster': '🐹',
+    'rabbit': '🐰', 'hase': '🐰', 'bunny': '🐰', 'kaninchen': '🐰',
+    'squirrel': '🐿️', 'eichhoernchen': '🐿️',
+    'bird': '🐦', 'vogel': '🐦', 'birds': '🐦', 'voegel': '🐦',
+    'owl': '🦉', 'eule': '🦉', 'eagle': '🦅', 'adler': '🦅',
+    'raven': '🐦‍⬛', 'rabe': '🐦‍⬛', 'crow': '🐦‍⬛', 'kraehe': '🐦‍⬛',
+    'swan': '🦢', 'schwan': '🦢', 'duck': '🦆', 'ente': '🦆',
+    'goose': '🦢', 'gans': '🦢', 'penguin': '🐧', 'pinguin': '🐧',
+    'peacock': '🦚', 'pfau': '🦚', 'parrot': '🦜', 'papagei': '🦜',
+    'dove': '🕊️', 'taube': '🕊️', 'seagull': '🐦', 'moewe': '🐦',
+    'sparrow': '🐦', 'spatz': '🐦', 'robin': '🐦', 'rotkehlchen': '🐦',
+    'fish': '🐟', 'fisch': '🐟', 'fishes': '🐠', 'fische': '🐠',
+    'shark': '🦈', 'hai': '🦈', 'whale': '🐋', 'wal': '🐋',
+    'dolphin': '🐬', 'delfin': '🐬', 'octopus': '🐙', 'krake': '🐙',
+    'jellyfish': '🪼', 'qualle': '🪼', 'seahorse': '🐴', 'seepferdchen': '🐴',
+    'starfish': '⭐', 'seestern': '⭐', 'crab': '🦀', 'krabbe': '🦀',
+    'lobster': '🦞', 'hummer': '🦞', 'shrimp': '🦐', 'garnele': '🦐',
+    'horse': '🐴', 'pferd': '🐴', 'pony': '🐴',
+    'unicorn': '🦄', 'einhorn': '🦄',
+    'donkey': '🫏', 'esel': '🫏', 'zebra': '🦓',
+    'cow': '🐄', 'kuh': '🐄', 'ox': '🐂', 'ochse': '🐂', 'bull': '🐂', 'stier': '🐂',
+    'sheep': '🐑', 'schaf': '🐑', 'lamb': '🐑', 'lamm': '🐑',
+    'goat': '🐐', 'ziege': '🐐', 'pig': '🐷', 'schwein': '🐷',
+    'chicken': '🐔', 'huhn': '🐔', 'hen': '🐔', 'henne': '🐔',
+    'rooster': '🐓', 'hahn': '🐓', 'chick': '🐤', 'kueken': '🐤',
+    'turkey': '🦃', 'truthahn': '🦃',
+    'wolf': '🐺', 'fox': '🦊', 'fuchs': '🦊',
+    'bear': '🐻', 'baer': '🐻', 'polarbear': '🐻‍❄️', 'eisbaer': '🐻‍❄️',
+    'panda': '🐼', 'koala': '🐨',
+    'lion': '🦁', 'loewe': '🦁', 'tiger': '🐯',
+    'leopard': '🐆', 'cheetah': '🐆', 'gepard': '🐆',
+    'elephant': '🐘', 'elefant': '🐘', 'giraffe': '🦒',
+    'hippo': '🦛', 'nilpferd': '🦛', 'rhino': '🦏', 'nashorn': '🦏',
+    'monkey': '🐵', 'affe': '🐵', 'gorilla': '🦍', 'chimp': '🐒', 'schimpanse': '🐒',
+    'deer': '🦌', 'hirsch': '🦌', 'reh': '🦌', 'moose': '🫎', 'elch': '🫎',
+    'camel': '🐫', 'kamel': '🐫', 'llama': '🦙', 'lama': '🦙',
+    'kangaroo': '🦘', 'kaenguru': '🦘', 'sloth': '🦥', 'faultier': '🦥',
+    'dragon': '🐉', 'drache': '🐉', 'dragons': '🐉', 'drachen': '🐉',
+    'snake': '🐍', 'schlange': '🐍', 'serpent': '🐍',
+    'lizard': '🦎', 'echse': '🦎', 'gecko': '🦎', 'iguana': '🦎',
+    'frog': '🐸', 'frosch': '🐸', 'toad': '🐸', 'kroete': '🐸',
+    'turtle': '🐢', 'schildkroete': '🐢', 'tortoise': '🐢',
+    'crocodile': '🐊', 'krokodil': '🐊', 'alligator': '🐊',
+    'dinosaur': '🦕', 'dinosaurier': '🦕', 'dino': '🦕', 'trex': '🦖',
+    'spider': '🕷️', 'spinne': '🕷️', 'web': '🕸️', 'spinnennetz': '🕸️',
+    'bee': '🐝', 'biene': '🐝', 'honeybee': '🐝', 'honigbiene': '🐝',
+    'butterfly': '🦋', 'schmetterling': '🦋',
+    'beetle': '🪲', 'kaefer': '🪲', 'ladybug': '🐞', 'marienkaefer': '🐞',
+    'caterpillar': '🐛', 'raupe': '🐛', 'ant': '🐜', 'ameise': '🐜',
+    'snail': '🐌', 'schnecke': '🐌', 'worm': '🪱', 'wurm': '🪱',
+    'dragonfly': '🪰', 'libelle': '🪰', 'firefly': '✨', 'gluehwuermchen': '✨',
+    'scorpion': '🦂', 'skorpion': '🦂',
+    'bone': '🦴', 'knochen': '🦴', 'bones': '🦴',
+    'skull': '💀', 'schaedel': '💀', 'skeleton': '💀', 'skelett': '💀',
+    'tooth': '🦷', 'zahn': '🦷', 'teeth': '🦷', 'zaehne': '🦷', 'fang': '🦷',
+    'claw': '🦎', 'kralle': '🦎', 'claws': '🦎', 'krallen': '🦎',
+    'scale': '🐉', 'schuppe': '🐉', 'scales': '🐉', 'schuppen': '🐉',
+    'wing': '🪽', 'fluegel': '🪽', 'wings': '🪽',
+    'tail': '🦊', 'schwanz': '🦊', 'horn': '📯', 'horns': '📯', 'hoerner': '📯',
+    'egg': '🥚', 'ei': '🥚', 'eggs': '🥚', 'eier': '🥚',
+    'nest': '🪺', 'beak': '🐦', 'schnabel': '🐦',
+    'hoof': '🐴', 'huf': '🐴', 'hooves': '🐴', 'hufe': '🐴',
+    'mane': '🦁', 'maehne': '🦁', 'whisker': '🐱', 'schnurrhaare': '🐱',
+
+    // === MAGIC & FANTASY / MAGIE & FANTASY ===
+    'magic': '✨', 'magie': '✨', 'magical': '✨', 'magisch': '✨',
+    'spell': '📜', 'zauber': '🪄', 'spells': '📜', 'zaubersprueche': '📜',
+    'wand': '🪄', 'zauberstab': '🪄', 'staff': '🪄', 'stab': '🪄',
+    'potion': '🧪', 'trank': '🧪', 'potions': '🧪', 'traenke': '🧪',
+    'elixir': '🧪', 'elixier': '🧪',
+    'spark': '✨', 'funke': '✨', 'sparks': '✨', 'funken': '✨',
+    'sparkle': '✨', 'glitter': '✨', 'glitzer': '✨', 'shimmer': '✨', 'schimmer': '✨',
+    'glow': '🌟', 'leuchten': '🌟', 'shine': '✨', 'schein': '✨',
+    'dust': '✨', 'staub': '✨', 'powder': '✨', 'pulver': '✨',
+    'witch': '🧙‍♀️', 'hexe': '🧙‍♀️', 'witches': '🧙‍♀️', 'hexen': '🧙‍♀️',
+    'wizard': '🧙', 'zauberer': '🧙', 'mage': '🧙', 'magier': '🧙', 'sorcerer': '🧙',
+    'fairy': '🧚', 'fee': '🧚', 'fairies': '🧚', 'feen': '🧚',
+    'elf': '🧝', 'elfe': '🧝', 'elves': '🧝', 'elfen': '🧝',
+    'dwarf': '🧔', 'zwerg': '🧔', 'dwarves': '🧔', 'zwerge': '🧔',
+    'giant': '👹', 'riese': '👹', 'giants': '👹', 'riesen': '👹',
+    'troll': '👹', 'ogre': '👹', 'oger': '👹',
+    'goblin': '👺', 'kobold': '👺', 'goblins': '👺', 'kobolde': '👺',
+    'ghost': '👻', 'geist': '👻', 'ghosts': '👻', 'geister': '👻',
+    'spirit': '👻', 'specter': '👻', 'gespenst': '👻', 'phantom': '👻',
+    'demon': '👿', 'daemon': '👿', 'devil': '😈', 'teufel': '😈',
+    'angel': '👼', 'engel': '👼', 'angels': '👼', 'guardian': '👼', 'schutzengel': '👼',
+    'vampire': '🧛', 'vampir': '🧛', 'werewolf': '🐺', 'werwolf': '🐺',
+    'zombie': '🧟', 'mummy': '🧟', 'mumie': '🧟',
+    'mermaid': '🧜‍♀️', 'meerjungfrau': '🧜‍♀️', 'merman': '🧜‍♂️', 'meermann': '🧜‍♂️',
+    'orb': '🔮', 'kugel': '🔮', 'sphere': '🔮',
+    'crystal': '🔮', 'kristall': '🔮', 'crystals': '🔮', 'kristalle': '🔮',
+    'amulet': '📿', 'amulett': '📿', 'talisman': '🧿',
+    'charm': '💝', 'rune': '🪬', 'runen': '🪬', 'runes': '🪬',
+    'portal': '🌀', 'vortex': '🌀', 'wirbel': '🌀', 'spiral': '🌀', 'spirale': '🌀',
+    'invisible': '👁️', 'unsichtbar': '👁️', 'secret': '🤫', 'geheim': '🤫',
+    'hidden': '🔍', 'versteckt': '🔍', 'mystery': '❓', 'mysterium': '❓',
+    'curse': '☠️', 'fluch': '☠️', 'blessing': '✝️', 'segen': '✝️',
+    'wish': '🌠', 'wunsch': '🌠', 'wishes': '🌠', 'wuensche': '🌠',
+    'dream': '💭', 'traum': '💭', 'dreams': '💭', 'traeume': '💭',
+    'nightmare': '😱', 'albtraum': '😱',
+    'enchanted': '✨', 'verzaubert': '✨', 'cursed': '☠️', 'verflucht': '☠️',
+    'blessed': '✨', 'gesegnet': '✨',
+
+    // === WEAPONS & TOOLS / WAFFEN & WERKZEUGE ===
+    'sword': '⚔️', 'schwert': '⚔️', 'swords': '⚔️', 'schwerter': '⚔️',
+    'blade': '🗡️', 'klinge': '🗡️', 'dagger': '🗡️', 'dolch': '🗡️',
+    'knife': '🔪', 'messer': '🔪', 'knives': '🔪',
+    'axe': '🪓', 'axt': '🪓', 'axes': '🪓', 'aexte': '🪓',
+    'hammer': '🔨', 'mallet': '🔨', 'holzhammer': '🔨',
+    'club': '🏏', 'keule': '🏏', 'mace': '🏏',
+    'shield': '🛡️', 'schild': '🛡️', 'shields': '🛡️', 'schilde': '🛡️',
+    'armor': '🛡️', 'ruestung': '🛡️', 'armour': '🛡️',
+    'bow': '🏹', 'bogen': '🏹', 'crossbow': '🏹', 'armbrust': '🏹',
+    'arrow': '➡️', 'pfeil': '➡️', 'arrows': '➡️', 'pfeile': '➡️',
+    'quiver': '🏹', 'koecher': '🏹',
+    'spear': '🔱', 'speer': '🔱', 'lance': '🔱', 'lanze': '🔱',
+    'trident': '🔱', 'dreizack': '🔱', 'halberd': '⚔️', 'hellebarde': '⚔️',
+    'key': '🔑', 'schluessel': '🔑', 'keys': '🔑',
+    'goldenkey': '🔑', 'goldschluessel': '🔑', 'goldener_schluessel': '🔑',
+    'silverkey': '🗝️', 'silberschluessel': '🗝️',
+    'lock': '🔒', 'schloss': '🔒', 'padlock': '🔐', 'vorhangschloss': '🔐',
+    'unlock': '🔓', 'unlocked': '🔓',
+    'rope': '🪢', 'seil': '🪢', 'ropes': '🪢', 'seile': '🪢',
+    'chain': '⛓️', 'kette': '⛓️', 'chains': '⛓️', 'ketten': '⛓️',
+    'hook': '🪝', 'haken': '🪝', 'hooks': '🪝',
+    'anchor': '⚓', 'anker': '⚓',
+    'shovel': '🪴', 'schaufel': '🪴', 'spade': '♠️',
+    'pickaxe': '⛏️', 'spitzhacke': '⛏️', 'pick': '⛏️',
+    'saw': '🪚', 'saege': '🪚',
+    'wrench': '🔧', 'schraubenschluessel': '🔧', 'screwdriver': '🪛', 'schraubenzieher': '🪛',
+    'pliers': '🔧', 'zange': '🔧',
+    'gear': '⚙️', 'zahnrad': '⚙️', 'gears': '⚙️',
+    'nail': '🔩', 'nagel': '🔩', 'nails': '🔩', 'naegel': '🔩',
+    'screw': '🔩', 'schraube': '🔩', 'screws': '🔩', 'schrauben': '🔩',
+    'bolzen': '🔩',
+    'fishingrod': '🎣', 'angelrute': '🎣', 'fishingpole': '🎣',
+    'net': '🥅', 'netz': '🥅',
+    'trap': '🪤', 'falle': '🪤', 'traps': '🪤', 'fallen': '🪤',
+    'scissors': '✂️', 'schere': '✂️',
+    'needle': '🪡', 'nadel': '🪡', 'thread': '🧵', 'faden': '🧵',
+
+    // === CLOTHING & ACCESSORIES / KLEIDUNG ===
+    'hat': '🎩', 'hut': '🎩', 'hats': '🎩', 'huete': '🎩',
+    'cap': '🧢', 'muetze': '🧢', 'beanie': '🧢',
+    'helmet': '⛑️', 'helm': '⛑️',
+    'crown': '👑', 'krone': '👑', 'crowns': '👑', 'kronen': '👑',
+    'tiara': '👸', 'diadem': '👸',
+    'cloak': '🧥', 'umhang': '🧥', 'cape': '🧥',
+    'coat': '🧥', 'mantel': '🧥', 'jacket': '🧥', 'jacke': '🧥',
+    'robe': '👘', 'dress': '👗', 'kleid': '👗',
+    'shirt': '👔', 'hemd': '👔', 'tunic': '👕',
+    'pants': '👖', 'hose': '👖', 'trousers': '👖',
+    'boot': '👢', 'stiefel': '👢', 'boots': '👢',
+    'shoe': '👟', 'schuh': '👟', 'shoes': '👟', 'schuhe': '👟',
+    'sandal': '🩴', 'sandale': '🩴', 'sandals': '🩴', 'sandalen': '🩴',
+    'sock': '🧦', 'socke': '🧦', 'socks': '🧦', 'socken': '🧦',
+    'glove': '🧤', 'handschuh': '🧤', 'gloves': '🧤', 'handschuhe': '🧤',
+    'ring': '💍', 'rings': '💍', 'ringe': '💍',
+    'bracelet': '📿', 'armband': '📿', 'bracelets': '📿', 'armbaender': '📿',
+    'necklace': '📿', 'halskette': '📿',
+    'pendant': '📿', 'anhaenger': '📿',
+    'earring': '💎', 'ohrring': '💎', 'earrings': '💎', 'ohrringe': '💎',
+    'belt': '🎗️', 'guertel': '🎗️',
+    'bag': '👜', 'tasche': '👜', 'bags': '👜', 'taschen': '👜',
+    'backpack': '🎒', 'rucksack': '🎒',
+    'pouch': '💰', 'beutel': '💰', 'sack': '💰',
+    'purse': '👛', 'geldboerse': '👛', 'wallet': '👛',
+    'glasses': '👓', 'brille': '👓', 'spectacles': '👓',
+    'sunglasses': '🕶️', 'sonnenbrille': '🕶️',
+    'mask': '🎭', 'maske': '🎭', 'masks': '🎭', 'masken': '🎭',
+    'scarf': '🧣', 'schal': '🧣',
+    'hairbow': '🎀', 'schleife': '🎀',
+    'button': '🔘', 'knopf': '🔘', 'buttons': '🔘', 'knoepfe': '🔘',
+
+    // === TREASURES / SCHAETZE ===
+    'gold': '🪙', 'silver': '🥈', 'silber': '🥈',
+    'bronze': '🥉', 'copper': '🟤', 'kupfer': '🟤',
+    'gem': '💎', 'gems': '💎', 'jewel': '💎', 'juwel': '💎', 'jewels': '💎', 'juwelen': '💎',
+    'diamond': '💎', 'diamant': '💎', 'diamonds': '💎', 'diamanten': '💎',
+    'ruby': '❤️', 'rubin': '❤️', 'rubies': '❤️', 'rubine': '❤️',
+    'emerald': '💚', 'smaragd': '💚', 'emeralds': '💚', 'smaragde': '💚',
+    'sapphire': '💙', 'saphir': '💙', 'sapphires': '💙', 'saphire': '💙',
+    'amethyst': '💜', 'topaz': '💛', 'topas': '💛',
+    'opal': '🤍', 'jade': '💚', 'amber': '🟠', 'bernstein': '🟠',
+    'gemstone': '💎', 'edelstein': '💎', 'gemstones': '💎', 'edelsteine': '💎',
+    'treasure': '💰', 'schatz': '💰', 'treasures': '💰', 'schaetze': '💰',
+    'chest': '📦', 'truhe': '📦', 'treasurechest': '📦', 'schatztruhe': '📦',
+    'coin': '🪙', 'muenze': '🪙', 'coins': '🪙', 'muenzen': '🪙',
+    'goldcoin': '🪙', 'goldmuenze': '🪙',
+    'money': '💵', 'geld': '💵', 'cash': '💵',
+    'trophy': '🏆', 'pokal': '🏆', 'trophae': '🏆',
+    'medal': '🏅', 'medaille': '🏅', 'medals': '🏅', 'medaillen': '🏅',
+    'award': '🎖️', 'orden': '🎖️', 'badge': '📛', 'abzeichen': '📛',
+    'prize': '🎁', 'preis': '🎁',
+    'loot': '💰', 'beute': '💰', 'booty': '💰',
+
+    // === FOOD & DRINKS / ESSEN & TRINKEN ===
+    'apple': '🍎', 'apfel': '🍎', 'apples': '🍎', 'aepfel': '🍎',
+    'greenapple': '🍏', 'gruenerapfel': '🍏',
+    'pear': '🍐', 'birne': '🍐', 'orange': '🍊',
+    'lemon': '🍋', 'zitrone': '🍋', 'lime': '🍋', 'limette': '🍋',
+    'banana': '🍌', 'banane': '🍌', 'bananas': '🍌', 'bananen': '🍌',
+    'strawberry': '🍓', 'erdbeere': '🍓', 'strawberries': '🍓', 'erdbeeren': '🍓',
+    'cherry': '🍒', 'kirsche': '🍒', 'cherries': '🍒', 'kirschen': '🍒',
+    'grape': '🍇', 'weintraube': '🍇', 'grapes': '🍇', 'weintrauben': '🍇',
+    'watermelon': '🍉', 'wassermelone': '🍉', 'melon': '🍈', 'melone': '🍈',
+    'peach': '🍑', 'pfirsich': '🍑', 'mango': '🥭',
+    'pineapple': '🍍', 'ananas': '🍍', 'coconut': '🥥', 'kokosnuss': '🥥',
+    'kiwi': '🥝', 'avocado': '🥑', 'tomato': '🍅', 'tomate': '🍅',
+    'blueberry': '🫐', 'blaubeere': '🫐', 'berry': '🫐', 'beere': '🫐',
+    'bread': '🍞', 'brot': '🍞', 'loaf': '🍞', 'laib': '🍞',
+    'croissant': '🥐', 'baguette': '🥖', 'pretzel': '🥨', 'brezel': '🥨',
+    'cake': '🎂', 'kuchen': '🎂', 'pie': '🥧', 'torte': '🥧',
+    'cupcake': '🧁', 'cookie': '🍪', 'keks': '🍪', 'cookies': '🍪', 'kekse': '🍪',
+    'donut': '🍩', 'candy': '🍬', 'suessigkeit': '🍬', 'candies': '🍬', 'suessigkeiten': '🍬',
+    'bonbon': '🍬', 'lollipop': '🍭', 'lutscher': '🍭',
+    'chocolate': '🍫', 'schokolade': '🍫', 'icecream': '🍦', 'eis': '🍦',
+    'cheese': '🧀', 'kaese': '🧀',
+    'meat': '🍖', 'fleisch': '🍖', 'steak': '🥩',
+    'ham': '🥓', 'schinken': '🥓', 'bacon': '🥓',
+    'chickenmeat': '🍗', 'haehnchen': '🍗', 'drumstick': '🍗',
+    'hotdog': '🌭', 'wurst': '🌭', 'sausage': '🌭',
+    'burger': '🍔', 'hamburger': '🍔', 'pizza': '🍕',
+    'taco': '🌮', 'burrito': '🌯', 'fries': '🍟', 'pommes': '🍟',
+    'soup': '🍲', 'suppe': '🍲', 'stew': '🍲', 'eintopf': '🍲',
+    'salad': '🥗', 'salat': '🥗',
+    'rice': '🍚', 'reis': '🍚', 'noodles': '🍜', 'nudeln': '🍜', 'pasta': '🍝',
+    'sushi': '🍣', 'onigiri': '🍙', 'dumpling': '🥟',
+    'carrot': '🥕', 'karotte': '🥕', 'moehre': '🥕',
+    'corn': '🌽', 'mais': '🌽', 'pepper': '🌶️', 'paprika': '🌶️',
+    'broccoli': '🥦', 'brokkoli': '🥦', 'garlic': '🧄', 'knoblauch': '🧄',
+    'onion': '🧅', 'zwiebel': '🧅', 'potato': '🥔', 'kartoffel': '🥔',
+    'eggplant': '🍆', 'aubergine': '🍆', 'cucumber': '🥒', 'gurke': '🥒',
+    'water': '💧', 'wasser': '💧', 'milk': '🥛', 'milch': '🥛',
+    'juice': '🧃', 'saft': '🧃', 'tea': '🍵', 'tee': '🍵',
+    'coffee': '☕', 'kaffee': '☕', 'cocoa': '☕', 'kakao': '☕',
+    'honey': '🍯', 'honig': '🍯', 'jam': '🍯', 'marmelade': '🍯',
+    'butter': '🧈', 'oil': '🫒', 'oel': '🫒',
+    'salt': '🧂', 'salz': '🧂', 'pfeffer': '🌶️',
+    'wine': '🍷', 'wein': '🍷', 'beer': '🍺', 'bier': '🍺',
+    'drink': '🍹', 'getraenk': '🍹', 'cocktail': '🍸',
+    'bottle': '🍾', 'flasche': '🍾', 'flask': '⚗️',
+
+    // === BOOKS & KNOWLEDGE / BUECHER & WISSEN ===
+    'book': '📖', 'buch': '📖', 'books': '📚', 'buecher': '📚',
+    'spellbook': '📖', 'zauberbuch': '📖', 'magicbook': '📖',
+    'diary': '📔', 'tagebuch': '📔', 'journal': '📔',
+    'notebook': '📓', 'notizbuch': '📓',
+    'encyclopedia': '📚', 'lexikon': '📚', 'dictionary': '📚', 'woerterbuch': '📚',
+    'letter': '✉️', 'brief': '✉️', 'letters': '✉️', 'briefe': '✉️',
+    'message': '📝', 'nachricht': '📝',
+    'note': '📝', 'notiz': '📝', 'notes': '📝', 'notizen': '📝',
+    'paper': '📄', 'papier': '📄', 'zettel': '📄',
+    'scroll': '📜', 'pergament': '📜', 'parchment': '📜', 'rolle': '📜',
+    'page': '📄', 'seite': '📄', 'pages': '📄', 'seiten': '📄',
+    'map': '🗺️', 'karte': '🗺️', 'maps': '🗺️', 'karten': '🗺️',
+    'treasuremap': '🗺️', 'schatzkarte': '🗺️',
+    'worldmap': '🗺️', 'weltkarte': '🗺️',
+    'compass': '🧭', 'kompass': '🧭',
+    'telescope': '🔭', 'fernglas': '🔭', 'binoculars': '🔭',
+    'magnifyingglass': '🔍', 'lupe': '🔍', 'magnifier': '🔍',
+    'microscope': '🔬', 'mikroskop': '🔬',
+    'hourglass': '⏳', 'sanduhr': '⏳', 'timer': '⏱️',
+    'clock': '⏰', 'uhr': '⏰', 'watch': '⌚', 'armbanduhr': '⌚',
+    'sundial': '☀️', 'sonnenuhr': '☀️',
+    'calendar': '📅', 'kalender': '📅', 'schedule': '📅',
+    'newspaper': '📰', 'zeitung': '📰',
+    'sign': '🪧', 'verkehrsschild': '🪧', 'signpost': '🪧', 'wegweiser': '🪧',
+
+    // === LIGHT & FIRE / LICHT & FEUER ===
+    'torch': '🔦', 'fackel': '🔦', 'torches': '🔦', 'fackeln': '🔦',
+    'lantern': '🏮', 'laterne': '🏮', 'lanterns': '🏮', 'laternen': '🏮',
+    'lamp': '🪔', 'lampe': '🪔', 'lamps': '🪔', 'lampen': '🪔',
+    'candle': '🕯️', 'kerze': '🕯️', 'candles': '🕯️', 'kerzen': '🕯️',
+    'chandelier': '🕯️', 'kronleuchter': '🕯️',
+    'bulb': '💡', 'gluehbirne': '💡', 'lightbulb': '💡',
+    'light': '💡', 'licht': '💡', 'lights': '💡', 'lichter': '💡',
+    'fire': '🔥', 'feuer': '🔥', 'fires': '🔥',
+    'flame': '🔥', 'flamme': '🔥', 'flames': '🔥', 'flammen': '🔥',
+    'ember': '🔥', 'glut': '🔥', 'embers': '🔥',
+    'ash': '⚫', 'asche': '⚫', 'ashes': '⚫',
+    'smoke': '💨', 'rauch': '💨',
+    'match': '🔥', 'streichholz': '🔥', 'matches': '🔥', 'streichhoelzer': '🔥',
+    'firework': '🎆', 'feuerwerk': '🎆', 'fireworks': '🎆',
+    'sparkler': '🎇', 'wunderkerze': '🎇',
+    'bonfire': '🔥', 'lagerfeuer': '🔥', 'campfire': '🏕️',
+    'ray': '☀️', 'strahl': '☀️', 'rays': '☀️', 'strahlen': '☀️',
+    'beam': '💡', 'lichtstrahl': '💡',
+
+    // === MUSIC & ART / MUSIK & KUNST ===
+    'music': '🎵', 'musik': '🎵',
+    'musicnote': '🎵', 'musicnotes': '🎵', 'noten': '🎵',
+    'flute': '🎵', 'floete': '🎵',
+    'drum': '🥁', 'trommel': '🥁', 'drums': '🥁', 'trommeln': '🥁',
+    'bell': '🔔', 'glocke': '🔔', 'bells': '🔔', 'glocken': '🔔',
+    'harp': '🎵', 'harfe': '🎵',
+    'violin': '🎻', 'geige': '🎻', 'fiddle': '🎻',
+    'guitar': '🎸', 'gitarre': '🎸',
+    'piano': '🎹', 'klavier': '🎹', 'keyboard': '🎹',
+    'trumpet': '🎺', 'trompete': '🎺', 'musikhorn': '📯',
+    'saxophone': '🎷', 'saxophon': '🎷', 'sax': '🎷',
+    'microphone': '🎤', 'mikrofon': '🎤', 'mic': '🎤',
+    'headphones': '🎧', 'kopfhoerer': '🎧',
+    'speaker': '🔊', 'lautsprecher': '🔊',
+    'radio': '📻', 'cd': '💿', 'record': '💿', 'schallplatte': '💿',
+    'paint': '🎨', 'farbe': '🎨', 'paints': '🎨', 'farben': '🎨',
+    'brush': '🖌️', 'pinsel': '🖌️', 'brushes': '🖌️',
+    'palette': '🎨', 'crayon': '🖍️', 'wachsmalstift': '🖍️',
+    'pencil': '✏️', 'bleistift': '✏️', 'pen': '🖊️', 'kugelschreiber': '🖊️',
+    'canvas': '🖼️', 'leinwand': '🖼️',
+    'painting': '🖼️', 'gemaelde': '🖼️', 'picture': '🖼️', 'bild': '🖼️',
+    'frame': '🖼️', 'rahmen': '🖼️',
+    'statue': '🗿', 'skulptur': '🗿', 'sculpture': '🗿',
+    'theater': '🎭', 'theatre': '🎭', 'stage': '🎭', 'buehne': '🎭',
+    'curtain': '🎭', 'vorhang': '🎭',
+    'ticket': '🎫', 'eintrittskarte': '🎟️', 'tickets': '🎟️',
+
+    // === BUILDINGS & PLACES / GEBAEUDE & ORTE ===
+    'house': '🏠', 'haus': '🏠', 'houses': '🏘️', 'haeuser': '🏘️',
+    'home': '🏠', 'zuhause': '🏠', 'cottage': '🏡',
+    'huette': '🛖', 'cabin': '🛖', 'blockhuette': '🛖',
+    'castle': '🏰', 'burgschloss': '🏰', 'burg': '🏰', 'palace': '🏰', 'palast': '🏰',
+    'fortress': '🏰', 'festung': '🏰',
+    'tower': '🗼', 'turm': '🗼', 'towers': '🗼', 'tuerme': '🗼',
+    'lighthouse': '🗼', 'leuchtturm': '🗼',
+    'temple': '🛕', 'tempel': '🛕', 'shrine': '⛩️', 'schrein': '⛩️',
+    'church': '⛪', 'kirche': '⛪', 'chapel': '⛪', 'kapelle': '⛪',
+    'mosque': '🕌', 'moschee': '🕌', 'synagogue': '🕍',
+    'pagoda': '🗼', 'pyramid': '🔺', 'pyramide': '🔺',
+    'door': '🚪', 'tuer': '🚪', 'doors': '🚪', 'tueren': '🚪',
+    'gate': '⛩️', 'tor': '⛩️', 'gates': '⛩️', 'tore': '⛩️',
+    'window': '🪟', 'fenster': '🪟', 'windows': '🪟',
+    'ladder': '🪜', 'leiter': '🪜',
+    'stairs': '🪜', 'treppe': '🪜', 'staircase': '🪜',
+    'bridge': '🌉', 'bruecke': '🌉', 'bridges': '🌉', 'bruecken': '🌉',
+    'well': '⛲', 'brunnen': '⛲', 'fountain': '⛲',
+    'mill': '🏭', 'muehle': '🏭', 'windmill': '🏭',
+    'barn': '🏚️', 'scheune': '🏚️', 'farm': '🏡', 'bauernhof': '🏡',
+    'tunnel': '🚇', 'passage': '🚇',
+    'grave': '🪦', 'grab': '🪦', 'tombstone': '🪦', 'grabstein': '🪦',
+    'cemetery': '🪦', 'friedhof': '🪦',
+    'crypt': '⚰️', 'gruft': '⚰️', 'coffin': '⚰️', 'sarg': '⚰️',
+    'dungeon': '🕳️', 'kerker': '🕳️', 'prison': '🏢', 'gefaengnis': '🏢',
+    'school': '🏫', 'schule': '🏫', 'university': '🏛️', 'universitaet': '🏛️',
+    'hospital': '🏥', 'krankenhaus': '🏥',
+    'hotel': '🏨', 'inn': '🏨', 'gasthof': '🏨', 'tavern': '🍺', 'taverne': '🍺',
+    'shop': '🏪', 'laden': '🏪', 'store': '🏬', 'geschaeft': '🏬',
+    'market': '🏪', 'markt': '🏪',
+    'bank': '🏦', 'museum': '🏛️',
+    'library': '📚', 'bibliothek': '📚',
+    'stadium': '🏟️', 'stadion': '🏟️', 'arena': '🏟️',
+    'tent': '⛺', 'zelt': '⛺', 'camping': '🏕️',
+
+    // === WEATHER / WETTER ===
+    'weather': '🌤️', 'wetter': '🌤️',
+    'sunny': '☀️', 'sonnig': '☀️', 'cloudy': '☁️', 'bewoelkt': '☁️',
+    'rain': '🌧️', 'regen': '🌧️', 'rainy': '🌧️', 'regnerisch': '🌧️',
+    'raindrop': '💧', 'regentropfen': '💧', 'raindrops': '💧',
+    'storm': '🌪️', 'sturm': '🌪️', 'stormy': '⛈️', 'stuermisch': '⛈️',
+    'thunderstorm': '⛈️', 'gewitter': '⛈️',
+    'tornado': '🌪️', 'hurricane': '🌀', 'hurrikan': '🌀',
+    'wind': '💨', 'windy': '💨', 'windig': '💨',
+    'breeze': '🍃', 'brise': '🍃',
+    'fog': '🌫️', 'nebel': '🌫️', 'foggy': '🌫️', 'neblig': '🌫️',
+    'mist': '🌫️', 'dunst': '🌫️',
+    'snow': '❄️', 'schnee': '❄️', 'snowy': '🌨️', 'schneeig': '🌨️',
+    'snowflake': '❄️', 'schneeflocke': '❄️', 'snowflakes': '❄️', 'schneeflocken': '❄️',
+    'blizzard': '🌨️', 'schneesturm': '🌨️',
+    'ice': '🧊', 'eiskristall': '🧊', 'icy': '🧊', 'eisig': '🧊',
+    'frost': '❄️', 'icicle': '🧊', 'eiszapfen': '🧊',
+    'hail': '🌨️', 'hagel': '🌨️',
+    'dew': '💧', 'tau': '💧',
+
+    // === HEARTS & EMOTIONS / HERZEN & GEFUEHLE ===
+    'heart': '❤️', 'herz': '❤️', 'hearts': '❤️', 'herzen': '❤️',
+    'redheart': '❤️', 'blueheart': '💙', 'greenheart': '💚',
+    'yellowheart': '💛', 'purpleheart': '💜', 'blackheart': '🖤',
+    'whiteheart': '🤍', 'orangeheart': '🧡', 'pinkheart': '💗',
+    'brokenheart': '💔', 'gebrochenes_herz': '💔',
+    'sparklingheart': '💖', 'growingheart': '💗',
+    'love': '💕', 'liebe': '💕', 'loving': '💕',
+    'kiss': '💋', 'kuss': '💋',
+    'friendship': '💛', 'freundschaft': '💛',
+    'happiness': '😊', 'glueck': '🍀', 'lucky': '🍀',
+    'joy': '😊', 'freude': '😊',
+    'sadness': '😢', 'traurigkeit': '😢',
+    'anger': '😠', 'wut': '😠', 'zorn': '😠',
+    'fear': '😨', 'angst': '😨',
+    'surprise': '😲', 'ueberraschung': '😲',
+    'courage': '💪', 'mut': '💪', 'brave': '💪', 'mutig': '💪',
+    'strength': '💪', 'kraft': '💪', 'staerke': '💪',
+    'power': '⚡', 'macht': '⚡',
+    'hope': '🌟', 'hoffnung': '🌟',
+    'faith': '🙏', 'glaube': '🙏',
+    'peace': '☮️', 'frieden': '☮️',
+    'wisdom': '🦉', 'weisheit': '🦉',
+    'memory': '💭', 'erinnerung': '💭', 'memories': '💭', 'erinnerungen': '💭',
+    'thought': '💭', 'gedanke': '💭', 'thoughts': '💭', 'gedanken': '💭',
+    'idea': '💡', 'idee': '💡',
+    'soul': '👻', 'seele': '👻',
+
+    // === SPECIAL ITEMS / BESONDERE ITEMS ===
+    'token': '🎰', 'plaque': '🏷️', 'plakette': '🏷️',
+    'dice': '🎲', 'wuerfel': '🎲',
+    'card': '🃏', 'spielkarte': '🃏', 'cards': '🃏',
+    'playingcard': '🃏', 'kartenspiel': '🃏',
+    'joker': '🃏',
+    'puzzle': '🧩', 'puzzlepiece': '🧩', 'puzzleteil': '🧩',
+    'balloon': '🎈', 'ballon': '🎈', 'balloons': '🎈', 'ballons': '🎈',
+    'gift': '🎁', 'geschenk': '🎁', 'gifts': '🎁', 'geschenke': '🎁',
+    'present': '🎁',
+    'partysurprise': '🎉',
+    'party': '🎉', 'feier': '🎉',
+    'confetti': '🎊', 'konfetti': '🎊',
+    'streamer': '🎊', 'luftschlange': '🎊',
+    'camera': '📷', 'kamera': '📷',
+    'photo': '🖼️', 'foto': '🖼️', 'photograph': '📷',
+    'mirror': '🪞', 'spiegel': '🪞',
+    'umbrella': '☂️', 'regenschirm': '☂️', 'parasol': '⛱️', 'sonnenschirm': '⛱️',
+    'fan': '🪭', 'faecher': '🪭',
+    'broom': '🧹', 'besen': '🧹',
+    'mop': '🧹', 'mopp': '🧹',
+    'bucket': '🪣', 'eimer': '🪣',
+    'magnet': '🧲',
+    'battery': '🔋', 'batterie': '🔋',
+    'plug': '🔌', 'stecker': '🔌',
+    'flag': '🚩', 'flagge': '🚩', 'fahne': '🚩',
+    'banner': '🏴',
+    'ribbon': '🎀',
+    'tag': '🏷️', 'etikett': '🏷️',
+    'label': '🏷️',
+    'stamp': '📮', 'briefmarke': '📮',
+    'envelope': '✉️', 'umschlag': '✉️',
+    'package': '📦', 'paket': '📦',
+    'box': '📦', 'schachtel': '📦', 'kiste': '📦',
+    'crate': '📦',
+    'barrel': '🛢️', 'fass': '🛢️',
+    'basket': '🧺', 'korb': '🧺',
+    'jar': '🏺', 'glas': '🏺', 'vase': '🏺',
+    'pot': '🍯', 'topf': '🍯',
+    'cauldron': '🍯', 'kessel': '🍯',
+    'bowl': '🥣', 'schuessel': '🥣',
+    'cup': '☕', 'tasse': '☕', 'mug': '☕', 'becher': '☕',
+    'plate': '🍽️', 'teller': '🍽️',
+    'fork': '🍴', 'gabel': '🍴',
+    'spoon': '🥄', 'loeffel': '🥄',
+    'chopsticks': '🥢', 'staebchen': '🥢',
   };
   const lowerItem = item.toLowerCase();
   // Check for exact match first
   if (emojiMap[lowerItem]) {
     return emojiMap[lowerItem];
   }
-  // Check for partial matches
-  for (const [key, emoji] of Object.entries(emojiMap)) {
+  // Check for partial matches (longer keys first for better matching)
+  const sortedKeys = Object.keys(emojiMap).sort((a, b) => b.length - a.length);
+  for (const key of sortedKeys) {
     if (lowerItem.includes(key) || key.includes(lowerItem)) {
-      return emoji;
+      return emojiMap[key];
     }
   }
   return '📦'; // Default

@@ -1,0 +1,342 @@
+{
+  "id": "magische-pokemon",
+  "title": "Die 3 magischen Pokemon",
+  "description": "Ein aufregendes Abenteuer mit drei besonderen Pokemon!",
+  "author": "Kind",
+  "language": "de",
+  "ageRating": "6+",
+  "tags": [],
+  "scenes": [
+    {
+      "id": "start",
+      "background": "EnchantedForest",
+      "characters": [
+        {
+          "sprite": "SparkMouse",
+          "position": "left",
+          "size": 60
+        },
+        {
+          "sprite": "ThunderBird",
+          "position": "center",
+          "size": 80
+        },
+        {
+          "sprite": "Sun",
+          "position": "right",
+          "size": 120
+        }
+      ],
+      "dialogue": [
+        "In einem magischen Wald, wo die Bäume in allen Regenbogenfarben leuchten, leben drei besondere Pokemon: Pichu, Pikachu und Raichu.",
+        "Pichu, klein und niedlich mit gelben Fell und spitzen Ohren, hüpft aufgeregt herum.",
+        "Pikachu, etwas größer mit roten Wangen, steht wachsam daneben.",
+        "Raichu, der Größte der drei, leuchtet hell wie die Sonne und wärmt alles um sich herum.",
+        "Plötzlich erfahren sie, dass die Zerstör-Pokemon Machollo, Machock und Machamp den Wald bedrohen!",
+        "Pichu quietscht: \"Wir müssen etwas unternehmen!\"",
+        "Pikachu nickt entschlossen: \"Ja, lasst uns unsere Kräfte vereinen!\"",
+        "Raichu fügt mit tiefer Stimme hinzu: \"Gemeinsam sind wir stark!\""
+      ],
+      "choices": [
+        {
+          "text": "⚡ Auf zum Abenteuer!",
+          "nextSceneId": "forest_path"
+        }
+      ]
+    },
+    {
+      "id": "forest_path",
+      "background": "DarkForest",
+      "characters": [
+        {
+          "sprite": "SparkMouse",
+          "position": "left",
+          "size": 60
+        },
+        {
+          "sprite": "ThunderBird",
+          "position": "center",
+          "size": 80
+        },
+        {
+          "sprite": "Elephant",
+          "position": "right",
+          "size": 120
+        }
+      ],
+      "dialogue": [
+        "Pichu, Pikachu und Raichu machen sich auf den Weg tiefer in den Wald. Ihre Körper glitzern im Dunkeln.",
+        "Pichu, das kleinste Pokemon, hüpft nervös von einem Bein aufs andere. Seine Ohren zucken bei jedem Geräusch.",
+        "Pikachu läuft vorsichtig voran, die Federn leuchten sanft und die Augen scannen aufmerksam die Umgebung.",
+        "Raichu, strahlend hell wie die Sonne, schwebt hinter den anderen her und erhellt und wärmt den Weg für alle.",
+        "Die Bäume werden dichter und der Weg dunkler. Schatten huschen zwischen den Stämmen hin und her.",
+        "Plötzlich hören sie ein lautes Krachen! Die Erde bebt leicht unter ihren Füßen.",
+        "Pikachu flüstert mit zitternden Federn: \"Hört ihr das? Das könnten die Zerstör-Pokemon sein!\""
+      ],
+      "choices": [
+        {
+          "text": "🔍 Vorsichtig weitergehen",
+          "nextSceneId": "encounter"
+        },
+        {
+          "text": "🌟 Magische Kräfte einsetzen",
+          "nextSceneId": "use_powers"
+        }
+      ]
+    },
+    {
+      "id": "use_powers",
+      "background": "DarkForest",
+      "characters": [
+        {
+          "sprite": "SparkMouse",
+          "position": "left",
+          "size": 60
+        },
+        {
+          "sprite": "ThunderBird",
+          "position": "center",
+          "size": 80
+        },
+        {
+          "sprite": "Elephant",
+          "position": "right",
+          "size": 120
+        }
+      ],
+      "dialogue": [
+        "Pichu, Pikachu und Raichu beschließen, ihre magischen Kräfte einzusetzen!",
+        "Pichu ruft aufgeregt: \"Lasst uns elektrische Sterne sammeln, um stärker zu werden!\"",
+        "Pikachu nickt: \"Gute Idee! Je mehr Sterne wir sammeln, desto mehr Energie haben wir gegen die Zerstör-Pokemon!\"",
+        "Raichu trompetet zustimmend: \"Los geht's! Wer sammelt die meisten?\""
+      ],
+      "miniGame": {
+        "type": "collect",
+        "playerSprite": "Elephant",
+        "collectSprite": "Star",
+        "obstacleSprite": "Rock",
+        "targetScore": 10,
+        "timeLimit": 30,
+        "successSceneId": "power_up",
+        "failSceneId": "try_again",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "id": "power_up",
+      "background": "EnchantedForest",
+      "characters": [
+        {
+          "sprite": "SparkMouse",
+          "position": "left",
+          "size": 60
+        },
+        {
+          "sprite": "ThunderBird",
+          "position": "center",
+          "size": 80
+        },
+        {
+          "sprite": "Elephant",
+          "position": "right",
+          "size": 120
+        }
+      ],
+      "dialogue": [
+        "Wow! Ihr habt es geschafft! 🎉",
+        "Pichu hüpft vor Freude: \"Schaut mal, wie wir leuchten!\"",
+        "Pikachu breitet stolz seine Flügel aus: \"Unsere Kräfte sind jetzt viel stärker!\"",
+        "Raichu trompetet laut: \"Jetzt sind wir bereit für die Zerstör-Pokemon!\"",
+        "Mit neuer Energie und Mut machen sich die drei auf den Weg, um den Wald zu beschützen."
+      ],
+      "choices": [
+        {
+          "text": "🌳 Weiter zum Kampf gegen die Zerstör-Pokemon",
+          "nextSceneId": "final_battle"
+        }
+      ]
+    },
+    {
+      "id": "try_again",
+      "background": "DarkForest",
+      "characters": [
+        {
+          "sprite": "SparkMouse",
+          "position": "left",
+          "size": 60
+        },
+        {
+          "sprite": "ThunderBird",
+          "position": "center",
+          "size": 80
+        },
+        {
+          "sprite": "Elephant",
+          "position": "right",
+          "size": 120
+        }
+      ],
+      "dialogue": [
+        "Oh nein! Ihr habt nicht genug Sterne gesammelt. 😔",
+        "Pichu sieht etwas traurig aus: \"Das war schwieriger als gedacht...\"",
+        "Pikachu ermutigt die anderen: \"Keine Sorge, wir können es noch einmal versuchen!\"",
+        "Raichu nickt entschlossen: \"Genau! Aller guten Dinge sind drei. Lasst es uns nochmal probieren!\""
+      ],
+      "choices": [
+        {
+          "text": "🌟 Noch einmal Sterne sammeln",
+          "nextSceneId": "use_powers"
+        },
+        {
+          "text": "🏠 Zurück zum Waldrand",
+          "nextSceneId": "forest_edge"
+        }
+      ]
+    },
+    {
+      "id": "final_battle",
+      "background": "CloudySky",
+      "characters": [
+        {
+          "sprite": "SparkMouse",
+          "position": "left",
+          "size": 70
+        },
+        {
+          "sprite": "Sun",
+          "position": "right",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Pichu und Raichu stehen den Zerstör-Pokemon gegenüber. Der Kampf beginnt!",
+        "Pikachu, der Elefant, bleibt sicher im Hintergrund und feuert seine Freunde an."
+      ],
+      "choices": [
+        {
+          "text": "Pichu greift an!",
+          "nextSceneId": "pichu_attack"
+        },
+        {
+          "text": "Raichu setzt Sonnenstrahlen ein!",
+          "nextSceneId": "raichu_attack"
+        }
+      ]
+    },
+    {
+      "id": "pichu_attack",
+      "background": "CloudySky",
+      "characters": [
+        {
+          "sprite": "SparkMouse",
+          "position": "center",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Pichu konzentriert all seine Energie! ⚡🐭⚡",
+        "Plötzlich wirft Pichu tausend Blitze von sich ab! ⚡⚡⚡",
+        "Aber das ist noch nicht alles! Pichu schießt auch noch 1000 riesige Blitzbälle! ⚽⚡",
+        "Der Himmel leuchtet hell von all den Blitzen und Blitzbällen!"
+      ],
+      "choices": [
+        {
+          "text": "Weiter zum Kampf",
+          "nextSceneId": "battle_continues"
+        }
+      ]
+    },
+    {
+      "id": "raichu_attack",
+      "background": "CloudySky",
+      "characters": [
+        {
+          "sprite": "Sun",
+          "position": "center",
+          "size": 120
+        }
+      ],
+      "dialogue": [
+        "Raichu, die strahlende Sonne, beginnt hell zu leuchten! ☀️✨",
+        "Plötzlich formt Raichu riesige Blitzbälle um sich herum! ⚡🔮⚡",
+        "Mit einem lauten Knall schießen die Blitzbälle auf die Zerstör-Pokemon zu!",
+        "Der Himmel ist erfüllt von blendenden Lichtblitzen!"
+      ],
+      "choices": [
+        {
+          "text": "Wie geht der Kampf weiter?",
+          "nextSceneId": "battle_continues"
+        }
+      ]
+    },
+    {
+      "id": "click_game",
+      "background": "CloudySky",
+      "dialogue": [
+        "Oh nein! Die Zerstör-Pokemon tauchen überall auf!",
+        "Klicke schnell auf sie, um sie mit Blitzen zu treffen!"
+      ],
+      "miniGame": {
+        "type": "click",
+        "targetSprite": "Ghost",
+        "targetScore": 10,
+        "timeLimit": 20,
+        "successSceneId": "game_success",
+        "failSceneId": "game_fail"
+      },
+      "choices": []
+    },
+    {
+      "id": "game_success",
+      "background": "CloudySky",
+      "characters": [
+        {
+          "sprite": "SparkMouse",
+          "position": "left",
+          "size": 70
+        },
+        {
+          "sprite": "Sun",
+          "position": "right",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Großartig! Du hast alle Zerstör-Pokemon getroffen!",
+        "Pichu und Raichu jubeln vor Freude!"
+      ],
+      "choices": [
+        {
+          "text": "Weiter zum Finale",
+          "nextSceneId": "final_battle"
+        }
+      ]
+    },
+    {
+      "id": "game_fail",
+      "background": "CloudySky",
+      "characters": [
+        {
+          "sprite": "SparkMouse",
+          "position": "left",
+          "size": 70
+        },
+        {
+          "sprite": "Sun",
+          "position": "right",
+          "size": 100
+        }
+      ],
+      "dialogue": [
+        "Oh nein! Die Zerstör-Pokemon waren zu schnell!",
+        "Aber Pichu und Raichu geben nicht auf. Versuche es nochmal!"
+      ],
+      "choices": [
+        {
+          "text": "Nochmal versuchen",
+          "nextSceneId": "click_game"
+        }
+      ]
+    }
+  ]
+}

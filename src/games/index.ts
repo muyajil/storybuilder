@@ -3,42 +3,29 @@
  * ================================
  * Hier werden alle Spiele registriert.
  * All games are registered here.
- *
- * Um ein neues Spiel hinzuzufügen / To add a new game:
- * 1. Erstelle einen Ordner unter src/games/mein-spiel-name/
- * 2. Erstelle die Spiel-Komponente (z.B. MeinSpiel.tsx)
- * 3. Importiere und registriere das Spiel hier unten
  */
 
 import type { GameInfo } from '../types';
 import type { StoryJson } from '../components/story/StorySchema';
 
 // === SPIELE IMPORTIEREN / IMPORT GAMES ===
-import { MagicForest } from './magic-forest/MagicForest';
-import { LianasOzeanAbenteuer } from './liana-abenteuer/LianasOzeanAbenteuer';
 import { DiemagischenGeschwister } from './magische-geschwister/DiemagischenGeschwister';
+import { TotoUndDerMannImMond } from './toto-mond/TotoUndDerMannImMond';
 
 // === STORY JSON IMPORTIEREN / IMPORT STORY JSON ===
-import lianaStoryData from './liana-abenteuer/story.json';
 import magischeGeschwisterStoryData from './magische-geschwister/story.json';
+import totoMondStoryData from './toto-mond/story.json';
+import { DiemagischenPokemon } from './magische-pokemon/DiemagischenPokemon';
 
 // === SPIELE REGISTRIEREN / REGISTER GAMES ===
 export const games: GameInfo[] = [
   {
-    id: 'magic-forest',
-    name: 'Der Magische Wald',
-    description: 'Eine interaktive Geschichte mit Entscheidungen durch verschiedene Welten!',
-    author: 'Kind',
-    component: MagicForest,
-    // Note: This game uses React-based Story, not JSON
-  },
-  {
-    id: 'liana-abenteuer',
-    name: 'Lianas Ozean-Abenteuer',
-    description: 'Prinzessin Liana erlebt ein spannendes Abenteuer am Ozean',
-    component: LianasOzeanAbenteuer,
-    author: 'Kind',
-    storyJson: lianaStoryData as StoryJson,
+    id: 'toto-mond',
+    name: 'Toto und der Mann im Mond',
+    description: 'Ein magisches Abenteuer zum Mond! Hilf Toto, die verlorenen Mondsteine zu finden und dem Mann im Mond sein Leuchten zurückzugeben.',
+    component: TotoUndDerMannImMond,
+    author: 'Spiele-Spielplatz',
+    storyJson: totoMondStoryData as StoryJson,
   },
   {
     id: 'magische-geschwister',
@@ -47,6 +34,13 @@ export const games: GameInfo[] = [
     component: DiemagischenGeschwister,
     author: 'Kind',
     storyJson: magischeGeschwisterStoryData as StoryJson,
+  },
+  {
+    id: 'magische-pokemon',
+    name: 'Die 3 magischen Pokemon',
+    description: 'Ein aufregendes Abenteuer mit drei besonderen Pokemon!',
+    component: DiemagischenPokemon,
+    author: 'Kind',
   },
 ];
 

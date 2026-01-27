@@ -97,22 +97,31 @@ export function createCollectGame(config: CollectGameConfig) {
     const playerY = height - 70;
     const [items, setItems] = useState<Array<{ id: number; x: number; y: number }>>([]);
     const [collected, setCollected] = useState(0);
+    const [gameEnded, setGameEnded] = useState(false);
     const keys = useKeyboard();
+    // Track collected item IDs to prevent double-counting
+    const collectedIdsRef = useState(() => new Set<number>())[0];
 
-    // Spawn items
+    // Spawn items at top of screen
     useEffect(() => {
+      if (gameEnded) return;
       const interval = setInterval(() => {
         setItems(prev => [...prev, {
           id: Date.now(),
           x: randomBetween(20, width - 50),
-          y: randomBetween(20, height / 2),
+          y: -30, // Start above screen so they fall in
         }]);
       }, spawnRate);
       return () => clearInterval(interval);
-    }, [width, height]);
+    }, [width, height, gameEnded]);
+
+    // Item fall speed
+    const itemFallSpeed = 100;
 
     // Game loop
     useGameLoop((dt) => {
+      if (gameEnded) return;
+
       // Move player
       let newX = playerX;
       if (keys.ArrowLeft || keys.a) newX -= playerSpeed * dt;
@@ -120,24 +129,43 @@ export function createCollectGame(config: CollectGameConfig) {
       newX = Math.max(0, Math.min(width - 50, newX));
       setPlayerX(newX);
 
-      // Check collisions
+      // Move items down and check collisions
       const playerRect = { x: newX, y: playerY, width: 50, height: 50 };
+
       setItems(prev => {
-        const remaining = prev.filter(item => {
-          const itemRect = { x: item.x, y: item.y, width: 30, height: 30 };
+        const remaining: typeof prev = [];
+        let newCollections = 0;
+
+        for (const item of prev) {
+          const newY = item.y + itemFallSpeed * dt;
+          // Remove if off screen
+          if (newY > height) continue;
+
+          // Skip if already collected (prevents double-counting)
+          if (collectedIdsRef.has(item.id)) continue;
+
+          const itemRect = { x: item.x, y: newY, width: 30, height: 30 };
           if (checkCollision(playerRect, itemRect)) {
-            setCollected(c => {
-              const newCount = c + 1;
-              onProgress?.(Math.round((newCount / itemsToWin) * 100));
-              if (newCount >= itemsToWin) {
-                setTimeout(onWin, 100);
-              }
-              return newCount;
-            });
-            return false;
+            collectedIdsRef.add(item.id);
+            newCollections++;
+          } else {
+            remaining.push({ ...item, y: newY });
           }
-          return true;
-        });
+        }
+
+        // Update score for collected items
+        if (newCollections > 0) {
+          setCollected(c => {
+            const newCount = c + newCollections;
+            onProgress?.(Math.round((newCount / itemsToWin) * 100));
+            if (newCount >= itemsToWin) {
+              setGameEnded(true);
+              setTimeout(onWin, 100);
+            }
+            return newCount;
+          });
+        }
+
         return remaining;
       });
     });
@@ -291,6 +319,8 @@ export function createCatchGame(config: CatchGameConfig) {
     const [caught, setCaught] = useState(0);
     const [missed, setMissed] = useState(0);
     const keys = useKeyboard();
+    // Track processed item IDs to prevent double-counting
+    const processedIdsRef = useState(() => new Set<number>())[0];
 
     // Spawn items
     useEffect(() => {
@@ -304,8 +334,13 @@ export function createCatchGame(config: CatchGameConfig) {
       return () => clearInterval(interval);
     }, [width]);
 
+    // Track if game has ended to prevent multiple callbacks
+    const [gameEnded, setGameEnded] = useState(false);
+
     // Game loop
     useGameLoop((dt) => {
+      if (gameEnded) return;
+
       // Move player (only horizontal)
       let newX = playerX;
       if (keys.ArrowLeft || keys.a) newX -= 250 * dt;
@@ -315,30 +350,56 @@ export function createCatchGame(config: CatchGameConfig) {
 
       // Move items & check collision
       const playerRect = { x: newX, y: height - 60, width: 80, height: 40 };
+
       setItems(prev => {
         const updated: typeof prev = [];
+        let caughtThisFrame = 0;
+        let missedThisFrame = 0;
+
         for (const item of prev) {
+          // Skip already processed items
+          if (processedIdsRef.has(item.id)) continue;
+
           const newY = item.y + fallSpeed * dt;
           if (newY > height) {
             // Missed!
-            setMissed(m => {
-              if (m + 1 >= 3) setTimeout(onLose, 100);
-              return m + 1;
-            });
+            processedIdsRef.add(item.id);
+            missedThisFrame++;
           } else {
             const itemRect = { x: item.x, y: newY, width: 30, height: 30 };
             if (checkCollision(playerRect, itemRect)) {
-              setCaught(c => {
-                const newCount = c + 1;
-                onProgress?.(Math.round((newCount / itemsToWin) * 100));
-                if (newCount >= itemsToWin) setTimeout(onWin, 100);
-                return newCount;
-              });
+              processedIdsRef.add(item.id);
+              caughtThisFrame++;
             } else {
               updated.push({ ...item, y: newY });
             }
           }
         }
+
+        // Update counters
+        if (missedThisFrame > 0) {
+          setMissed(m => {
+            const newMissed = m + missedThisFrame;
+            if (newMissed >= 3) {
+              setGameEnded(true);
+              setTimeout(onLose, 100);
+            }
+            return newMissed;
+          });
+        }
+
+        if (caughtThisFrame > 0) {
+          setCaught(c => {
+            const newCount = c + caughtThisFrame;
+            onProgress?.(Math.round((newCount / itemsToWin) * 100));
+            if (newCount >= itemsToWin) {
+              setGameEnded(true);
+              setTimeout(onWin, 100);
+            }
+            return newCount;
+          });
+        }
+
         return updated;
       });
     });
@@ -387,6 +448,7 @@ export function createClickGame(config: ClickGameConfig) {
     const [target, setTarget] = useState({ x: width / 2, y: height / 2 });
     const [clicked, setClicked] = useState(0);
     const [timeLeft, setTimeLeft] = useState(timePerTarget);
+    const [gameEnded, setGameEnded] = useState(false);
 
     // Spawn new target position
     const spawnTarget = () => {
@@ -399,19 +461,24 @@ export function createClickGame(config: ClickGameConfig) {
 
     // Countdown per target
     useEffect(() => {
+      if (gameEnded) return;
+
       const interval = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 100) {
-            onLose();
+            setGameEnded(true);
+            setTimeout(onLose, 100);
             return prev;
           }
           return prev - 100;
         });
       }, 100);
       return () => clearInterval(interval);
-    }, [target, onLose]);
+    }, [target, onLose, gameEnded]);
 
     const handleClick = (e: React.MouseEvent) => {
+      if (gameEnded) return;
+
       const rect = e.currentTarget.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
@@ -426,7 +493,8 @@ export function createClickGame(config: ClickGameConfig) {
         setClicked(newCount);
         onProgress?.(Math.round((newCount / clicksToWin) * 100));
         if (newCount >= clicksToWin) {
-          onWin();
+          setGameEnded(true);
+          setTimeout(onWin, 100);
         } else {
           spawnTarget();
         }
@@ -527,13 +595,34 @@ export function createSnakeGame(config: SnakeGameConfig) {
 
     const keys = useKeyboard();
 
+    // Function to spawn food not on snake body
+    const spawnFood = (snakeBody: Array<{ x: number; y: number }>) => {
+      let newFood: { x: number; y: number } = {
+        x: Math.floor(Math.random() * (gridWidth - 2)) + 1,
+        y: Math.floor(Math.random() * (gridHeight - 2)) + 1,
+      };
+      let attempts = 0;
+      while (
+        snakeBody.some(seg => seg.x === newFood.x && seg.y === newFood.y) &&
+        attempts < 100
+      ) {
+        newFood = {
+          x: Math.floor(Math.random() * (gridWidth - 2)) + 1,
+          y: Math.floor(Math.random() * (gridHeight - 2)) + 1,
+        };
+        attempts++;
+      }
+      return newFood;
+    };
+
     // Handle direction changes
     useEffect(() => {
+      if (gameOver) return;
       if (keys.ArrowUp || keys.w) setDirection(d => d !== 'down' ? 'up' : d);
       if (keys.ArrowDown || keys.s) setDirection(d => d !== 'up' ? 'down' : d);
       if (keys.ArrowLeft || keys.a) setDirection(d => d !== 'right' ? 'left' : d);
       if (keys.ArrowRight || keys.d) setDirection(d => d !== 'left' ? 'right' : d);
-    }, [keys]);
+    }, [keys, gameOver]);
 
     // Game loop
     useEffect(() => {
@@ -542,7 +631,7 @@ export function createSnakeGame(config: SnakeGameConfig) {
       const interval = setInterval(() => {
         setSnake(prev => {
           const head = prev[0];
-          let newHead = { ...head };
+          const newHead = { ...head };
 
           switch (direction) {
             case 'up': newHead.y -= 1; break;
@@ -569,13 +658,11 @@ export function createSnakeGame(config: SnakeGameConfig) {
 
           // Check food collision
           if (newHead.x === food.x && newHead.y === food.y) {
-            // Spawn new food
-            setFood({
-              x: Math.floor(Math.random() * (gridWidth - 2)) + 1,
-              y: Math.floor(Math.random() * (gridHeight - 2)) + 1,
-            });
+            // Spawn new food not on snake body
+            setFood(spawnFood(newSnake));
             onProgress?.(Math.round((newSnake.length / lengthToWin) * 100));
             if (newSnake.length >= lengthToWin) {
+              setGameOver(true);
               setTimeout(onWin, 100);
             }
           } else {
@@ -657,13 +744,17 @@ export function createRaceGame(config: RaceGameConfig) {
     const [distance, setDistance] = useState(0);
     const [obstacles, setObstacles] = useState<Array<{ id: number; x: number; y: number }>>([]);
     const [roadOffset, setRoadOffset] = useState(0);
+    const [gameEnded, setGameEnded] = useState(false);
     const keys = useKeyboard();
 
     const roadWidth = width * 0.6;
     const roadLeft = (width - roadWidth) / 2;
+    // Distance gained per second (independent of obstacle speed)
+    const distancePerSecond = 100;
 
     // Spawn obstacles
     useEffect(() => {
+      if (gameEnded) return;
       const interval = setInterval(() => {
         // Random position on the road
         const obstacleX = roadLeft + randomBetween(20, roadWidth - 70);
@@ -674,10 +765,12 @@ export function createRaceGame(config: RaceGameConfig) {
         }]);
       }, 1200);
       return () => clearInterval(interval);
-    }, [roadLeft, roadWidth]);
+    }, [roadLeft, roadWidth, gameEnded]);
 
     // Game loop
     useGameLoop((dt) => {
+      if (gameEnded) return;
+
       // Move player left/right
       let newX = playerX;
       if (keys.ArrowLeft || keys.a) newX -= playerSpeed * dt;
@@ -686,11 +779,12 @@ export function createRaceGame(config: RaceGameConfig) {
       newX = Math.max(roadLeft + 10, Math.min(roadLeft + roadWidth - 60, newX));
       setPlayerX(newX);
 
-      // Update distance
+      // Update distance (based on time, not obstacle speed)
       setDistance(d => {
-        const newDist = d + obstacleSpeed * dt * 0.5;
+        const newDist = d + distancePerSecond * dt;
         onProgress?.(Math.round((newDist / distanceToWin) * 100));
         if (newDist >= distanceToWin) {
+          setGameEnded(true);
           setTimeout(onWin, 100);
         }
         return newDist;
@@ -713,6 +807,7 @@ export function createRaceGame(config: RaceGameConfig) {
             return true;
           });
         if (hit) {
+          setGameEnded(true);
           setTimeout(onLose, 100);
         }
         return updated;
@@ -804,21 +899,24 @@ export function createFlappyGame(config: FlappyGameConfig) {
     backgroundColor = '#4a90d9',
     backgroundElements,
     pointsToWin = 5,
-    gravity = 600,
-    jumpForce = -280,
+    gravity = 400, // Reduced from 600 for easier gameplay
+    jumpForce = -250, // Slightly stronger jump for easier gameplay
   } = config;
 
   return function FlappyMiniGame({ width, height, onWin, onLose, onProgress }: MiniGameProps) {
     const [playerY, setPlayerY] = useState(height / 2);
     const [velocity, setVelocity] = useState(0);
-    const [pipes, setPipes] = useState<Array<{ id: number; x: number; gapY: number }>>([]);
+    const [pipes, setPipes] = useState<Array<{ id: number; x: number; gapY: number; passed: boolean }>>([]);
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
+    // Track scored pipe IDs to prevent double-counting
+    const scoredPipesRef = useState(() => new Set<number>())[0];
 
     const keys = useKeyboard();
     const pipeWidth = 60;
-    const gapHeight = 120;
+    const gapHeight = 160; // Larger gap = easier
     const playerSize = 40;
+    const terminalVelocity = 300; // Max fall speed (slower = easier)
 
     // Jump on space or up
     useEffect(() => {
@@ -835,8 +933,9 @@ export function createFlappyGame(config: FlappyGameConfig) {
           id: Date.now(),
           x: width,
           gapY: randomBetween(gapHeight, height - gapHeight),
+          passed: false,
         }]);
-      }, 2000);
+      }, 2500); // Slower spawn rate = easier
       return () => clearInterval(interval);
     }, [width, height, gameOver]);
 
@@ -844,8 +943,8 @@ export function createFlappyGame(config: FlappyGameConfig) {
     useGameLoop((dt) => {
       if (gameOver) return;
 
-      // Apply gravity
-      setVelocity(v => v + gravity * dt);
+      // Apply gravity with terminal velocity
+      setVelocity(v => Math.min(v + gravity * dt, terminalVelocity));
       setPlayerY(y => {
         const newY = y + velocity * dt;
         // Check floor/ceiling
@@ -862,17 +961,16 @@ export function createFlappyGame(config: FlappyGameConfig) {
 
       setPipes(prev => {
         const updated: typeof prev = [];
-        for (const pipe of prev) {
-          const newX = pipe.x - 150 * dt;
+        let scoredThisFrame = 0;
 
-          // Check if passed pipe
-          if (pipe.x > 50 + playerSize && newX <= 50 + playerSize) {
-            const newScore = score + 1;
-            setScore(newScore);
-            onProgress?.(Math.round((newScore / pointsToWin) * 100));
-            if (newScore >= pointsToWin) {
-              setTimeout(onWin, 100);
-            }
+        for (const pipe of prev) {
+          const newX = pipe.x - 100 * dt; // Slower pipes = easier
+
+          // Check if passed pipe (use Set to prevent double-counting across frames)
+          const justPassed = !scoredPipesRef.has(pipe.id) && pipe.x > 50 + playerSize && newX <= 50 + playerSize;
+          if (justPassed) {
+            scoredPipesRef.add(pipe.id);
+            scoredThisFrame++;
           }
 
           if (newX > -pipeWidth) {
@@ -885,9 +983,23 @@ export function createFlappyGame(config: FlappyGameConfig) {
               setTimeout(onLose, 100);
             }
 
-            updated.push({ ...pipe, x: newX });
+            updated.push({ ...pipe, x: newX, passed: scoredPipesRef.has(pipe.id) });
           }
         }
+
+        // Update score after processing all pipes
+        if (scoredThisFrame > 0) {
+          setScore(s => {
+            const newScore = s + scoredThisFrame;
+            onProgress?.(Math.round((newScore / pointsToWin) * 100));
+            if (newScore >= pointsToWin) {
+              setGameOver(true);
+              setTimeout(onWin, 100);
+            }
+            return newScore;
+          });
+        }
+
         return updated;
       });
     });
