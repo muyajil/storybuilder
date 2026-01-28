@@ -210,7 +210,8 @@
       ],
       "dialogue": [
         "Pichu und Raichu stehen den Zerstör-Pokemon gegenüber. Der Kampf beginnt!",
-        "Pikachu, der Elefant, bleibt sicher im Hintergrund und feuert seine Freunde an."
+        "Pikachu, der Elefant, bleibt sicher im Hintergrund und feuert seine Freunde an.",
+        "Plötzlich tauchen überall Zerstör-Pokemon auf! Was tust du?"
       ],
       "choices": [
         {
@@ -220,6 +221,10 @@
         {
           "text": "Raichu setzt Sonnenstrahlen ein!",
           "nextSceneId": "raichu_attack"
+        },
+        {
+          "text": "Zerstör-Pokemon abwehren!",
+          "nextSceneId": "click_game"
         }
       ]
     },
@@ -307,8 +312,8 @@
       ],
       "choices": [
         {
-          "text": "Weiter zum Finale",
-          "nextSceneId": "final_battle"
+          "text": "Zum Finale",
+          "nextSceneId": "happy_ending"
         }
       ]
     },
@@ -335,6 +340,40 @@
         {
           "text": "Nochmal versuchen",
           "nextSceneId": "click_game"
+        }
+      ]
+    },
+    {
+      "id": "happy_ending",
+      "background": "FlowerMeadow",
+      "characters": [
+        {
+          "sprite": "SparkMouse",
+          "position": "left",
+          "size": 80
+        },
+        {
+          "sprite": "Sun",
+          "position": "right",
+          "size": 110
+        },
+        {
+          "sprite": "Kid",
+          "position": "center",
+          "size": 90
+        }
+      ],
+      "dialogue": [
+        "Hurra! Die Zerstör-Pokemon sind besiegt! 🎉",
+        "Pichu und Raichu strahlen vor Freude. ⚡☀️",
+        "Du hast es geschafft! Die Pokémon-Welt ist gerettet!",
+        "Pichu und Raichu tanzen fröhlich um dich herum.",
+        "Du bist jetzt ein echter Pokémon-Held! 🏆"
+      ],
+      "choices": [
+        {
+          "text": "Nochmal spielen",
+          "nextSceneId": "start"
         }
       ]
     }
